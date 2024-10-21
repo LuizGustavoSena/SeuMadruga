@@ -1,0 +1,33 @@
+{
+  "name": "seubarriga",
+  "version": "1.0.0",
+  "description": "Estudo Node",
+  "main": "index.ts",
+  "scripts": {
+    "build": "tsc",
+    "start": "yarn build && node dist/src/server.js",
+    "dev": "ts-node-dev --transpile-only src/server.ts",
+    "test": "jest"
+  },
+  "author": "Luiz Sena",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "5.0.0",
+    "@types/jest": "29.5.13",
+    "@types/module-alias": "2.0.4",
+    "@types/node": "22.7.7",
+    "@typescript-eslint/eslint-plugin": "8.11.0",
+    "@typescript-eslint/parser": "8.11.0",
+    "eslint": "9.13.0",
+    "jest": "29.7.0",
+    "supertest": "7.0.0",
+    "ts-jest": "29.2.5",
+    "ts-node-dev": "2.0.0",
+    "typescript": "5.6.3"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "4.21.1",
+    "module-alias": "2.2.3"
+  }
+}
