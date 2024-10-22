@@ -1,6 +1,9 @@
+import bodyParser from "body-parser";
 import express, { Express, Request, Response } from "express";
 
 const app: Express = express();
+
+app.use(bodyParser.json());
 
 app.get('/', (req: Request, res: Response) => {
     res.status(200).send();
@@ -14,6 +17,10 @@ app.get('/users', (req: Request, res: Response) => {
         }
     ]
     res.status(200).json(users);
+});
+
+app.post('/users', (req: Request, res: Response) => {
+    res.status(201).json(req.body);
 });
 
 export default app;
