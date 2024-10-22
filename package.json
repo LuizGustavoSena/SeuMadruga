@@ -2,7 +2,7 @@
   "name": "seubarriga",
   "version": "1.0.0",
   "description": "Estudo Node",
-  "main": "index.ts",
+  "main": "server.ts",
   "scripts": {
     "build": "tsc",
     "start": "yarn build && node dist/src/server.js",
@@ -17,6 +17,7 @@
     "@types/jest": "29.5.13",
     "@types/module-alias": "2.0.4",
     "@types/node": "22.7.7",
+    "@types/supertest": "6.0.2",
     "@typescript-eslint/eslint-plugin": "8.11.0",
     "@typescript-eslint/parser": "8.11.0",
     "eslint": "9.13.0",
@@ -27,7 +28,7 @@
     "typescript": "5.6.3"
   },
   "dependencies": {
-    "dotenv": "^16.4.5",
+    "dotenv": "16.4.5",
     "express": "4.21.1",
     "module-alias": "2.2.3"
   }
