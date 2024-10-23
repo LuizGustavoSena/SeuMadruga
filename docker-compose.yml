@@ -1,0 +1,13 @@
+# Use postgres/example user/password credentials
+version: '3'
+
+services:
+  database:
+    image: postgres:latest
+
+    ports:
+      - 5432:5432
+
+    environment:
+      POSTGRES_PASSWORD: ${PASSWORD_DB}
+      POSTGRES_DB: ${NAME_DB}
