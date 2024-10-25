@@ -1,18 +1,28 @@
 import { Request, Response } from 'express';
+import knex from 'knex';
+import config from "../../knexfile";
+
+const db = knex(config);
 
 module.exports = () => {
-    const findAll = (req: Request, res: Response) => {
-        const users = [
-            {
-                name: 'John Doe',
-                email: 'johndoe@email.com'
-            }
-        ]
-        res.status(200).json(users);
+    const findAll = async (req: Request, res: Response) => {
+        try {
+            const users = await db('users').select();
+
+            res.status(users.length = 0 ? 204 : 200).json(users);
+        } catch (error) {
+            res.status(400).json({ error: 'Database error' });
+        }
     };
 
-    const create = (req: Request, res: Response) => {
-        res.status(201).json(req.body);
+    const create = async (req: Request, res: Response) => {
+        try {
+            const response = db('users').insert(req.body, '*');
+
+            res.status(201).json(response);
+        } catch (error) {
+            res.status(400).json({ error: 'Database error' });
+        }
     };
 
     return { findAll, create };

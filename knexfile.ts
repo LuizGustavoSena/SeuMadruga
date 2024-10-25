@@ -1,6 +1,6 @@
 import 'dotenv/config';
 
-module.exports = {
+const config = {
     test: {
         client: 'pg',
         version: '9.6',
@@ -15,3 +15,5 @@ module.exports = {
         }
     }
 }
+
+export default config['test'];
