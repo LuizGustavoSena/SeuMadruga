@@ -17,7 +17,7 @@ module.exports = () => {
 
     const create = async (req: Request, res: Response) => {
         try {
-            const response = db('users').insert(req.body);
+            const response = await db('users').insert(req.body, ['id', 'name']);
 
             res.status(201).json(response);
         } catch (error) {
