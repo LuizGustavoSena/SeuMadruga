@@ -1,4 +1,4 @@
-import { UserModel, UserProps } from '@src/models/user';
+import { UserModel, UserProps } from '@src/domain/models/user';
 import knex from 'knex';
 import config from "../../knexfile";
 

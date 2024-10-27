@@ -12,11 +12,20 @@ describe('Users', () => {
     });
 
     test('Should be create a user', async () => {
-        const props = { name: 'Walter Mitty', email: `${Date.now()}@email.com`, password: '123' };
+        const props = { name: 'Walter Mitty', email: `${Date.now()}@email.com`, password: '12354' };
 
         const response = await request.post('/users').send(props);
 
         expect(response.status).toBe(201);
         expect(response.body.name).toBe(props.name);
+    });
+
+    test('Should be error in password less than required when create a user', async () => {
+        const props = { name: 'Walter Mitty', email: `${Date.now()}@email.com`, password: '123' };
+
+        const response = await request.post('/users').send(props);
+
+        expect(response.status).toBe(400);
+        expect(response.body.error).toContain('password');
     });
 });

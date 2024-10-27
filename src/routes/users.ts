@@ -1,5 +1,7 @@
-import { UserModel } from '@src/models/user';
+import { UserModel } from '@src/domain/models/user';
 import { Express, Request, Response } from 'express';
+import { ZodError } from 'zod';
+import Validation from '../domain/validations';
 import UserService from '../services/user';
 
 const user = new UserService();
@@ -17,11 +19,15 @@ module.exports = (app: Express) => {
 
     const create = async (req: Request, res: Response) => {
         try {
+            Validation.createUser(req.body);
+
             const response = await user.save(req.body);
 
             res.status(201).json(response);
-        } catch (error) {
-            res.status(400).json({ error: 'Database error' });
+        } catch (error: any) {
+            let message = error instanceof ZodError ? `${error.errors.map(el => el.message).join(', ')}` : 'Database error';
+
+            res.status(400).json({ error: message });
         }
     };
 
