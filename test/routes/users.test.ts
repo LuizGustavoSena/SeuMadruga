@@ -17,6 +17,6 @@ describe('Users', () => {
         const response = await request.post('/users').send(props);
 
         expect(response.status).toBe(201);
-        expect(response.body[0].name).toBe(props.name);
+        expect(response.body.name).toBe(props.name);
     });
 });
