@@ -64,4 +64,14 @@ describe('Users', () => {
         expect(response.status).toBe(400);
         expect(response.body.error).toContain('name');
     });
+
+    test('Should be error in send same emael when create a user', async () => {
+        const props = { name: 'Walter Mitty', email: `${Date.now()}@email.com`, password: '12345' };
+
+        await request.post('/users').send(props);
+        const response = await request.post('/users').send(props);
+
+        expect(response.status).toBe(400);
+        expect(response.body.error).toContain('existente');
+    });
 });
