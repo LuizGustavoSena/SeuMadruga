@@ -13,6 +13,12 @@ export default class UserService {
         return users;
     }
 
+    async findByEmail(email: string): Promise<UserModel[]> {
+        const users = await db.select('id', 'name', 'email').from('users').where({ email });
+
+        return users;
+    }
+
     async save(params: UserProps): Promise<UserModel> {
         const response = await db('users').insert(params, ['id', 'name', 'email']);
 

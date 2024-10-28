@@ -21,11 +21,16 @@ module.exports = (app: Express) => {
         try {
             Validation.createUser(req.body);
 
+            const existEmail = await user.findByEmail(req.body.email);
+
+            if (existEmail.length > 0)
+                throw new Error('Email já existente');
+
             const response = await user.save(req.body);
 
             res.status(201).json(response);
         } catch (error: any) {
-            let message = error instanceof ZodError ? `${error.errors.map(el => el.message).join(', ')}` : 'Database error';
+            let message = error instanceof ZodError ? `${error.errors.map(el => el.message).join(', ')}` : error.message;
 
             res.status(400).json({ error: message });
         }
