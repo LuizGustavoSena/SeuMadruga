@@ -28,4 +28,40 @@ describe('Users', () => {
         expect(response.status).toBe(400);
         expect(response.body.error).toContain('password');
     });
+
+    test('Should be error in don`t send password when create a user', async () => {
+        const props = { name: 'Walter Mitty', email: `${Date.now()}@email.com` };
+
+        const response = await request.post('/users').send(props);
+
+        expect(response.status).toBe(400);
+        expect(response.body.error).toContain('password');
+    });
+
+    test('Should be error in don`t send email when create a user', async () => {
+        const props = { name: 'Walter Mitty', password: '12345' };
+
+        const response = await request.post('/users').send(props);
+
+        expect(response.status).toBe(400);
+        expect(response.body.error).toContain('email');
+    });
+
+    test('Should be error in send email in format error when create a user', async () => {
+        const props = { name: 'Walter Mitty', email: `${Date.now()}@emailcom`, password: '12345' };
+
+        const response = await request.post('/users').send(props);
+
+        expect(response.status).toBe(400);
+        expect(response.body.error).toContain('email');
+    });
+
+    test('Should be error in don`t send name when create a user', async () => {
+        const props = { email: `${Date.now()}@email.com`, password: '12345' };
+
+        const response = await request.post('/users').send(props);
+
+        expect(response.status).toBe(400);
+        expect(response.body.error).toContain('name');
+    });
 });
