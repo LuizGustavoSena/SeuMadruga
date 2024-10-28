@@ -6,8 +6,8 @@ export default class Validation {
     static createUser(params: any): void {
         const validation = z.object({
             name: z.string({ required_error: 'Campo name deve ser preenchido' }),
-            email: z.string().email({ message: 'Campo email deve ser do tipo email' }),
-            password: z.string().min(5, { message: 'Campo password deve conter no mínimo 5 caracteres' })
+            email: z.string({ required_error: 'Campo email deve ser preenchido' }).email({ message: 'Campo email deve ser do tipo email' }),
+            password: z.string({ required_error: 'Campo password deve ser preenchido' }).min(5, { message: 'Campo password deve conter no mínimo 5 caracteres' })
         });
 
         validation.parse(params);
