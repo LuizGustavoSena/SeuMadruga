@@ -9,3 +9,5 @@ export type CreateResponse = {
 }
 
 export type GetAllResponse = CreateResponse[];
+
+export type GetByIdResponse = CreateResponse;
