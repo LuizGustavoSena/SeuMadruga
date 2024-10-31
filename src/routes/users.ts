@@ -1,12 +1,12 @@
 import { UserModel } from '@src/domain/models/user';
-import { Express, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { ZodError } from 'zod';
 import Validation from '../domain/validations';
 import UserService from '../services/user';
 
 const user = new UserService();
 
-module.exports = (app: Express) => {
+module.exports = () => {
     const findAll = async (req: Request, res: Response) => {
         try {
             const users = await user.findAll();
