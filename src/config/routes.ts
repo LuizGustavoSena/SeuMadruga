@@ -8,4 +8,7 @@ module.exports = (app: Express) => {
     app.route('/accounts')
         .get(app.routes.accounts.getAll)
         .post(app.routes.accounts.create);
+
+    app.route('/accounts/:id')
+        .get(app.routes.accounts.getById);
 }

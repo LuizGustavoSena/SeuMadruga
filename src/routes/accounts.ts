@@ -25,5 +25,16 @@ module.exports = () => {
         }
     }
 
-    return { create, getAll };
+    const getById = async (req: Request, res: Response) => {
+        try {
+            const response = await account.getById(Number(req.params.id));
+
+            res.status(response ? 200 : 404).send(response);
+        } catch (error) {
+            res.status(400).json({ error: 'Database error' });
+
+        }
+    }
+
+    return { create, getAll, getById };
 }
