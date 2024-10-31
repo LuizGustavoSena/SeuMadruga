@@ -38,10 +38,7 @@ describe('Accounts', () => {
             user_id: USER.id
         }
 
-        const response = await request.post(URL).send(account);
-
-        expect(response.status).toBe(201);
-        expect(response.body.name).toBe(account.name);
+        await request.post(URL).send(account);
 
         const get = await request.get(URL);
 
@@ -49,4 +46,24 @@ describe('Accounts', () => {
         expect(get.body.length).toBeGreaterThan(0);
     });
 
+    test('Should be get by id account successful', async () => {
+        const account = {
+            name: 'Acc 3',
+            user_id: USER.id
+        }
+
+        const response = await request.post(URL).send(account);
+
+        const get = await request.get(`${URL}/${response.body.id}`);
+
+        expect(get.status).toBe(200);
+        expect(get.body.name).toBe(account.name);
+    });
+
+    test('Should be get by id account successful', async () => {
+
+        const get = await request.get(`${URL}/${-1}`);
+
+        expect(get.status).toBe(404);
+    });
 })
