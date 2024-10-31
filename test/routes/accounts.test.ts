@@ -30,6 +30,23 @@ describe('Accounts', () => {
 
         expect(response.status).toBe(201);
         expect(response.body.name).toBe(account.name);
-    })
+    });
+
+    test('Should be get all accounts', async () => {
+        const account = {
+            name: 'Acc 2',
+            user_id: USER.id
+        }
+
+        const response = await request.post(URL).send(account);
+
+        expect(response.status).toBe(201);
+        expect(response.body.name).toBe(account.name);
+
+        const get = await request.get(URL);
+
+        expect(get.status).toBe(200);
+        expect(get.body.length).toBeGreaterThan(0);
+    });
 
 })
