@@ -14,5 +14,16 @@ module.exports = () => {
         }
     };
 
-    return { create };
+    const getAll = async (req: Request, res: Response) => {
+        try {
+            const response = await account.getAll();
+
+            res.status(response.length > 0 ? 200 : 204).send(response);
+        } catch (error) {
+            res.status(400).json({ error: 'Database error' });
+
+        }
+    }
+
+    return { create, getAll };
 }
