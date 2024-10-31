@@ -7,3 +7,5 @@ export type CreateResponse = {
     id: number;
     name: String;
 }
+
+export type GetAllResponse = CreateResponse[];
