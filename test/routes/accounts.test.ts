@@ -61,9 +61,24 @@ describe('Accounts', () => {
     });
 
     test('Should be get by id account successful', async () => {
-
         const get = await request.get(`${URL}/${-1}`);
 
         expect(get.status).toBe(404);
     });
+
+    test('Should be update a successful account', async () => {
+        const account = {
+            name: 'Acc 4',
+            user_id: USER.id
+        }
+
+        const updatedName = 'Acc update';
+
+        const response = await request.post(URL).send(account);
+
+        const put = await request.put(`${URL}/${response.body.id}`).send({ name: updatedName });
+
+        expect(put.status).toBe(200);
+        expect(put.body.name).toBe(updatedName);
+    })
 })
