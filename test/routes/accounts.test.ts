@@ -80,5 +80,21 @@ describe('Accounts', () => {
 
         expect(put.status).toBe(200);
         expect(put.body.name).toBe(updatedName);
-    })
+    });
+
+    test('Should be delete by id account successful', async () => {
+        const account = {
+            name: 'Acc 5',
+            user_id: USER.id
+        }
+
+        const response = await request.post(URL).send(account);
+
+        const del = await request.delete(`${URL}/${response.body.id}`);
+
+        const get = await request.get(`${URL}/${response.body.id}`);
+
+        expect(del.status).toBe(200);
+        expect(get.status).toBe(404);
+    });
 })
