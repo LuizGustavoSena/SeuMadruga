@@ -1,9 +1,12 @@
 import app from '@src/app';
+import UserService from '@src/services/user';
 import supertest from 'supertest';
 
 const URL = '/users';
 
 const request = supertest(app);
+
+const userService = new UserService();
 
 describe('Users', () => {
     test('Should be list users', async () => {
@@ -22,6 +25,12 @@ describe('Users', () => {
         expect(response.status).toBe(201);
         expect(response.body.name).toBe(props.name);
         expect(response.body).not.toHaveProperty('password');
+
+        const user = await userService.findByEmail(props.email);
+
+        expect(user.password).not.toBeUndefined();
+        expect(user.password).not.toBeNull();
+        expect(user.password).not.toBe(props.password);
     });
 
     test('Should be error in password less than required when create a user', async () => {
