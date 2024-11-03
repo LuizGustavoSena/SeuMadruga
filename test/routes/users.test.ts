@@ -11,6 +11,7 @@ describe('Users', () => {
 
         expect(response.status).toBe(200);
         expect(response.body.length).toBeGreaterThan(0);
+        expect(response.body[0]).not.toHaveProperty('password');
     });
 
     test('Should be create a user', async () => {
@@ -20,6 +21,7 @@ describe('Users', () => {
 
         expect(response.status).toBe(201);
         expect(response.body.name).toBe(props.name);
+        expect(response.body).not.toHaveProperty('password');
     });
 
     test('Should be error in password less than required when create a user', async () => {
