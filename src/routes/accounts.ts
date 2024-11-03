@@ -36,5 +36,19 @@ module.exports = () => {
         }
     }
 
-    return { create, getAll, getById };
+    const update = async (req: Request, res: Response) => {
+        try {
+            const response = await account.update({
+                id: Number(req.params.id),
+                name: req.body.name
+            });
+
+            res.status(200).send(response);
+        } catch (error) {
+            res.status(400).json({ error: 'Database error' });
+
+        }
+    }
+
+    return { create, getAll, getById, update };
 }

@@ -10,5 +10,6 @@ module.exports = (app: Express) => {
         .post(app.routes.accounts.create);
 
     app.route('/accounts/:id')
-        .get(app.routes.accounts.getById);
+        .get(app.routes.accounts.getById)
+        .put(app.routes.accounts.update);
 }
