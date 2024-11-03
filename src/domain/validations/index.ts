@@ -12,4 +12,12 @@ export default class Validation {
 
         validation.parse(params);
     }
+
+    static createAccount(params: any): void {
+        const validation = z.object({
+            name: z.string({ required_error: 'Campo name deve ser preenchido' })
+        });
+
+        validation.parse(params);
+    }
 }
