@@ -1,4 +1,4 @@
-import { CreateProps, CreateResponse, GetAllResponse, GetByIdResponse } from "@src/domain/models/account";
+import { CreateProps, CreateResponse, GetAllResponse, GetByIdResponse, UpdateParams, UpdateResponse } from "@src/domain/models/account";
 import knex from 'knex';
 import config from "../../knexfile";
 
@@ -23,6 +23,14 @@ export default class AccountService {
 
     async getById(id: number): Promise<GetByIdResponse> {
         const response = await db.select('id', 'name').from(this.tableName).where({ id });
+
+        return response[0];
+    }
+
+    async update(params: UpdateParams): Promise<UpdateResponse> {
+        const response = await db(this.tableName).where({ id: params.id }).update({
+            name: params.name
+        }, ['id', 'name']);
 
         return response[0];
     }

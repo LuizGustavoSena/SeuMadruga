@@ -11,3 +11,10 @@ export type CreateResponse = {
 export type GetAllResponse = CreateResponse[];
 
 export type GetByIdResponse = CreateResponse;
+
+export type UpdateParams = {
+    id: number;
+    name: string
+}
+
+export type UpdateResponse = CreateResponse;
