@@ -32,6 +32,17 @@ describe('Accounts', () => {
         expect(response.body.name).toBe(account.name);
     });
 
+    test('Should be error in create a account without name', async () => {
+        const account = {
+            user_id: USER.id
+        }
+
+        const response = await request.post(URL).send(account);
+
+        expect(response.status).toBe(400);
+        expect(response.body.error).toContain('name');
+    });
+
     test('Should be get all accounts', async () => {
         const account = {
             name: 'Acc 2',
