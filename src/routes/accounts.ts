@@ -50,5 +50,16 @@ module.exports = () => {
         }
     }
 
-    return { create, getAll, getById, update };
+    const deleteById = async (req: Request, res: Response) => {
+        try {
+            await account.deleteById(Number(req.params.id));
+
+            res.status(200).send();
+        } catch (error) {
+            res.status(400).json({ error: 'Database error' });
+
+        }
+    }
+
+    return { create, getAll, getById, update, deleteById };
 }
