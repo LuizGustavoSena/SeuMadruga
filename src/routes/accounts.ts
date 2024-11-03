@@ -1,16 +1,22 @@
+import Validation from '@src/domain/validations';
 import AccountService from '@src/services/account';
 import { Request, Response } from 'express';
+import { ZodError } from 'zod';
 
 const account = new AccountService();
 
 module.exports = () => {
     const create = async (req: Request, res: Response) => {
         try {
+            Validation.createAccount(req.body);
+
             const response = await account.create(req.body);
 
             res.status(201).send(response);
-        } catch (error) {
-            res.status(400).json({ error: 'Database error' });
+        } catch (error: any) {
+            let message = error instanceof ZodError ? `${error.errors.map(el => el.message).join(', ')}` : error.message;
+
+            res.status(400).json({ error: message });
         }
     };
 
