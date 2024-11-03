@@ -21,11 +21,6 @@ module.exports = () => {
         try {
             Validation.createUser(req.body);
 
-            const existEmail = await user.findByEmail(req.body.email);
-
-            if (existEmail.length > 0)
-                throw new Error('Email já existente');
-
             const response = await user.save(req.body);
 
             res.status(201).json(response);
