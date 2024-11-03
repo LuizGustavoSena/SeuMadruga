@@ -34,4 +34,8 @@ export default class AccountService {
 
         return response[0];
     }
+
+    async deleteById(id: number): Promise<void> {
+        await db(this.tableName).where({ id }).del();
+    }
 }
