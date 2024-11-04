@@ -1,6 +1,9 @@
 import { Express } from "express";
 
 module.exports = (app: Express) => {
+    app.route('/auth/signin')
+        .post(app.routes.auth.signin);
+
     app.route('/users')
         .get(app.routes.users.findAll)
         .post(app.routes.users.create);
