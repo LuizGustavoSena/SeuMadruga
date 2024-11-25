@@ -1,7 +1,7 @@
-import Validation from '@src/domain/validations';
-import AccountService from '@src/services/account';
 import { Request, Response } from 'express';
 import { ZodError } from 'zod';
+import Validation from '../domain/validations';
+import AccountService from '../services/account';
 
 const account = new AccountService();
 
