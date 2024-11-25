@@ -59,4 +59,10 @@ describe('Auth', () => {
         expect(response.status).toBe(400);
         expect(response.body.error).toBe('Usuário não encontrado');
     });
+
+    test('Should be error when request any endpoint without token', async () => {
+        const response = await request.get(URL_USERS);
+
+        expect(response.status).toBe(401);
+    });
 })
