@@ -4,7 +4,8 @@ const consign = require('consign');
 const app: Express = express();
 
 consign({ cwd: 'src', verbose: false })
-    .include('config/middlewares.ts')
+    .include('config/passport.ts')
+    .then('config/middlewares.ts')
     .then('./routes')
     .then('./config/routes.ts')
     .into(app);
