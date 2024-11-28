@@ -20,6 +20,20 @@ describe('Auth', () => {
         USER.id = response.body.id;
     });
 
+    test('Should be successful create account', async () => {
+        const response = await request.post(`${URL}/signup`)
+            .send({
+                name: 'Walter',
+                email: `${Date.now()}@email.com`,
+                password: '12354'
+            });
+
+        expect(response.status).toBe(201);
+        expect(response.body.name).toBe('Walter');
+        expect(response.body).toHaveProperty('email');
+        expect(response.body).not.toHaveProperty('password');
+    });
+
     test('Should be auth successful user', async () => {
         const response = await request.post(`${URL}/signin`).send({
             email: USER.email,
