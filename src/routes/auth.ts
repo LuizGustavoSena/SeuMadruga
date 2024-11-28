@@ -1,6 +1,6 @@
-import AuthService from '@src/services/auth';
-import UserService from '@src/services/user';
 import { Request, Response } from 'express';
+import AuthService from '../services/auth';
+import UserService from '../services/user';
 
 const authService = new AuthService(new UserService());
 

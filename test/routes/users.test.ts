@@ -1,6 +1,6 @@
 import app from '@src/app';
-import UserService from '@src/services/user';
 import supertest from 'supertest';
+import UserService from '../services/user';
 
 const URL = '/users';
 

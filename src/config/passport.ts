@@ -1,6 +1,6 @@
-import UserService from '@src/services/user';
 import 'dotenv/config';
 import { Express } from "express";
+import UserService from '../services/user';
 
 const passport = require('passport');
 const { Strategy, ExtractJwt } = require('passport-jwt');
