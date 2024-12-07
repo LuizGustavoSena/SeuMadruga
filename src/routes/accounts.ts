@@ -24,9 +24,9 @@ module.exports = () => {
 
     router.get('/', async (req: Request, res: Response) => {
         try {
-            const response = await account.getAll();
+            const response = await account.getByUserId(req.user.id);
 
-            res.status(response.length > 0 ? 200 : 204).send(response);
+            res.status(response ? 200 : 204).send(response);
         } catch (error) {
             res.status(400).json({ error: 'Database error' });
 
