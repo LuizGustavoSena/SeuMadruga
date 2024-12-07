@@ -12,7 +12,7 @@ module.exports = () => {
         try {
             Validation.createAccount(req.body);
 
-            const response = await account.create(req.body);
+            const response = await account.create({ ...req.body, user_id: req.user.id });
 
             res.status(201).send(response);
         } catch (error: any) {
