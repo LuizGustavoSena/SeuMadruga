@@ -1,6 +1,6 @@
-import Validation from '@src/domain/validations';
 import express, { Express, Request, Response } from 'express';
 import { ZodError } from 'zod';
+import Validation from '../domain/validations';
 import AuthService from '../services/auth';
 import UserService from '../services/user';
 
