@@ -1,13 +1,17 @@
 import app from '@src/app';
+import AuthService from '@src/services/auth';
+import UserService from '@src/services/user';
 import supertest from 'supertest';
+import { user } from './models/user';
 
 const URL = '/accounts';
-const URL_USERS = '/users';
 
 const request = supertest(app);
 
-const USER = {
-    id: undefined,
+const userService = new UserService();
+const authService = new AuthService(userService);
+
+const USER: user = {
     name: 'Walter Mitty',
     email: `${Date.now()}@email.com`,
     password: '12354'
@@ -15,9 +19,15 @@ const USER = {
 
 describe('Accounts', () => {
     beforeAll(async () => {
-        const response = await request.post(URL_USERS).send(USER);
+        const response = await userService.save(USER);;
 
-        USER.id = response.body.id;
+        const token = await authService.signin({
+            email: USER.email,
+            password: USER.password
+        });
+
+        USER.token = token.token;
+        USER.id = response.id;
     });
 
     test('Should be create a successful account', async () => {
@@ -26,7 +36,9 @@ describe('Accounts', () => {
             user_id: USER.id
         }
 
-        const response = await request.post(URL).send(account);
+        const response = await request.post(URL)
+            .set('authorization', `JWT ${USER.token}`)
+            .send(account);
 
         expect(response.status).toBe(201);
         expect(response.body.name).toBe(account.name);
@@ -37,7 +49,9 @@ describe('Accounts', () => {
             user_id: USER.id
         }
 
-        const response = await request.post(URL).send(account);
+        const response = await request.post(URL)
+            .set('authorization', `JWT ${USER.token}`)
+            .send(account);
 
         expect(response.status).toBe(400);
         expect(response.body.error).toContain('name');
@@ -49,9 +63,12 @@ describe('Accounts', () => {
             user_id: USER.id
         }
 
-        await request.post(URL).send(account);
+        await request.post(URL)
+            .set('authorization', `JWT ${USER.token}`)
+            .send(account);
 
-        const get = await request.get(URL);
+        const get = await request.get(URL)
+            .set('authorization', `JWT ${USER.token}`);
 
         expect(get.status).toBe(200);
         expect(get.body.length).toBeGreaterThan(0);
@@ -63,16 +80,20 @@ describe('Accounts', () => {
             user_id: USER.id
         }
 
-        const response = await request.post(URL).send(account);
+        const response = await request.post(URL)
+            .set('authorization', `JWT ${USER.token}`)
+            .send(account);
 
-        const get = await request.get(`${URL}/${response.body.id}`);
+        const get = await request.get(`${URL}/${response.body.id}`)
+            .set('authorization', `JWT ${USER.token}`);
 
         expect(get.status).toBe(200);
         expect(get.body.name).toBe(account.name);
     });
 
     test('Should be get by id account successful', async () => {
-        const get = await request.get(`${URL}/${-1}`);
+        const get = await request.get(`${URL}/${-1}`)
+            .set('authorization', `JWT ${USER.token}`);
 
         expect(get.status).toBe(404);
     });
@@ -85,9 +106,13 @@ describe('Accounts', () => {
 
         const updatedName = 'Acc update';
 
-        const response = await request.post(URL).send(account);
+        const response = await request.post(URL)
+            .set('authorization', `JWT ${USER.token}`)
+            .send(account);
 
-        const put = await request.put(`${URL}/${response.body.id}`).send({ name: updatedName });
+        const put = await request.put(`${URL}/${response.body.id}`)
+            .set('authorization', `JWT ${USER.token}`)
+            .send({ name: updatedName });
 
         expect(put.status).toBe(200);
         expect(put.body.name).toBe(updatedName);
@@ -99,11 +124,15 @@ describe('Accounts', () => {
             user_id: USER.id
         }
 
-        const response = await request.post(URL).send(account);
+        const response = await request.post(URL)
+            .set('authorization', `JWT ${USER.token}`)
+            .send(account);
 
-        const del = await request.delete(`${URL}/${response.body.id}`);
+        const del = await request.delete(`${URL}/${response.body.id}`)
+            .set('authorization', `JWT ${USER.token}`);
 
-        const get = await request.get(`${URL}/${response.body.id}`);
+        const get = await request.get(`${URL}/${response.body.id}`)
+            .set('authorization', `JWT ${USER.token}`);
 
         expect(del.status).toBe(200);
         expect(get.status).toBe(404);
