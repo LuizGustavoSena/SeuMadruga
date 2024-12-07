@@ -32,8 +32,7 @@ describe('Accounts', () => {
 
     test('Should be create a successful account', async () => {
         const account = {
-            name: 'Acc 1',
-            user_id: USER.id
+            name: 'Acc 1'
         }
 
         const response = await request.post(URL)
@@ -45,13 +44,8 @@ describe('Accounts', () => {
     });
 
     test('Should be error in create a account without name', async () => {
-        const account = {
-            user_id: USER.id
-        }
-
         const response = await request.post(URL)
-            .set('authorization', `JWT ${USER.token}`)
-            .send(account);
+            .set('authorization', `JWT ${USER.token}`);
 
         expect(response.status).toBe(400);
         expect(response.body.error).toContain('name');
@@ -59,8 +53,7 @@ describe('Accounts', () => {
 
     test('Should be get all accounts', async () => {
         const account = {
-            name: 'Acc 2',
-            user_id: USER.id
+            name: 'Acc 2'
         }
 
         await request.post(URL)
@@ -76,8 +69,7 @@ describe('Accounts', () => {
 
     test('Should be get by id account successful', async () => {
         const account = {
-            name: 'Acc 3',
-            user_id: USER.id
+            name: 'Acc 3'
         }
 
         const response = await request.post(URL)
@@ -100,8 +92,7 @@ describe('Accounts', () => {
 
     test('Should be update a successful account', async () => {
         const account = {
-            name: 'Acc 4',
-            user_id: USER.id
+            name: 'Acc 4'
         }
 
         const updatedName = 'Acc update';
@@ -120,8 +111,7 @@ describe('Accounts', () => {
 
     test('Should be delete by id account successful', async () => {
         const account = {
-            name: 'Acc 5',
-            user_id: USER.id
+            name: 'Acc 5'
         }
 
         const response = await request.post(URL)
