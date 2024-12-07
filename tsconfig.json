@@ -42,5 +42,8 @@
     "exclude": [
         "./node_modules/*",
         "dist"
+    ],
+    "files": [
+        "./src/domain/models/app.d.ts"
     ]
 }
