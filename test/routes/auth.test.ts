@@ -1,4 +1,5 @@
 import app from '@src/app';
+import UserService from '@src/services/user';
 import supertest from 'supertest';
 import { user } from './models/user';
 
@@ -6,6 +7,7 @@ const URL = '/auth';
 const URL_USERS = '/users';
 
 const request = supertest(app);
+const userService = new UserService();
 
 const USER: user = {
     name: 'Walter Mitty',
@@ -15,9 +17,9 @@ const USER: user = {
 
 describe('Auth', () => {
     beforeAll(async () => {
-        const response = await request.post(URL_USERS).send(USER);
+        const response = await userService.save(USER);;
 
-        USER.id = response.body.id;
+        USER.id = response.id;
     });
 
     test('Should be successful create account', async () => {
