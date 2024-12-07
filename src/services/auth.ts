@@ -1,7 +1,7 @@
 import { SigninParams, SigninResponse } from "@src/domain/models/auth";
 import 'dotenv/config';
 import UserService from "./user";
-const bcrypt = require('bcrypt-nodejs');
+const bcrypt = require('bcryptjs');
 const jwt = require('jwt-simple');
 
 export default class AuthService {
