@@ -1,13 +1,13 @@
 import app from '@src/app';
 import supertest from 'supertest';
+import { user } from './models/user';
 
 const URL = '/auth';
 const URL_USERS = '/users';
 
 const request = supertest(app);
 
-const USER = {
-    id: undefined,
+const USER: user = {
     name: 'Walter Mitty',
     email: `${Date.now()}@email.com`,
     password: '12354'
