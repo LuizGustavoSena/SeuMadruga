@@ -7,7 +7,7 @@
     "build": "tsc",
     "start": "yarn build && node dist/src/server.js",
     "dev": "ts-node-dev --transpile-only src/server.ts",
-    "test": "jest --verbose=true",
+    "test": "jest --setupFiles dotenv/config --verbose=true --forceExit",
     "test:w": "yarn test --watch"
   },
   "author": "Luiz Sena",
