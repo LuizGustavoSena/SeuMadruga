@@ -4,7 +4,7 @@ import UserService from '@src/services/user';
 import supertest from 'supertest';
 import { user } from './models/user';
 
-const URL = '/accounts';
+const URL = '/v1/accounts';
 
 const request = supertest(app);
 

@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import express, { Request, Response } from 'express';
 import { ZodError } from 'zod';
 import Validation from '../domain/validations';
 import AccountService from '../services/account';
@@ -6,7 +6,9 @@ import AccountService from '../services/account';
 const account = new AccountService();
 
 module.exports = () => {
-    const create = async (req: Request, res: Response) => {
+    const router = express.Router();
+
+    router.post('/', async (req: Request, res: Response) => {
         try {
             Validation.createAccount(req.body);
 
@@ -18,9 +20,9 @@ module.exports = () => {
 
             res.status(400).json({ error: message });
         }
-    };
+    });
 
-    const getAll = async (req: Request, res: Response) => {
+    router.get('/', async (req: Request, res: Response) => {
         try {
             const response = await account.getAll();
 
@@ -29,9 +31,9 @@ module.exports = () => {
             res.status(400).json({ error: 'Database error' });
 
         }
-    }
+    });
 
-    const getById = async (req: Request, res: Response) => {
+    router.get('/:id', async (req: Request, res: Response) => {
         try {
             const response = await account.getById(Number(req.params.id));
 
@@ -40,9 +42,9 @@ module.exports = () => {
             res.status(400).json({ error: 'Database error' });
 
         }
-    }
+    });
 
-    const update = async (req: Request, res: Response) => {
+    router.put('/:id', async (req: Request, res: Response) => {
         try {
             const response = await account.update({
                 id: Number(req.params.id),
@@ -54,9 +56,9 @@ module.exports = () => {
             res.status(400).json({ error: 'Database error' });
 
         }
-    }
+    });
 
-    const deleteById = async (req: Request, res: Response) => {
+    router.delete('/:id', async (req: Request, res: Response) => {
         try {
             await account.deleteById(Number(req.params.id));
 
@@ -65,7 +67,7 @@ module.exports = () => {
             res.status(400).json({ error: 'Database error' });
 
         }
-    }
+    });
 
-    return { create, getAll, getById, update, deleteById };
+    return router;
 }

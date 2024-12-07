@@ -7,7 +7,7 @@ consign({ cwd: 'src', verbose: false })
     .include('config/passport.ts')
     .then('config/middlewares.ts')
     .then('./routes')
-    .then('./config/routes.ts')
+    .then('./config/router.ts')
     .into(app);
 
 app.get('/', (req: Request, res: Response) => {

@@ -1,5 +1,5 @@
 import { UserModel } from '@src/domain/models/user';
-import { Request, Response } from 'express';
+import express, { Request, Response } from 'express';
 import { ZodError } from 'zod';
 import Validation from '../domain/validations';
 import UserService from '../services/user';
@@ -7,7 +7,9 @@ import UserService from '../services/user';
 const user = new UserService();
 
 module.exports = () => {
-    const findAll = async (req: Request, res: Response) => {
+    const router = express.Router();
+
+    router.get('/', async (req: Request, res: Response) => {
         try {
             const users = await user.findAll();
 
@@ -15,9 +17,9 @@ module.exports = () => {
         } catch (error) {
             res.status(400).json({ error: 'Database error' });
         }
-    };
+    });
 
-    const create = async (req: Request, res: Response) => {
+    router.post('/', async (req: Request, res: Response) => {
         try {
             Validation.createUser(req.body);
 
@@ -29,7 +31,7 @@ module.exports = () => {
 
             res.status(400).json({ error: message });
         }
-    };
+    });
 
-    return { findAll, create };
+    return router;
 }
