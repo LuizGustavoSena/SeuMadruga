@@ -15,7 +15,7 @@ export default class AccountService {
         if (account.length > 0)
             throw new Error('Conta existente');
 
-        const response = await db(this.tableName).insert(params, ['id', 'name']);
+        const response = await db(this.tableName).insert(params, ['id', 'name', 'user_id']);
 
         return response[0];
     }
@@ -27,7 +27,7 @@ export default class AccountService {
     }
 
     async getByFilter(filter: any): Promise<GetByIdResponse[]> {
-        const response = await db.select('id', 'name').from(this.tableName).where(filter);
+        const response = await db.select('id', 'name', 'user_id').from(this.tableName).where(filter);
 
         return response;
     }

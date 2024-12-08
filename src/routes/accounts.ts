@@ -37,10 +37,14 @@ module.exports = () => {
         try {
             const response = await account.getByFilter({ id: Number(req.params.id) });
 
-            res.status(response.length ? 200 : 404).send(response[0]);
+            if (response.length > 0 && response[0].user_id !== req.user.id) {
+                res.status(403).json({ error: 'Essa conta não pertence a esse usuário' });
+                return;
+            }
+
+            res.status(response.length > 0 ? 200 : 404).send(response[0]);
         } catch (error) {
             res.status(400).json({ error: 'Database error' });
-
         }
     });
 

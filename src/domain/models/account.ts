@@ -6,6 +6,7 @@ export type CreateProps = {
 export type CreateResponse = {
     id: number;
     name: String;
+    user_id: number;
 }
 
 export type GetAllResponse = CreateResponse[];
