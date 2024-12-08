@@ -1,4 +1,5 @@
 import app from '@src/app';
+import { GetByIdResponse } from '@src/domain/models/account';
 import AuthService from '@src/services/auth';
 import UserService from '@src/services/user';
 import supertest from 'supertest';
@@ -17,17 +18,31 @@ const USER: user = {
     password: '12354'
 }
 
+const ANOTHER_USER: user = {
+    name: 'Another Walter Mitty',
+    email: `Another${Date.now()}@email.com`,
+    password: '12354'
+}
+
 describe('Accounts', () => {
     beforeAll(async () => {
         const response = await userService.save(USER);;
+        const another_response = await userService.save(ANOTHER_USER);;
 
         const token = await authService.signin({
             email: USER.email,
             password: USER.password
         });
+        const another_token = await authService.signin({
+            email: ANOTHER_USER.email,
+            password: ANOTHER_USER.password
+        });
 
         USER.token = token.token;
         USER.id = response.id;
+
+        ANOTHER_USER.token = another_token.token;
+        ANOTHER_USER.id = another_response.id;
     });
 
     test('Should be create a successful account', async () => {
@@ -49,22 +64,6 @@ describe('Accounts', () => {
 
         expect(response.status).toBe(400);
         expect(response.body.error).toContain('name');
-    });
-
-    test('Should be get all accounts', async () => {
-        const account = {
-            name: 'Acc 2'
-        }
-
-        await request.post(URL)
-            .set('authorization', `JWT ${USER.token}`)
-            .send(account);
-
-        const get = await request.get(URL)
-            .set('authorization', `JWT ${USER.token}`);
-
-        expect(get.status).toBe(200);
-        expect(get.body.length).toBeGreaterThan(0);
     });
 
     test('Should be get by id account successful', async () => {
@@ -126,5 +125,32 @@ describe('Accounts', () => {
 
         expect(del.status).toBe(200);
         expect(get.status).toBe(404);
+    });
+
+    test('Should be list only accounts by user', async () => {
+        const account = { name: 'USER' };
+        const another_account = { name: 'ANOTHER_USER' };
+
+        await request.post(URL)
+            .set('authorization', `JWT ${USER.token}`)
+            .send(account);
+
+        await request.post(URL)
+            .set('authorization', `JWT ${ANOTHER_USER.token}`)
+            .send(another_account);
+
+        const response = await request.get(URL)
+            .set('authorization', `JWT ${USER.token}`);
+
+        const another_response = await request.get(URL)
+            .set('authorization', `JWT ${ANOTHER_USER.token}`);
+
+        expect(response.status).toBe(200);
+        expect(response.body.length).toBeGreaterThanOrEqual(1);
+        expect(response.body.find((el: GetByIdResponse) => el.name === account.name)).not.toBeUndefined();
+
+        expect(another_response.status).toBe(200);
+        expect(another_response.body.length).toBeGreaterThanOrEqual(1);
+        expect(another_response.body.find((el: GetByIdResponse) => el.name === another_account.name)).not.toBeUndefined();
     });
 })
