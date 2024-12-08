@@ -10,6 +10,11 @@ export default class AccountService {
     constructor() { };
 
     async create(params: CreateProps): Promise<CreateResponse> {
+        const account = await this.getByFilter({ name: params.name, user_id: params.user_id });
+
+        if (account.length > 0)
+            throw new Error('Conta existente');
+
         const response = await db(this.tableName).insert(params, ['id', 'name']);
 
         return response[0];
@@ -21,14 +26,8 @@ export default class AccountService {
         return response;
     }
 
-    async getById(id: number): Promise<GetByIdResponse> {
-        const response = await db.select('id', 'name').from(this.tableName).where({ id });
-
-        return response[0];
-    }
-
-    async getByUserId(user_id: number): Promise<GetByIdResponse[]> {
-        const response = await db.select('id', 'name').from(this.tableName).where({ user_id });
+    async getByFilter(filter: any): Promise<GetByIdResponse[]> {
+        const response = await db.select('id', 'name').from(this.tableName).where(filter);
 
         return response;
     }

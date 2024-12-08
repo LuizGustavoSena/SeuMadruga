@@ -24,7 +24,7 @@ module.exports = () => {
 
     router.get('/', async (req: Request, res: Response) => {
         try {
-            const response = await account.getByUserId(req.user.id);
+            const response = await account.getByFilter({ user_id: req.user.id });
 
             res.status(response.length > 0 ? 200 : 204).send(response);
         } catch (error) {
@@ -35,9 +35,9 @@ module.exports = () => {
 
     router.get('/:id', async (req: Request, res: Response) => {
         try {
-            const response = await account.getById(Number(req.params.id));
+            const response = await account.getByFilter({ id: Number(req.params.id) });
 
-            res.status(response ? 200 : 404).send(response);
+            res.status(response.length ? 200 : 404).send(response[0]);
         } catch (error) {
             res.status(400).json({ error: 'Database error' });
 
