@@ -1,18 +1,31 @@
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import { ZodError } from 'zod';
 import Validation from '../domain/validations';
 import AccountService from '../services/account';
 
-const account = new AccountService();
+const serviceAccount = new AccountService();
 
 module.exports = () => {
     const router = express.Router();
+
+    router.param('id', async (req: Request, res: Response, next: NextFunction) => {
+        const account = await serviceAccount.getByFilter({ id: Number(req.params.id) });
+
+        if (account.length === 0 ||
+            (account.length > 0 && account.find(el => el.user_id === req.user.id))
+        ) {
+            next();
+            return;
+        }
+
+        res.status(403).json({ error: 'Essa conta não pertence a esse usuário' });
+    });
 
     router.post('/', async (req: Request, res: Response) => {
         try {
             Validation.createAccount(req.body);
 
-            const response = await account.create({ ...req.body, user_id: req.user.id });
+            const response = await serviceAccount.create({ ...req.body, user_id: req.user.id });
 
             res.status(201).send(response);
         } catch (error: any) {
@@ -24,7 +37,7 @@ module.exports = () => {
 
     router.get('/', async (req: Request, res: Response) => {
         try {
-            const response = await account.getByFilter({ user_id: req.user.id });
+            const response = await serviceAccount.getByFilter({ user_id: req.user.id });
 
             res.status(response.length > 0 ? 200 : 204).send(response);
         } catch (error) {
@@ -35,12 +48,7 @@ module.exports = () => {
 
     router.get('/:id', async (req: Request, res: Response) => {
         try {
-            const response = await account.getByFilter({ id: Number(req.params.id) });
-
-            if (response.length > 0 && response[0].user_id !== req.user.id) {
-                res.status(403).json({ error: 'Essa conta não pertence a esse usuário' });
-                return;
-            }
+            const response = await serviceAccount.getByFilter({ id: Number(req.params.id) });
 
             res.status(response.length > 0 ? 200 : 404).send(response[0]);
         } catch (error) {
@@ -50,7 +58,7 @@ module.exports = () => {
 
     router.put('/:id', async (req: Request, res: Response) => {
         try {
-            const response = await account.update({
+            const response = await serviceAccount.update({
                 id: Number(req.params.id),
                 name: req.body.name
             });
@@ -64,7 +72,7 @@ module.exports = () => {
 
     router.delete('/:id', async (req: Request, res: Response) => {
         try {
-            await account.deleteById(Number(req.params.id));
+            await serviceAccount.deleteById(Number(req.params.id));
 
             res.status(200).send();
         } catch (error) {
