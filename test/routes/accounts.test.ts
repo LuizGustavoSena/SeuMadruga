@@ -153,4 +153,23 @@ describe('Accounts', () => {
         expect(another_response.body.length).toBeGreaterThanOrEqual(1);
         expect(another_response.body.find((el: GetByIdResponse) => el.name === another_account.name)).not.toBeUndefined();
     });
+
+    test('Should don`t insert account with same name', async () => {
+        const account = { name: 'Duplicate Name' };
+
+        const response = await request.post(URL)
+            .set('authorization', `JWT ${USER.token}`)
+            .send(account);
+
+        const duplicateResponse = await request.post(URL)
+            .set('authorization', `JWT ${USER.token}`)
+            .send(account);
+
+        expect(response.status).toBe(201);
+        expect(response.body.name).toBe(account.name);
+
+        expect(duplicateResponse.status).toBe(400);
+        expect(duplicateResponse.body).toHaveProperty('error');
+        expect(duplicateResponse.body.error).toContain('existente');
+    });
 })
