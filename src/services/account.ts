@@ -27,10 +27,10 @@ export default class AccountService {
         return response[0];
     }
 
-    async getByUserId(user_id: number): Promise<GetByIdResponse> {
+    async getByUserId(user_id: number): Promise<GetByIdResponse[]> {
         const response = await db.select('id', 'name').from(this.tableName).where({ user_id });
 
-        return response[0];
+        return response;
     }
 
     async update(params: UpdateParams): Promise<UpdateResponse> {
