@@ -78,6 +78,7 @@ describe('Accounts', () => {
         const get = await request.get(`${URL}/${response.body.id}`)
             .set('authorization', `JWT ${USER.token}`);
 
+        expect(response.status).toBe(201);
         expect(get.status).toBe(200);
         expect(get.body.name).toBe(account.name);
     });
@@ -171,5 +172,21 @@ describe('Accounts', () => {
         expect(duplicateResponse.status).toBe(400);
         expect(duplicateResponse.body).toHaveProperty('error');
         expect(duplicateResponse.body.error).toContain('existente');
+    });
+
+    test('Should don`t show account with other user_id', async () => {
+        const account = { name: 'NameTheUserOne' };
+
+        const response = await request.post(URL)
+            .set('authorization', `JWT ${USER.token}`)
+            .send(account);
+
+        const responseAnotherUser = await request.get(`${URL}/${response.body.id}`)
+            .set('authorization', `JWT ${ANOTHER_USER.token}`)
+            .send(account);
+
+        expect(responseAnotherUser.status).toBe(403);
+        expect(responseAnotherUser.body).toHaveProperty('error');
+        expect(responseAnotherUser.body.error).toContain('não pertence');
     });
 })
