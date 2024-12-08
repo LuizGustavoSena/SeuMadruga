@@ -174,7 +174,7 @@ describe('Accounts', () => {
         expect(duplicateResponse.body.error).toContain('existente');
     });
 
-    test('Should don`t show account with other user_id', async () => {
+    test('Should don`t show another user_id account', async () => {
         const account = { name: 'NameTheUserOne' };
 
         const response = await request.post(URL)
@@ -182,8 +182,38 @@ describe('Accounts', () => {
             .send(account);
 
         const responseAnotherUser = await request.get(`${URL}/${response.body.id}`)
-            .set('authorization', `JWT ${ANOTHER_USER.token}`)
+            .set('authorization', `JWT ${ANOTHER_USER.token}`);
+
+        expect(responseAnotherUser.status).toBe(403);
+        expect(responseAnotherUser.body).toHaveProperty('error');
+        expect(responseAnotherUser.body.error).toContain('não pertence');
+    });
+
+    test('Should don`t update another user_id account', async () => {
+        const account = { name: 'NameToUpdateTheUserOne' };
+
+        const response = await request.post(URL)
+            .set('authorization', `JWT ${USER.token}`)
             .send(account);
+
+        const responseAnotherUser = await request.put(`${URL}/${response.body.id}`)
+            .set('authorization', `JWT ${ANOTHER_USER.token}`)
+            .send({ name: 'AlterName' });
+
+        expect(responseAnotherUser.status).toBe(403);
+        expect(responseAnotherUser.body).toHaveProperty('error');
+        expect(responseAnotherUser.body.error).toContain('não pertence');
+    });
+
+    test('Should don`t delete another user_id account', async () => {
+        const account = { name: 'NameToDeleteTheUserOne' };
+
+        const response = await request.post(URL)
+            .set('authorization', `JWT ${USER.token}`)
+            .send(account);
+
+        const responseAnotherUser = await request.delete(`${URL}/${response.body.id}`)
+            .set('authorization', `JWT ${ANOTHER_USER.token}`);
 
         expect(responseAnotherUser.status).toBe(403);
         expect(responseAnotherUser.body).toHaveProperty('error');
