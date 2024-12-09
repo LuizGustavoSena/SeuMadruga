@@ -25,7 +25,7 @@ export default class Validation {
     static createTransaction(params: any): void {
         const validation = z.object({
             description: z.string({ required_error: 'Campo description deve ser preenchido' }),
-            type: z.nativeEnum(Type, { required_error: 'Campo type deve ser obrigatório', message: `Enum não conhecido, utilize apenas ${Type}` }),
+            type: z.nativeEnum(Type, { required_error: 'Campo type deve ser obrigatório' }),
             ammount: z.number({ required_error: 'Campo ammount deve ser preenchido', message: 'Campo ammount deve ser do tipo number' }),
         });
 
