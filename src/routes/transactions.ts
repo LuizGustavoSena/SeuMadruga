@@ -44,5 +44,15 @@ module.exports = () => {
         }
     });
 
+    router.put('/:id', async (req: Request, res: Response) => {
+        try {
+            const response = await transactionService.updateById(Number(req.params.id), req.body);
+
+            res.status(response ? 200 : 404).send(response);
+        } catch (error: any) {
+            res.status(400).send({ error: error.message });
+        }
+    });
+
     return router;
 }
