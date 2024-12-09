@@ -13,14 +13,14 @@ export default class TransactionService {
             .join('accounts', 'accounts.id', 'acc_id')
             .where(params.filter ?? {})
             .andWhere('accounts.user_id', '=', params.user_id)
-            .select();
+            .select(`${this.tableName}.id`, 'description', 'type', 'date', 'ammount', 'acc_id');
 
         return response;
     }
 
     async create(params: CreateProps): Promise<CreateResponse> {
         const response = await db(this.tableName)
-            .insert({ ...params, date: new Date() }, '*');
+            .insert({ ...params, date: new Date() }, ['id', 'description', 'type', 'date', 'ammount', 'acc_id']);
 
         return response[0];
     }

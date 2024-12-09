@@ -14,7 +14,6 @@ export type FindResponse = {
     type: Type;
     date: Date;
     ammount: number;
-    status: boolean;
     acc_id: number;
 }
 
@@ -22,7 +21,6 @@ export type CreateProps = {
     description: string;
     type: Type;
     ammount: number;
-    status: boolean;
     acc_id: number;
 }
 
