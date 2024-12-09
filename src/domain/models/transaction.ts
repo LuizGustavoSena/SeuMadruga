@@ -25,3 +25,12 @@ export type CreateProps = {
 }
 
 export type CreateResponse = FindResponse;
+
+export type UpdateProps = {
+    description?: string;
+    type?: Type;
+    date?: Date;
+    ammount?: number;
+}
+
+export type UpdateResponse = FindResponse;

@@ -1,4 +1,4 @@
-import { CreateProps, CreateResponse, FindProps, FindResponse } from "@src/domain/models/transaction";
+import { CreateProps, CreateResponse, FindProps, FindResponse, UpdateProps, UpdateResponse } from "@src/domain/models/transaction";
 import knex from 'knex';
 import config from "../../knexfile";
 
@@ -29,6 +29,14 @@ export default class TransactionService {
     async create(params: CreateProps): Promise<CreateResponse> {
         const response = await db(this.tableName)
             .insert({ ...params, date: new Date() }, ['id', 'description', 'type', 'date', 'ammount', 'acc_id']);
+
+        return response[0];
+    }
+
+    async updateById(id: number, params: UpdateProps): Promise<UpdateResponse> {
+        const response = await db(this.tableName)
+            .where({ id })
+            .update(params, ['id', 'description', 'type', 'date', 'ammount', 'acc_id']);
 
         return response[0];
     }
