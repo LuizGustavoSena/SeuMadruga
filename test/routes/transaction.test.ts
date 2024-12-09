@@ -72,15 +72,16 @@ describe('Transaction', () => {
     });
 
     test('Should be successful create a transaction', async () => {
-        const response = await transactionService.create({
-            acc_id: ACCOUNTS[0].id ?? 0,
-            ammount: 100,
-            description: 'Successful transaction',
-            status: true,
-            type: Type.ACTIVE
-        });
+        const response = await request.post(URL_TRANSACTION)
+            .set('authorization', `JWT ${USERS[0].token}`)
+            .send({
+                ammount: 100,
+                description: 'Successful transaction',
+                type: Type.ACTIVE
+            });
 
-        expect(response).toHaveProperty('id');
+        expect(response.status).toBe(201);
+        expect(response.body).toHaveProperty('id');
     });
 
     test('Should don`t list another transaction account`s', async () => {
@@ -90,7 +91,6 @@ describe('Transaction', () => {
             acc_id: ACCOUNTS[0].id ?? 0,
             ammount: 100,
             description,
-            status: true,
             type: Type.ACTIVE
         });
 
@@ -98,7 +98,6 @@ describe('Transaction', () => {
             acc_id: ACCOUNTS[1].id ?? 0,
             ammount: 100,
             description,
-            status: true,
             type: Type.ACTIVE
         });
 
