@@ -110,4 +110,20 @@ describe('Transaction', () => {
         expect(filter).toHaveLength(1);
         expect(filter[0].acc_id).toBe(ACCOUNTS[0].id);
     });
+
+    test('Should successful get transaction by id', async () => {
+        const transaction = await request.post(URL_TRANSACTION)
+            .set('authorization', `JWT ${USERS[0].token}`)
+            .send({
+                ammount: 100,
+                description: 'Successful transaction',
+                type: Type.ACTIVE
+            });
+
+        const response = await request.get(`${URL_TRANSACTION}/${transaction.body.id}`)
+            .set('authorization', `JWT ${USERS[0].token}`);
+
+        expect(response.status).toBe(200);
+        expect(response.body.id).toBe(transaction.body.id);
+    });
 });
