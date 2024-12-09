@@ -18,6 +18,14 @@ export default class TransactionService {
         return response;
     }
 
+    async findById(id: number): Promise<FindResponse> {
+        const response = await db(this.tableName)
+            .where({ id })
+            .select('id', 'description', 'type', 'date', 'ammount', 'acc_id');
+
+        return response[0];
+    }
+
     async create(params: CreateProps): Promise<CreateResponse> {
         const response = await db(this.tableName)
             .insert({ ...params, date: new Date() }, ['id', 'description', 'type', 'date', 'ammount', 'acc_id']);
