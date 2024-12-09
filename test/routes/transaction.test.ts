@@ -126,4 +126,22 @@ describe('Transaction', () => {
         expect(response.status).toBe(200);
         expect(response.body.id).toBe(transaction.body.id);
     });
+
+    test('Should successful update transaction by id', async () => {
+        const transaction = await request.post(URL_TRANSACTION)
+            .set('authorization', `JWT ${USERS[0].token}`)
+            .send({
+                ammount: 100,
+                description: 'Successful update transaction',
+                type: Type.ACTIVE
+            });
+
+        const response = await request.put(`${URL_TRANSACTION}/${transaction.body.id}`)
+            .set('authorization', `JWT ${USERS[0].token}`)
+            .send({ description: 'Updated transaction' });
+
+        expect(response.status).toBe(200);
+        expect(response.body.description).not.toBe(transaction);
+        expect(response.body.id).toBe(transaction.body.id);
+    });
 });
