@@ -23,11 +23,19 @@ export default class Validation {
     }
 
     static createTransaction(params: any): void {
+        const inputType = z.object({
+            ammount: z.number().positive({ message: 'Campo ammount deve ser positivo' })
+        });
+
+        const outputType = z.object({
+            ammount: z.number().negative({ message: 'Campo ammount deve ser negativo' })
+        });
+
         const validation = z.object({
             description: z.string({ required_error: 'Campo description deve ser preenchido' }),
             type: z.nativeEnum(Type, { required_error: 'Campo type deve ser obrigatório' }),
             ammount: z.number({ required_error: 'Campo ammount deve ser preenchido', message: 'Campo ammount deve ser do tipo number' }),
-        });
+        }).merge(params.type === Type.INPUT ? inputType : outputType);
 
         validation.parse(params);
     }
