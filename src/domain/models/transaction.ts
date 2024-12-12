@@ -4,8 +4,8 @@ export type FindProps = {
 }
 
 export enum Type {
-    ACTIVE = 'I',
-    INACTIVE = 'O',
+    INPUT = 'I',
+    OUTPUT = 'O',
 }
 
 export type FindResponse = {

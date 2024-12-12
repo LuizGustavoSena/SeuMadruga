@@ -77,7 +77,7 @@ describe('Transaction', () => {
             .send({
                 ammount: 100,
                 description: 'Successful transaction',
-                type: Type.ACTIVE
+                type: Type.INPUT
             });
 
         expect(response.status).toBe(201);
@@ -91,14 +91,14 @@ describe('Transaction', () => {
             acc_id: ACCOUNTS[0].id ?? 0,
             ammount: 100,
             description,
-            type: Type.ACTIVE
+            type: Type.INPUT
         });
 
         await transactionService.create({
             acc_id: ACCOUNTS[1].id ?? 0,
             ammount: 100,
             description,
-            type: Type.ACTIVE
+            type: Type.INPUT
         });
 
         const response = await request.get(URL_TRANSACTION)
@@ -117,7 +117,7 @@ describe('Transaction', () => {
             .send({
                 ammount: 100,
                 description: 'Successful transaction',
-                type: Type.ACTIVE
+                type: Type.INPUT
             });
 
         const response = await request.get(`${URL_TRANSACTION}/${transaction.body.id}`)
@@ -133,10 +133,8 @@ describe('Transaction', () => {
             .send({
                 ammount: 100,
                 description: 'Error transaction',
-                type: Type.ACTIVE
+                type: Type.INPUT
             });
-
-        console.log(USERS[1].id)
 
         const response = await request.get(`${URL_TRANSACTION}/${transaction.body.id}`)
             .set('authorization', `JWT ${USERS[1].token}`);
@@ -151,7 +149,7 @@ describe('Transaction', () => {
             .send({
                 ammount: 100,
                 description: 'Successful update transaction',
-                type: Type.ACTIVE
+                type: Type.INPUT
             });
 
         const response = await request.put(`${URL_TRANSACTION}/${transaction.body.id}`)
@@ -169,7 +167,7 @@ describe('Transaction', () => {
             .send({
                 ammount: 100,
                 description: 'Error update transaction',
-                type: Type.ACTIVE
+                type: Type.INPUT
             });
 
         const response = await request.put(`${URL_TRANSACTION}/${transaction.body.id}`)
@@ -186,7 +184,7 @@ describe('Transaction', () => {
             .send({
                 ammount: 100,
                 description: 'Successful update transaction',
-                type: Type.ACTIVE
+                type: Type.INPUT
             });
 
         const response = await request.delete(`${URL_TRANSACTION}/${transaction.body.id}`)
@@ -206,7 +204,7 @@ describe('Transaction', () => {
             .send({
                 ammount: 100,
                 description: 'Error update transaction',
-                type: Type.ACTIVE
+                type: Type.INPUT
             });
 
         const response = await request.delete(`${URL_TRANSACTION}/${transaction.body.id}`)
