@@ -127,6 +127,24 @@ describe('Transaction', () => {
         expect(response.body.id).toBe(transaction.body.id);
     });
 
+    test('Should error get transaction by another user', async () => {
+        const transaction = await request.post(URL_TRANSACTION)
+            .set('authorization', `JWT ${USERS[0].token}`)
+            .send({
+                ammount: 100,
+                description: 'Error transaction',
+                type: Type.ACTIVE
+            });
+
+        console.log(USERS[1].id)
+
+        const response = await request.get(`${URL_TRANSACTION}/${transaction.body.id}`)
+            .set('authorization', `JWT ${USERS[1].token}`);
+
+        expect(response.status).toBe(403);
+        expect(response.body.error).toContain('não pertence');
+    });
+
     test('Should successful update transaction by id', async () => {
         const transaction = await request.post(URL_TRANSACTION)
             .set('authorization', `JWT ${USERS[0].token}`)
@@ -143,5 +161,63 @@ describe('Transaction', () => {
         expect(response.status).toBe(200);
         expect(response.body.description).not.toBe(transaction);
         expect(response.body.id).toBe(transaction.body.id);
+    });
+
+    test('Should error update transaction by another user', async () => {
+        const transaction = await request.post(URL_TRANSACTION)
+            .set('authorization', `JWT ${USERS[0].token}`)
+            .send({
+                ammount: 100,
+                description: 'Error update transaction',
+                type: Type.ACTIVE
+            });
+
+        const response = await request.put(`${URL_TRANSACTION}/${transaction.body.id}`)
+            .set('authorization', `JWT ${USERS[1].token}`)
+            .send({ description: 'Updated transaction' });
+
+        expect(response.status).toBe(403);
+        expect(response.body.error).toContain('não pertence');
+    });
+
+    test('Should successful delete transaction by id', async () => {
+        const transaction = await request.post(URL_TRANSACTION)
+            .set('authorization', `JWT ${USERS[0].token}`)
+            .send({
+                ammount: 100,
+                description: 'Successful update transaction',
+                type: Type.ACTIVE
+            });
+
+        const response = await request.delete(`${URL_TRANSACTION}/${transaction.body.id}`)
+            .set('authorization', `JWT ${USERS[0].token}`)
+            .send({ description: 'Delete transaction' });
+
+        const responseGet = await request.get(`${URL_TRANSACTION}/${transaction.body.id}`)
+            .set('authorization', `JWT ${USERS[0].token}`);
+
+        expect(response.status).toBe(200);
+        expect(responseGet.status).toBe(404);
+    });
+
+    test('Should error delete transaction by another user', async () => {
+        const transaction = await request.post(URL_TRANSACTION)
+            .set('authorization', `JWT ${USERS[0].token}`)
+            .send({
+                ammount: 100,
+                description: 'Error update transaction',
+                type: Type.ACTIVE
+            });
+
+        const response = await request.delete(`${URL_TRANSACTION}/${transaction.body.id}`)
+            .set('authorization', `JWT ${USERS[1].token}`)
+            .send({ description: 'Updated transaction' });
+
+        const responseGet = await request.get(`${URL_TRANSACTION}/${transaction.body.id}`)
+            .set('authorization', `JWT ${USERS[0].token}`);
+
+        expect(response.status).toBe(403);
+        expect(responseGet.status).toBe(200);
+        expect(responseGet.body.id).toBe(transaction.body.id);
     });
 });
