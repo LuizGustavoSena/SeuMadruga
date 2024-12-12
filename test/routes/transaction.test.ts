@@ -84,6 +84,32 @@ describe('Transaction', () => {
         expect(response.body).toHaveProperty('id');
     });
 
+    test('Should be error create a transaction with negative ammount on Input type', async () => {
+        const response = await request.post(URL_TRANSACTION)
+            .set('authorization', `JWT ${USERS[0].token}`)
+            .send({
+                ammount: -100,
+                description: 'Successful transaction',
+                type: Type.INPUT
+            });
+
+        expect(response.status).toBe(400);
+        expect(response.body.error).toContain('deve ser positivo');
+    });
+
+    test('Should be error create a transaction with positive ammount on Output type', async () => {
+        const response = await request.post(URL_TRANSACTION)
+            .set('authorization', `JWT ${USERS[0].token}`)
+            .send({
+                ammount: 100,
+                description: 'Successful transaction',
+                type: Type.OUTPUT
+            });
+
+        expect(response.status).toBe(400);
+        expect(response.body.error).toContain('deve ser negativo');
+    });
+
     test('Should don`t list another transaction account`s', async () => {
         const description = 'Don`t list another transaction account`s';
 
