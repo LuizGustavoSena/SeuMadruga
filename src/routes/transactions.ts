@@ -5,7 +5,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import { ZodError } from 'zod';
 
 const transactionService = new TransactionService();
-const serviceAccount = new AccountService();
+const serviceAccount = new AccountService(transactionService);
 
 module.exports = () => {
     const router = express.Router();
@@ -19,7 +19,9 @@ module.exports = () => {
             return;
         }
 
-        if (transaction.acc_id !== req.user.id) {
+        const account = await serviceAccount.getByFilter({ user_id: req.user.id });
+
+        if (!account.find(el => el.id === transaction.acc_id)) {
             res.status(403).send({ error: 'Essa transação não pertence a essa conta' });
 
             return;
@@ -45,7 +47,9 @@ module.exports = () => {
         try {
             Validation.createTransaction(req.body);
 
-            const response = await transactionService.create({ ...req.body, acc_id: req.user.id });
+            const account = await serviceAccount.getByFilter({ user_id: req.user.id });
+
+            const response = await transactionService.create({ ...req.body, acc_id: account[0].id });
 
             res.status(201).send(response);
         } catch (error: any) {
