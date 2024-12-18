@@ -1,13 +1,16 @@
 import { CreateProps, CreateResponse, GetAllResponse, GetByIdResponse, UpdateParams, UpdateResponse } from "@src/domain/models/account";
 import knex from 'knex';
 import config from "../../knexfile";
+import TransactionService from "./transaction";
 
 const db = knex(config);
 
 export default class AccountService {
     tableName = 'accounts';
 
-    constructor() { };
+    constructor(
+        private transactionService: TransactionService
+    ) { };
 
     async create(params: CreateProps): Promise<CreateResponse> {
         const account = await this.getByFilter({ name: params.name, user_id: params.user_id });
@@ -41,6 +44,12 @@ export default class AccountService {
     }
 
     async deleteById(id: number): Promise<void> {
+        const account = await this.getByFilter({ id });
+
+        const transaction = await this.transactionService.find({ user_id: account[0].user_id });
+
+        if (transaction.length > 0) throw new Error('Não é possível excluir conta por ter transações vinculadas a ela');
+
         await db(this.tableName).where({ id }).del();
     }
 }
