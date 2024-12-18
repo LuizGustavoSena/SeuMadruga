@@ -110,6 +110,42 @@ describe('Transaction', () => {
         expect(response.body.error).toContain('deve ser negativo');
     });
 
+    test('Should be error create a transaction without description', async () => {
+        const response = await request.post(URL_TRANSACTION)
+            .set('authorization', `JWT ${USERS[0].token}`)
+            .send({
+                ammount: 100,
+                type: Type.OUTPUT
+            });
+
+        expect(response.status).toBe(400);
+        expect(response.body.error).toContain('description deve ser preenchido');
+    });
+
+    test('Should be error create a transaction without ammount', async () => {
+        const response = await request.post(URL_TRANSACTION)
+            .set('authorization', `JWT ${USERS[0].token}`)
+            .send({
+                description: 'Error transaction without ammount',
+                type: Type.OUTPUT
+            });
+
+        expect(response.status).toBe(400);
+        expect(response.body.error).toContain('ammount deve ser preenchido');
+    });
+
+    test('Should be error create a transaction without type or with incorrect type', async () => {
+        const response = await request.post(URL_TRANSACTION)
+            .set('authorization', `JWT ${USERS[0].token}`)
+            .send({
+                ammount: 100,
+                description: 'Error transaction without type or with incorrect type'
+            });
+
+        expect(response.status).toBe(400);
+        expect(response.body.error).toContain('type inválido');
+    });
+
     test('Should don`t list another transaction account`s', async () => {
         const description = 'Don`t list another transaction account`s';
 
