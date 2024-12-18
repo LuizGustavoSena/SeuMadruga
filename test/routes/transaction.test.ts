@@ -12,8 +12,8 @@ const URL_TRANSACTION = '/v1/transactions';
 const request = supertest(app);
 const userService = new UserService();
 const authService = new AuthService(userService);
-const serviceAccount = new AccountService();
 const transactionService = new TransactionService();
+const serviceAccount = new AccountService(transactionService);
 
 const USERS: user[] = [
     {
