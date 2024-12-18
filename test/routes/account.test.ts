@@ -1,11 +1,13 @@
 import app from '@src/app';
 import { GetByIdResponse } from '@src/domain/models/account';
+import { Type } from '@src/domain/models/transaction';
 import AuthService from '@src/services/auth';
 import UserService from '@src/services/user';
 import supertest from 'supertest';
 import { user } from './models/user';
 
 const URL = '/v1/accounts';
+const URL_TRANSACTION = '/v1/transactions';
 
 const request = supertest(app);
 
@@ -218,5 +220,28 @@ describe('Accounts', () => {
         expect(responseAnotherUser.status).toBe(403);
         expect(responseAnotherUser.body).toHaveProperty('error');
         expect(responseAnotherUser.body.error).toContain('não pertence');
+    });
+
+    test('Should don`t delete account with one or multiple transactions', async () => {
+        const account = { name: `DelWithTrans${Date.now()}` };
+
+        const response = await request.post(URL)
+            .set('authorization', `JWT ${USER.token}`)
+            .send(account);
+
+        await request.post(URL_TRANSACTION)
+            .set('authorization', `JWT ${USER.token}`)
+            .send({
+                ammount: 100,
+                description: `Error delete account with transaction${Date.now()}`,
+                type: Type.INPUT
+            });
+
+        const responseDelte = await request.delete(`${URL}/${response.body.id}`)
+            .set('authorization', `JWT ${USER.token}`);
+
+        expect(responseDelte.status).toBe(400);
+        expect(responseDelte.body).toHaveProperty('error');
+        expect(responseDelte.body.error).toContain('transações vinculadas a ela');
     });
 })
