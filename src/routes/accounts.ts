@@ -1,9 +1,11 @@
+import TransactionService from '@src/services/transaction';
 import express, { NextFunction, Request, Response } from 'express';
 import { ZodError } from 'zod';
 import Validation from '../domain/validations';
 import AccountService from '../services/account';
 
-const serviceAccount = new AccountService();
+const serviceTransaction = new TransactionService();
+const serviceAccount = new AccountService(serviceTransaction);
 
 module.exports = () => {
     const router = express.Router();
@@ -75,8 +77,8 @@ module.exports = () => {
             await serviceAccount.deleteById(Number(req.params.id));
 
             res.status(200).send();
-        } catch (error) {
-            res.status(400).json({ error: 'Database error' });
+        } catch (error: any) {
+            res.status(400).json({ error: error.message });
 
         }
     });
