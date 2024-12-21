@@ -45,7 +45,6 @@ export default class Validation {
             ammount: z.number({ required_error: 'Campo ammount deve ser preenchido' }),
             acc_ori_id: z.number({ required_error: 'Campo acc_ori_id deve ser preenchido' }),
             acc_dest_id: z.number({ required_error: 'Campo acc_dest_id deve ser preenchido' }),
-            user_id: z.number({ required_error: 'Campo user_id deve ser preenchido' }),
         });
 
         validation.parse(params);
