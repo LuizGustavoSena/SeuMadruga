@@ -8,7 +8,8 @@
     "start": "yarn build && node dist/src/server.js",
     "dev": "ts-node-dev --transpile-only src/server.ts",
     "test": "jest --setupFiles dotenv/config --verbose=true --forceExit",
-    "test:w": "yarn test --watch"
+    "test:w": "yarn test --watch",
+    "seed": "./node_modules/.bin/knex seed:run --env test"
   },
   "author": "Luiz Sena",
   "license": "ISC",
