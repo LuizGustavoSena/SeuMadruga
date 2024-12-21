@@ -1,4 +1,4 @@
-import { TransferProps } from '@src/domain/models/transfer';
+import { CreateTransfer, CreateTransferResponse, TransferProps } from '@src/domain/models/transfer';
 import knex from 'knex';
 import config from "../../knexfile";
 
@@ -15,5 +15,12 @@ export default class TransferService {
             .select();
 
         return response;
+    }
+
+    async create(params: CreateTransfer): Promise<CreateTransferResponse> {
+        const response = await db(this.tableName)
+            .insert({ ...params, date: new Date() }, '*');
+
+        return response[0];
     }
 }
