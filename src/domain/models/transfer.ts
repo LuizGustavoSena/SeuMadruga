@@ -7,3 +7,6 @@ export type TransferProps = {
     acc_dest_id: number;
     user_id: number;
 }
+
+export type CreateTransfer = Omit<TransferProps, 'id'>;
+export type CreateTransferResponse = TransferProps;

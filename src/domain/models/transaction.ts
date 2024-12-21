@@ -17,20 +17,10 @@ export type FindResponse = {
     acc_id: number;
 }
 
-export type CreateProps = {
-    description: string;
-    type: Type;
-    ammount: number;
-    acc_id: number;
-}
+export type CreateProps = Omit<FindResponse, 'date' | 'id'>
 
 export type CreateResponse = FindResponse;
 
-export type UpdateProps = {
-    description?: string;
-    type?: Type;
-    date?: Date;
-    ammount?: number;
-}
+export type UpdateProps = Partial<Omit<FindResponse, 'acc_id' | 'id'>>
 
 export type UpdateResponse = FindResponse;
