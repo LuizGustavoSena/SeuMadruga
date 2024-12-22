@@ -13,7 +13,7 @@ export default class TransactionService {
             .join('accounts', 'accounts.id', 'acc_id')
             .where(params.filter ?? {})
             .andWhere('accounts.user_id', '=', params.user_id)
-            .select(`${this.tableName}.id`, 'description', 'type', 'date', 'ammount', 'acc_id');
+            .select(`${this.tableName}.id`, 'description', 'type', 'date', 'ammount', 'acc_id', 'transfer_id');
 
         return response;
     }
