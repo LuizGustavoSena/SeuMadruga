@@ -26,7 +26,7 @@ const ANOTHER_USER: user = {
     password: '12354'
 }
 
-describe('Accounts', () => {
+describe('Account', () => {
     beforeAll(async () => {
         const response = await userService.save(USER);;
         const another_response = await userService.save(ANOTHER_USER);;

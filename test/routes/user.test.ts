@@ -17,7 +17,7 @@ const USER: user = {
     password: '123456789'
 }
 
-describe('Users', () => {
+describe('User', () => {
     beforeAll(async () => {
         await userService.save(USER);
 
