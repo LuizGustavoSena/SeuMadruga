@@ -1,3 +1,12 @@
+export type TransactionProps = {
+    description: string;
+    type: Type;
+    date: Date;
+    ammount: number;
+    acc_id: number;
+    transfer_id?: number;
+}
+
 export type FindProps = {
     user_id: number;
     filter?: any;
@@ -8,14 +17,7 @@ export enum Type {
     OUTPUT = 'O',
 }
 
-export type FindResponse = {
-    id: number;
-    description: string;
-    type: Type;
-    date: Date;
-    ammount: number;
-    acc_id: number;
-}
+export type FindResponse = TransactionProps & { id: number };
 
 export type CreateProps = Omit<FindResponse, 'date' | 'id'>
 
