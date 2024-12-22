@@ -75,4 +75,68 @@ describe('Transfer', () => {
         expect(transactions[1].type).toBe(Type.INPUT);
         expect(transactions[1].transfer_id).toBe(response.body.id);
     });
+
+    test('Should be error when create transfer without description', async () => {
+        const params: Partial<CreateTransfer> = {
+            acc_ori_id: 10003,
+            acc_dest_id: 10004,
+            ammount: 100
+        };
+
+        const response = await request.post(URL)
+            .set('authorization', `JWT ${token}`)
+            .send(params);
+
+        expect(response.status).toBe(400);
+        expect(response.body).toHaveProperty('error');
+        expect(response.body.error).toContain('description deve ser preenchido');
+    });
+
+    test('Should be error when create transfer without ammount', async () => {
+        const params: Partial<CreateTransfer> = {
+            acc_ori_id: 10003,
+            acc_dest_id: 10004,
+            description: 'Error transfer'
+        };
+
+        const response = await request.post(URL)
+            .set('authorization', `JWT ${token}`)
+            .send(params);
+
+        expect(response.status).toBe(400);
+        expect(response.body).toHaveProperty('error');
+        expect(response.body.error).toContain('ammount deve ser preenchido');
+    });
+
+    test('Should be error when create transfer without acc_ori_id', async () => {
+        const params: Partial<CreateTransfer> = {
+            acc_dest_id: 10004,
+            ammount: 100,
+            description: 'Error transfer'
+        };
+
+        const response = await request.post(URL)
+            .set('authorization', `JWT ${token}`)
+            .send(params);
+
+        expect(response.status).toBe(400);
+        expect(response.body).toHaveProperty('error');
+        expect(response.body.error).toContain('acc_ori_id deve ser preenchido');
+    });
+
+    test('Should be error when create transfer without acc_dest_id', async () => {
+        const params: Partial<CreateTransfer> = {
+            acc_ori_id: 10003,
+            ammount: 100,
+            description: 'Error transfer'
+        };
+
+        const response = await request.post(URL)
+            .set('authorization', `JWT ${token}`)
+            .send(params);
+
+        expect(response.status).toBe(400);
+        expect(response.body).toHaveProperty('error');
+        expect(response.body.error).toContain('acc_dest_id deve ser preenchido');
+    });
 })
