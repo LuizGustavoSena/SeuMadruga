@@ -1,11 +1,14 @@
 import app from '@src/app';
 import { CreateTransfer } from '@src/domain/models/transfer';
 import AuthService from '@src/services/auth';
+import TransactionService from '@src/services/transaction';
 import UserService from '@src/services/user';
 import supertest from 'supertest';
 
 const URL = '/v1/transfers';
 var token = '';
+
+const transactionService = new TransactionService();
 
 const request = supertest(app);
 
@@ -46,5 +49,20 @@ describe('Auth', () => {
         expect(response.body).toHaveProperty('id');
         expect(response.body).toHaveProperty('description');
         expect(response.body.description).toBe(params.description);
+
+        const transactions = await transactionService.find({
+            user_id: 10000,
+            filter: {
+                transfer_id: response.body.id
+            }
+        });
+
+        expect(transactions).toHaveLength(2);
+        expect(transactions[0].description).toBe(`Transfer to account_id: ${params.acc_dest_id}`);
+        expect(transactions[0].ammount).toBe(`-${params.ammount}.00`);
+        expect(transactions[0].acc_id).toBe(params.acc_ori_id);
+        expect(transactions[1].description).toBe(`Transfer from account_id: ${params.acc_ori_id}`);
+        expect(transactions[1].ammount).toBe(`${params.ammount}.00`);
+        expect(transactions[1].acc_id).toBe(params.acc_dest_id);
     });
 })
