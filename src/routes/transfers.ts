@@ -1,9 +1,13 @@
 import Validation from '@src/domain/validations';
+import AccountService from '@src/services/account';
+import TransactionService from '@src/services/transaction';
 import TransferService from '@src/services/transfer';
 import express, { Request, Response } from 'express';
 import { ZodError } from 'zod';
 
 const transferService = new TransferService();
+const serviceTransaction = new TransactionService();
+const serviceAccount = new AccountService(serviceTransaction);
 
 module.exports = () => {
     const router = express.Router();
@@ -21,6 +25,16 @@ module.exports = () => {
     router.post('/', async (req: Request, res: Response) => {
         try {
             Validation.createTransfer(req.body);
+
+            const accountOrigin = await serviceAccount.getByFilter({ id: req.body.acc_ori_id });
+
+            if (accountOrigin.length === 0 || accountOrigin[0].user_id !== req.user.id)
+                throw new Error('acc_ori_id não pertence a esse usuário');
+
+            const accountDestiny = await serviceAccount.getByFilter({ id: req.body.acc_dest_id });
+
+            if (accountDestiny.length === 0 || accountDestiny[0].user_id !== req.user.id)
+                throw new Error('acc_dest_id não pertence a esse usuário');
 
             const response = await transferService.create({ ...req.body, user_id: req.user.id });
 
