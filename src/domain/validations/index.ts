@@ -45,7 +45,7 @@ export default class Validation {
             ammount: z.number({ required_error: 'Campo ammount deve ser preenchido' }),
             acc_ori_id: z.number({ required_error: 'Campo acc_ori_id deve ser preenchido' }),
             acc_dest_id: z.number({ required_error: 'Campo acc_dest_id deve ser preenchido' }),
-        });
+        }).refine(data => data.acc_ori_id !== data.acc_dest_id, { message: 'acc_ori_id e acc_dest_id devem ter valores diferentes' });
 
         validation.parse(params);
     }
