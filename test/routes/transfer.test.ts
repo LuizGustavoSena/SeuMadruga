@@ -156,4 +156,38 @@ describe('Transfer', () => {
         expect(response.body).toHaveProperty('error');
         expect(response.body.error).toContain('acc_ori_id e acc_dest_id devem ter valores diferentes');
     });
+
+    test('Should be error when create transfer with another acc_ori_id id', async () => {
+        const params: Partial<CreateTransfer> = {
+            acc_ori_id: 10005,
+            acc_dest_id: 10004,
+            ammount: 100,
+            description: 'Error transfer'
+        };
+
+        const response = await request.post(URL)
+            .set('authorization', `JWT ${token}`)
+            .send(params);
+
+        expect(response.status).toBe(400);
+        expect(response.body).toHaveProperty('error');
+        expect(response.body.error).toContain('acc_ori_id não pertence a esse usuário');
+    });
+
+    test('Should be error when create transfer with another acc_dest_id id', async () => {
+        const params: Partial<CreateTransfer> = {
+            acc_ori_id: 10003,
+            acc_dest_id: 10006,
+            ammount: 100,
+            description: 'Error transfer'
+        };
+
+        const response = await request.post(URL)
+            .set('authorization', `JWT ${token}`)
+            .send(params);
+
+        expect(response.status).toBe(400);
+        expect(response.body).toHaveProperty('error');
+        expect(response.body.error).toContain('acc_dest_id não pertence a esse usuário');
+    });
 })
