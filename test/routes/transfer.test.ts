@@ -139,4 +139,21 @@ describe('Transfer', () => {
         expect(response.body).toHaveProperty('error');
         expect(response.body.error).toContain('acc_dest_id deve ser preenchido');
     });
+
+    test('Should be error when create transfer with acc_ori_id equal acc_dest_id', async () => {
+        const params: Partial<CreateTransfer> = {
+            acc_ori_id: 10003,
+            acc_dest_id: 10003,
+            ammount: 100,
+            description: 'Error transfer'
+        };
+
+        const response = await request.post(URL)
+            .set('authorization', `JWT ${token}`)
+            .send(params);
+
+        expect(response.status).toBe(400);
+        expect(response.body).toHaveProperty('error');
+        expect(response.body.error).toContain('acc_ori_id e acc_dest_id devem ter valores diferentes');
+    });
 })
