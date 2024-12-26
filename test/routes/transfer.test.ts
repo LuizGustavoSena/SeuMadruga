@@ -206,4 +206,11 @@ describe('Transfer', () => {
 
         expect(response.status).toBe(404);
     });
+
+    test('Should be error 403 when get a transfer from another user', async () => {
+        const response = await request.get(`${URL}/10008`)
+            .set('authorization', `JWT ${token}`);
+
+        expect(response.status).toBe(403);
+    });
 })
