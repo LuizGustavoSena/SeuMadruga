@@ -2,7 +2,7 @@ import Validation from '@src/domain/validations';
 import AccountService from '@src/services/account';
 import TransactionService from '@src/services/transaction';
 import TransferService from '@src/services/transfer';
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import { ZodError } from 'zod';
 
 const transferService = new TransferService();
@@ -11,6 +11,25 @@ const serviceAccount = new AccountService(serviceTransaction);
 
 module.exports = () => {
     const router = express.Router();
+
+    router.param('id', async (req: Request, res: Response, next: NextFunction) => {
+        const transfer = await transferService.find({ id: Number(req.params.id) });
+
+        if (transfer.length === 0) {
+            res.status(404).send();
+
+            return;
+        }
+
+
+        if (transfer[0].user_id !== req.user.id) {
+            res.status(403).send({ error: 'Essa transação não pertence a essa conta' });
+
+            return;
+        }
+
+        next();
+    });
 
     router.get('/', async (req: Request, res: Response) => {
         try {
