@@ -11,7 +11,7 @@ export default class TransferService {
 
     constructor() { }
 
-    async find(filters: Partial<TransferProps>): Promise<any> {
+    async find(filters: Partial<TransferProps>): Promise<TransferProps[]> {
         const response = await db(this.tableName)
             .where(filters)
             .select();
