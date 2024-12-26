@@ -46,5 +46,15 @@ module.exports = () => {
         }
     });
 
+    router.get('/:id', async (req: Request, res: Response) => {
+        try {
+            const response = await transferService.find({ id: Number(req.params.id) });
+
+            res.status(200).send(response[0]);
+        } catch (error: any) {
+            res.status(400).send({ error: error.message });
+        }
+    });
+
     return router;
 }
