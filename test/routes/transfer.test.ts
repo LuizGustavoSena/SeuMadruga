@@ -199,4 +199,11 @@ describe('Transfer', () => {
         expect(response.body).toHaveProperty('description');
         expect(response.body.description).toContain('Transfer 1');
     });
+
+    test('Should be error 404 when send wrong id', async () => {
+        const response = await request.get(`${URL}/10000`)
+            .set('authorization', `JWT ${token}`);
+
+        expect(response.status).toBe(404);
+    });
 })
