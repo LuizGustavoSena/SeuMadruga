@@ -190,4 +190,13 @@ describe('Transfer', () => {
         expect(response.body).toHaveProperty('error');
         expect(response.body.error).toContain('acc_dest_id não pertence a esse usuário');
     });
+
+    test('Should be successful get by id', async () => {
+        const response = await request.get(`${URL}/10007`)
+            .set('authorization', `JWT ${token}`);
+
+        expect(response.status).toBe(200);
+        expect(response.body).toHaveProperty('description');
+        expect(response.body.description).toContain('Transfer 1');
+    });
 })
