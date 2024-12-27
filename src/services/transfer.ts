@@ -43,9 +43,7 @@ export default class TransferService {
 
         const transfer = response[0] as TransferProps;
 
-        await db(this.transactionTable)
-            .where({ transfer_id: transfer.id })
-            .del();
+        await this.deleteTransactionsByTransferId(transfer.id);
 
         await this.insertTransactions({
             acc_dest_id: transfer.acc_dest_id,
@@ -58,7 +56,15 @@ export default class TransferService {
         return transfer;
     }
 
-    private async insertTransactions(params: insertTransactionsProps) {
+    async deleteById(id: number): Promise<void> {
+        await this.deleteTransactionsByTransferId(id);
+
+        await db(this.tableName)
+            .where({ id })
+            .del();
+    }
+
+    private async insertTransactions(params: insertTransactionsProps): Promise<void> {
         const transactions: TransactionProps[] = [
             {
                 description: `Transfer to account_id: ${params.acc_dest_id}`,
@@ -79,5 +85,11 @@ export default class TransferService {
         ]
 
         await db(this.transactionTable).insert(transactions);
+    }
+
+    private async deleteTransactionsByTransferId(id: number): Promise<void> {
+        await db(this.transactionTable)
+            .where({ transfer_id: id })
+            .del();
     }
 }
