@@ -88,5 +88,15 @@ module.exports = () => {
         }
     });
 
+    router.delete('/:id', async (req: Request, res: Response) => {
+        try {
+            await transferService.deleteById(Number(req.params.id));
+
+            res.status(200).send();
+        } catch (error: any) {
+            res.status(400).send({ error: error.message });
+        }
+    });
+
     return router;
 }
