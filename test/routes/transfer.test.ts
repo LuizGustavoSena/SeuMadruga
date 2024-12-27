@@ -1,6 +1,6 @@
 import app from '@src/app';
 import { Type } from '@src/domain/models/transaction';
-import { CreateTransfer } from '@src/domain/models/transfer';
+import { CreateTransfer, TransferProps } from '@src/domain/models/transfer';
 import AuthService from '@src/services/auth';
 import TransactionService from '@src/services/transaction';
 import UserService from '@src/services/user';
@@ -212,5 +212,20 @@ describe('Transfer', () => {
             .set('authorization', `JWT ${token}`);
 
         expect(response.status).toBe(403);
+    });
+
+    test('Should be successful update by id', async () => {
+        const updatedValue: Partial<TransferProps> = {
+            description: 'Updated transfer',
+            ammount: 500
+        };
+
+        const response = await request.put(`${URL}/10007`)
+            .set('authorization', `JWT ${token}`)
+            .send(updatedValue);
+
+        expect(response.status).toBe(200);
+        expect(response.body.description).toBe(updatedValue.description);
+        expect(response.body.ammount).toBe(`${updatedValue.ammount}.00`);
     });
 })
