@@ -248,7 +248,52 @@ describe('Transfer', () => {
             ammount: 500
         };
 
-        const response = await request.get(`${URL}/10008`)
+        const response = await request.put(`${URL}/10008`)
+            .set('authorization', `JWT ${token}`)
+            .send(updatedValue);
+
+        expect(response.status).toBe(403);
+    });
+
+    test('Should be successful delete by id', async () => {
+        const response = await request.delete(`${URL}/10007`)
+            .set('authorization', `JWT ${token}`);
+
+        const get = await request.get(`${URL}/10007`)
+            .set('authorization', `JWT ${token}`);
+
+        const transactions = await transactionService.find({
+            user_id: 10000,
+            filter: {
+                transfer_id: 10007
+            }
+        });
+
+        expect(response.status).toBe(200);
+        expect(get.status).toBe(404);
+        expect(transactions.length).toBe(0);
+    });
+
+    test('Should be error 404 when delete transfer with wrong id', async () => {
+        const updatedValue: Partial<TransferProps> = {
+            description: 'Updated transfer',
+            ammount: 500
+        };
+
+        const response = await request.delete(`${URL}/10000`)
+            .set('authorization', `JWT ${token}`)
+            .send(updatedValue);
+
+        expect(response.status).toBe(404);
+    });
+
+    test('Should be error 403 when delete transfer from another user', async () => {
+        const updatedValue: Partial<TransferProps> = {
+            description: 'Updated transfer',
+            ammount: 500
+        };
+
+        const response = await request.delete(`${URL}/10008`)
             .set('authorization', `JWT ${token}`)
             .send(updatedValue);
 
