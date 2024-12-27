@@ -228,4 +228,30 @@ describe('Transfer', () => {
         expect(response.body.description).toBe(updatedValue.description);
         expect(response.body.ammount).toBe(`${updatedValue.ammount}.00`);
     });
+
+    test('Should be error 404 when update transfer with wrong id', async () => {
+        const updatedValue: Partial<TransferProps> = {
+            description: 'Updated transfer',
+            ammount: 500
+        };
+
+        const response = await request.put(`${URL}/10000`)
+            .set('authorization', `JWT ${token}`)
+            .send(updatedValue);
+
+        expect(response.status).toBe(404);
+    });
+
+    test('Should be error 403 when udpate transfer from another user', async () => {
+        const updatedValue: Partial<TransferProps> = {
+            description: 'Updated transfer',
+            ammount: 500
+        };
+
+        const response = await request.get(`${URL}/10008`)
+            .set('authorization', `JWT ${token}`)
+            .send(updatedValue);
+
+        expect(response.status).toBe(403);
+    });
 })
