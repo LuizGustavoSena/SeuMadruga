@@ -33,6 +33,7 @@ export default class Validation {
 
         const validation = z.object({
             description: z.string({ required_error: 'Campo description deve ser preenchido' }),
+            acc_id: z.number({ required_error: 'Campo acc_id deve ser preenchido' }),
             type: z.nativeEnum(Type, { required_error: 'Campo type deve ser preenchido', message: 'type inválido' }),
         }).merge(params.type === Type.INPUT ? inputType : outputType);
 

@@ -49,7 +49,12 @@ module.exports = () => {
 
             const account = await serviceAccount.getByFilter({ user_id: req.user.id });
 
-            const response = await transactionService.create({ ...req.body, acc_id: account[0].id });
+            if (!account.find(el => el.id === req.body.acc_id)) {
+                res.status(403).json({ error: 'Conta pertence a outro usuário' });
+                return
+            }
+
+            const response = await transactionService.create(req.body);
 
             res.status(201).send(response);
         } catch (error: any) {

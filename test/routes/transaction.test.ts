@@ -55,12 +55,12 @@ describe('Transaction', () => {
         ACCOUNTS[0].user_id = USERS[0].id ?? 0;
         ACCOUNTS[1].user_id = USERS[1].id ?? 0;
 
-        for await (var account of ACCOUNTS) {
+        for await (var value of ACCOUNTS) {
             const response = await serviceAccount.create({
-                name: account.name,
-                user_id: account.user_id
+                name: value.name,
+                user_id: value.user_id
             });
-            account.id = response.id;
+            value.id = response.id;
         }
     });
 
@@ -77,7 +77,8 @@ describe('Transaction', () => {
             .send({
                 ammount: 100,
                 description: 'Successful transaction',
-                type: Type.INPUT
+                type: Type.INPUT,
+                acc_id: ACCOUNTS[0].id
             });
 
         expect(response.status).toBe(201);
@@ -90,7 +91,8 @@ describe('Transaction', () => {
             .send({
                 ammount: -100,
                 description: 'Successful transaction',
-                type: Type.INPUT
+                type: Type.INPUT,
+                acc_id: ACCOUNTS[0].id
             });
 
         expect(response.status).toBe(400);
@@ -103,7 +105,8 @@ describe('Transaction', () => {
             .send({
                 ammount: 100,
                 description: 'Successful transaction',
-                type: Type.OUTPUT
+                type: Type.OUTPUT,
+                acc_id: ACCOUNTS[0].id
             });
 
         expect(response.status).toBe(400);
@@ -115,7 +118,8 @@ describe('Transaction', () => {
             .set('authorization', `JWT ${USERS[0].token}`)
             .send({
                 ammount: 100,
-                type: Type.OUTPUT
+                type: Type.OUTPUT,
+                acc_id: ACCOUNTS[0].id
             });
 
         expect(response.status).toBe(400);
@@ -127,7 +131,8 @@ describe('Transaction', () => {
             .set('authorization', `JWT ${USERS[0].token}`)
             .send({
                 description: 'Error transaction without ammount',
-                type: Type.OUTPUT
+                type: Type.OUTPUT,
+                acc_id: ACCOUNTS[0].id
             });
 
         expect(response.status).toBe(400);
@@ -139,11 +144,39 @@ describe('Transaction', () => {
             .set('authorization', `JWT ${USERS[0].token}`)
             .send({
                 ammount: 100,
-                description: 'Error transaction without type or with incorrect type'
+                description: 'Error transaction without type or with incorrect type',
+                acc_id: ACCOUNTS[0].id
             });
 
         expect(response.status).toBe(400);
         expect(response.body.error).toContain('type inválido');
+    });
+
+    test('Should be error create a transaction without acc_id', async () => {
+        const response = await request.post(URL_TRANSACTION)
+            .set('authorization', `JWT ${USERS[0].token}`)
+            .send({
+                ammount: 100,
+                description: 'Error transaction without type or with incorrect type',
+                type: Type.INPUT
+            });
+
+        expect(response.status).toBe(400);
+        expect(response.body.error).toContain('acc_id deve ser preenchido');
+    });
+
+    test('Should be error create a transaction with acc_id from another user', async () => {
+        const response = await request.post(URL_TRANSACTION)
+            .set('authorization', `JWT ${USERS[0].token}`)
+            .send({
+                ammount: 100,
+                description: 'Error transaction without type or with incorrect type',
+                type: Type.INPUT,
+                acc_id: ACCOUNTS[1].id
+            });
+
+        expect(response.status).toBe(403);
+        expect(response.body.error).toContain('Conta pertence a outro usuário');
     });
 
     test('Should don`t list another transaction account`s', async () => {
@@ -179,7 +212,8 @@ describe('Transaction', () => {
             .send({
                 ammount: 100,
                 description: 'Successful transaction',
-                type: Type.INPUT
+                type: Type.INPUT,
+                acc_id: ACCOUNTS[0].id
             });
 
         const response = await request.get(`${URL_TRANSACTION}/${transaction.body.id}`)
@@ -195,7 +229,8 @@ describe('Transaction', () => {
             .send({
                 ammount: 100,
                 description: 'Error transaction',
-                type: Type.INPUT
+                type: Type.INPUT,
+                acc_id: ACCOUNTS[0].id
             });
 
         const response = await request.get(`${URL_TRANSACTION}/${transaction.body.id}`)
@@ -211,7 +246,8 @@ describe('Transaction', () => {
             .send({
                 ammount: 100,
                 description: 'Successful update transaction',
-                type: Type.INPUT
+                type: Type.INPUT,
+                acc_id: ACCOUNTS[0].id
             });
 
         const response = await request.put(`${URL_TRANSACTION}/${transaction.body.id}`)
@@ -229,7 +265,8 @@ describe('Transaction', () => {
             .send({
                 ammount: 100,
                 description: 'Error update transaction',
-                type: Type.INPUT
+                type: Type.INPUT,
+                acc_id: ACCOUNTS[0].id
             });
 
         const response = await request.put(`${URL_TRANSACTION}/${transaction.body.id}`)
@@ -246,7 +283,8 @@ describe('Transaction', () => {
             .send({
                 ammount: 100,
                 description: 'Successful update transaction',
-                type: Type.INPUT
+                type: Type.INPUT,
+                acc_id: ACCOUNTS[0].id
             });
 
         const response = await request.delete(`${URL_TRANSACTION}/${transaction.body.id}`)
@@ -266,7 +304,8 @@ describe('Transaction', () => {
             .send({
                 ammount: 100,
                 description: 'Error update transaction',
-                type: Type.INPUT
+                type: Type.INPUT,
+                acc_id: ACCOUNTS[0].id
             });
 
         const response = await request.delete(`${URL_TRANSACTION}/${transaction.body.id}`)
