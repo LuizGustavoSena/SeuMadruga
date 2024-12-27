@@ -10,3 +10,18 @@ export type TransferProps = {
 
 export type CreateTransfer = Omit<TransferProps, 'id'>;
 export type CreateTransferResponse = TransferProps;
+
+export type UpdateTransferProps = {
+    id: number;
+    data: Omit<TransferProps, 'id'>;
+}
+
+export type UpdateTransferResponse = TransferProps;
+
+export type insertTransactionsProps = {
+    acc_ori_id: number;
+    acc_dest_id: number;
+    ammount: number;
+    date: Date;
+    id: number;
+}
