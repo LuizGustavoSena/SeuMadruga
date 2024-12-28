@@ -186,14 +186,16 @@ describe('Transaction', () => {
             acc_id: ACCOUNTS[0].id ?? 0,
             ammount: 100,
             description,
-            type: Type.INPUT
+            type: Type.INPUT,
+            status: true
         });
 
         await transactionService.create({
             acc_id: ACCOUNTS[1].id ?? 0,
             ammount: 100,
             description,
-            type: Type.INPUT
+            type: Type.INPUT,
+            status: true
         });
 
         const response = await request.get(URL_TRANSACTION)
