@@ -18,6 +18,7 @@ const transactionService = new TransactionService();
 const transferService = new TransferService();
 
 var token = '';
+var generalToken = '';
 
 const request = supertest(app);
 
@@ -33,6 +34,13 @@ describe('Balance', () => {
         });
 
         token = response.token;
+
+        const anotherResponse = await authService.signin({
+            email: 'email5@email.com',
+            password: '123456789'
+        });
+
+        generalToken = anotherResponse.token;
     });
 
     test('Should be list only accounts with any transaction', async () => {
@@ -184,5 +192,19 @@ describe('Balance', () => {
         expect(response.body[1]).toHaveProperty('id');
         expect(response.body[1].id).toBe(10008);
         expect(response.body[1].sum).toBe(`450.00`);
+    });
+
+    test('Should calculate balance of user`s accounts', async () => {
+        const response = await request.get(URL)
+            .set('authorization', `JWT ${generalToken}`);
+
+        expect(response.status).toBe(200);
+        expect(response.body).toHaveLength(2);
+        expect(response.body[0]).toHaveProperty('id');
+        expect(response.body[0].id).toBe(10011);
+        expect(response.body[0].sum).toBe(`162.00`);
+        expect(response.body[1]).toHaveProperty('id');
+        expect(response.body[1].id).toBe(10012);
+        expect(response.body[1].sum).toBe(`-248.00`);
     });
 });
