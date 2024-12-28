@@ -234,7 +234,9 @@ describe('Account', () => {
             .send({
                 ammount: 100,
                 description: `Error delete account with transaction${Date.now()}`,
-                type: Type.INPUT
+                type: Type.INPUT,
+                status: true,
+                acc_id: response.body.id
             });
 
         const responseDelte = await request.delete(`${URL}/${response.body.id}`)
