@@ -72,7 +72,8 @@ export default class TransferService {
                 ammount: params.ammount * -1,
                 date: params.date,
                 type: Type.OUTPUT,
-                transfer_id: params.id
+                transfer_id: params.id,
+                status: true
             },
             {
                 description: `Transfer from account_id: ${params.acc_ori_id}`,
@@ -80,7 +81,8 @@ export default class TransferService {
                 ammount: params.ammount,
                 date: params.date,
                 type: Type.INPUT,
-                transfer_id: params.id
+                transfer_id: params.id,
+                status: true
             }
         ]
 

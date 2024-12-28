@@ -27,8 +27,10 @@ export default class TransactionService {
     }
 
     async create(params: CreateProps): Promise<CreateResponse> {
+        const dataRequest = params.date ?? new Date();
+
         const response = await db(this.tableName)
-            .insert({ ...params, date: new Date() }, ['id', 'description', 'type', 'date', 'ammount', 'acc_id']);
+            .insert({ ...params, date: dataRequest }, ['id', 'description', 'type', 'date', 'ammount', 'acc_id']);
 
         return response[0];
     }
