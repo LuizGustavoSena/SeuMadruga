@@ -4,8 +4,12 @@ import AccountService from '@src/services/account';
 import AuthService from '@src/services/auth';
 import TransactionService from '@src/services/transaction';
 import UserService from '@src/services/user';
+import knex from 'knex';
 import supertest from 'supertest';
+import config from "../../knexfile";
 import { account, user } from './models/user';
+
+const db = knex(config);
 
 const URL_TRANSACTION = '/v1/transactions';
 
@@ -41,6 +45,10 @@ const ACCOUNTS: account[] = [
 
 describe('Transaction', () => {
     beforeAll(async () => {
+        await db('transactions').del();
+        await db('transfers').del();
+        await db('accounts').del();
+
         for await (var user of USERS) {
             const response = await userService.save(user);;
             user.id = response.id;

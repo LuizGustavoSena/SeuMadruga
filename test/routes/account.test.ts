@@ -3,8 +3,12 @@ import { GetByIdResponse } from '@src/domain/models/account';
 import { Type } from '@src/domain/models/transaction';
 import AuthService from '@src/services/auth';
 import UserService from '@src/services/user';
+import knex from 'knex';
 import supertest from 'supertest';
+import config from "../../knexfile";
 import { user } from './models/user';
+
+const db = knex(config);
 
 const URL = '/v1/accounts';
 const URL_TRANSACTION = '/v1/transactions';
@@ -131,6 +135,10 @@ describe('Account', () => {
     });
 
     test('Should be list only accounts by user', async () => {
+        await db('transactions').del();
+        await db('transfers').del();
+        await db('accounts').del();
+
         const account = { name: 'USER' };
         const another_account = { name: 'ANOTHER_USER' };
 
