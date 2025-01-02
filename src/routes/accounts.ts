@@ -25,7 +25,7 @@ module.exports = () => {
 
     router.post('/', async (req: Request, res: Response) => {
         try {
-            Validation.createAccount(req.body);
+            Validation.createOrUpdateAccount(req.body);
 
             const response = await serviceAccount.create({ ...req.body, user_id: req.user.id });
 
@@ -60,6 +60,8 @@ module.exports = () => {
 
     router.put('/:id', async (req: Request, res: Response) => {
         try {
+            Validation.createOrUpdateAccount(req.body);
+
             const response = await serviceAccount.update({
                 id: Number(req.params.id),
                 name: req.body.name
