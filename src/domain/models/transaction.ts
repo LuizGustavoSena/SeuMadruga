@@ -24,6 +24,6 @@ export type CreateProps = Omit<TransactionProps, 'date'> & { date?: Date };
 
 export type CreateResponse = FindResponse;
 
-export type UpdateProps = Partial<Omit<FindResponse, 'acc_id' | 'id'>>
+export type UpdateProps = Partial<Omit<TransactionProps, 'acc_id'>>
 
 export type UpdateResponse = FindResponse;
