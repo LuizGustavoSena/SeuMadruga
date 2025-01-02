@@ -8,12 +8,6 @@ const db = knex(config);
 export default class UserService {
     constructor() { }
 
-    async findAll(): Promise<UserModel[]> {
-        const users = await db.select('id', 'name', 'email').from('users');
-
-        return users;
-    }
-
     async findByEmail(email: string): Promise<FindByEmailResponse> {
         const users = await db.select().from('users').where({ email }).first();
 
