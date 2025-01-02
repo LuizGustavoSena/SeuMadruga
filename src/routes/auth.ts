@@ -1,4 +1,4 @@
-import express, { Express, Request, Response } from 'express';
+import express, { Request, Response } from 'express';
 import { ZodError } from 'zod';
 import Validation from '../domain/validations';
 import AuthService from '../services/auth';
@@ -7,16 +7,20 @@ import UserService from '../services/user';
 const user = new UserService();
 const authService = new AuthService(user);
 
-module.exports = (app: Express) => {
+module.exports = () => {
     const router = express.Router();
 
     router.post('/signin', async (req: Request, res: Response) => {
         try {
+            Validation.loginUser(req.body);
+
             const response = await authService.signin(req.body);
 
             res.status(201).send(response);
         } catch (error: any) {
-            res.status(400).send({ error: error.message });
+            let message = error instanceof ZodError ? `${error.errors.map(el => el.message).join(', ')}` : error.message;
+
+            res.status(400).send({ error: message });
         }
     });
 
