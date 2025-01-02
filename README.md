@@ -156,6 +156,6 @@ Contributions are welcome! Please follow these steps:
 
 ## Contributor
 
-<a href="https://github.com/LuizGustavoSena/SeuMadruga/graphs/contributors">
+<a href="https://github.com/LuizGustavoSena">
   <img height="60" width="60" style="border-radius: 50px" src="https://avatars.githubusercontent.com/u/69394005?v=4" alt="contrib.rocks image" />
 </a>
