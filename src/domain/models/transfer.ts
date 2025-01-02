@@ -13,7 +13,7 @@ export type CreateTransferResponse = TransferProps;
 
 export type UpdateTransferProps = {
     id: number;
-    data: Omit<TransferProps, 'id'>;
+    data: Partial<Omit<TransferProps, 'id'>>;
 }
 
 export type UpdateTransferResponse = TransferProps;
