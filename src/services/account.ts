@@ -1,4 +1,5 @@
 import { CreateProps, CreateResponse, GetAllResponse, GetByIdResponse, UpdateParams, UpdateResponse } from "@src/domain/models/account";
+import { Database } from "@src/infrastructure/models/database";
 import knex from 'knex';
 import config from "../../knexfile";
 import TransactionService from "./transaction";
@@ -6,10 +7,9 @@ import TransactionService from "./transaction";
 const db = knex(config);
 
 export default class AccountService {
-    tableName = 'accounts';
-
     constructor(
-        private transactionService: TransactionService
+        private transactionService: TransactionService,
+        private db: Database,
     ) { };
 
     async create(params: CreateProps): Promise<CreateResponse> {
@@ -18,29 +18,32 @@ export default class AccountService {
         if (account.length > 0)
             throw new Error('Conta existente');
 
-        const response = await db(this.tableName).insert(params, ['id', 'name', 'user_id']);
+        const response = await this.db.create<CreateProps, CreateResponse>(params);
 
-        return response[0];
+        return response;
     }
 
     async getAll(): Promise<GetAllResponse> {
-        const response = await db.select('id', 'name').from(this.tableName);
+        const response = await this.db.getAll<GetAllResponse>();
 
         return response;
     }
 
     async getByFilter(filter: any): Promise<GetByIdResponse[]> {
-        const response = await db.select('id', 'name', 'user_id').from(this.tableName).where(filter);
+        const response = await this.db.getByFIlter<GetByIdResponse[]>(filter);
 
         return response;
     }
 
     async update(params: UpdateParams): Promise<UpdateResponse> {
-        const response = await db(this.tableName).where({ id: params.id }).update({
-            name: params.name
-        }, ['id', 'name']);
+        const response = await this.db.update<UpdateResponse>({
+            id: params.id,
+            data: {
+                name: params.name
+            }
+        });
 
-        return response[0];
+        return response;
     }
 
     async deleteById(id: number): Promise<void> {
@@ -50,6 +53,6 @@ export default class AccountService {
 
         if (transaction.length > 0) throw new Error('Não é possível excluir conta por ter transações vinculadas a ela');
 
-        await db(this.tableName).where({ id }).del();
+        await this.db.deleteById(id);
     }
 }
