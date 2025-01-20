@@ -1,3 +1,4 @@
+import KnexDatabase from '@src/infrastructure/database/knex';
 import TransactionService from '@src/services/transaction';
 import express, { NextFunction, Request, Response } from 'express';
 import { ZodError } from 'zod';
@@ -5,7 +6,7 @@ import Validation from '../domain/validations';
 import AccountService from '../services/account';
 
 const serviceTransaction = new TransactionService();
-const serviceAccount = new AccountService(serviceTransaction);
+const serviceAccount = new AccountService(serviceTransaction, new KnexDatabase('accounts'));
 
 module.exports = () => {
     const router = express.Router();
