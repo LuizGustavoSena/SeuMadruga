@@ -1,10 +1,6 @@
 import { CreateProps, CreateResponse, GetAllResponse, GetByIdResponse, UpdateParams, UpdateResponse } from "@src/domain/models/account";
 import { Database } from "@src/infrastructure/models/database";
-import knex from 'knex';
-import config from "../../knexfile";
 import TransactionService from "./transaction";
-
-const db = knex(config);
 
 export default class AccountService {
     constructor(
