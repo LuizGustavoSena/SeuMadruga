@@ -1,6 +1,7 @@
 import app from '@src/app';
 import { GetByIdResponse } from '@src/domain/models/account';
 import { Type } from '@src/domain/models/transaction';
+import BcryptEncrypt from '@src/infrastructure/encrypt/bcrypt';
 import AuthService from '@src/services/auth';
 import UserService from '@src/services/user';
 import knex from 'knex';
@@ -16,7 +17,7 @@ const URL_TRANSACTION = '/v1/transactions';
 const request = supertest(app);
 
 const userService = new UserService();
-const authService = new AuthService(userService);
+const authService = new AuthService(userService, new BcryptEncrypt());
 
 const USER: user = {
     name: 'Walter Mitty',

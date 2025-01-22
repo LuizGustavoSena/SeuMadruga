@@ -1,6 +1,7 @@
 import app from '@src/app';
 import { CreateProps, Type } from '@src/domain/models/transaction';
 import { CreateTransfer } from '@src/domain/models/transfer';
+import BcryptEncrypt from '@src/infrastructure/encrypt/bcrypt';
 import AuthService from '@src/services/auth';
 import TransactionService from '@src/services/transaction';
 import TransferService from '@src/services/transfer';
@@ -26,7 +27,7 @@ describe('Balance', () => {
     beforeAll(async () => {
         await db.seed.run();
 
-        const authService = new AuthService(new UserService());
+        const authService = new AuthService(new UserService(), new BcryptEncrypt());
 
         const response = await authService.signin({
             email: 'email3@email.com',

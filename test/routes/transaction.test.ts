@@ -1,5 +1,7 @@
 import app from '@src/app';
 import { FindResponse, Type } from '@src/domain/models/transaction';
+import KnexDatabase from '@src/infrastructure/database/knex';
+import BcryptEncrypt from '@src/infrastructure/encrypt/bcrypt';
 import AccountService from '@src/services/account';
 import AuthService from '@src/services/auth';
 import TransactionService from '@src/services/transaction';
@@ -15,9 +17,9 @@ const URL_TRANSACTION = '/v1/transactions';
 
 const request = supertest(app);
 const userService = new UserService();
-const authService = new AuthService(userService);
+const authService = new AuthService(userService, new BcryptEncrypt());
 const transactionService = new TransactionService();
-const serviceAccount = new AccountService(transactionService);
+const serviceAccount = new AccountService(transactionService, new KnexDatabase('accounts'));
 
 const USERS: user[] = [
     {
