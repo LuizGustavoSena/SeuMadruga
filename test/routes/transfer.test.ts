@@ -2,6 +2,7 @@ import app from '@src/app';
 import { Type } from '@src/domain/models/transaction';
 import { CreateTransfer, TransferProps } from '@src/domain/models/transfer';
 import BcryptEncrypt from '@src/infrastructure/encrypt/bcrypt';
+import JwtSimpleJwt from '@src/infrastructure/jwt/jwtSimple';
 import AuthService from '@src/services/auth';
 import TransactionService from '@src/services/transaction';
 import UserService from '@src/services/user';
@@ -21,7 +22,7 @@ describe('Transfer', () => {
     beforeAll(async () => {
         await db.seed.run();
 
-        const authService = new AuthService(new UserService(), new BcryptEncrypt());
+        const authService = new AuthService(new UserService(), new BcryptEncrypt(), new JwtSimpleJwt());
 
         const response = await authService.signin({
             email: 'email1@email.com',
