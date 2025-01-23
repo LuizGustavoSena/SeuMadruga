@@ -1,14 +1,13 @@
 import { SigninParams, SigninResponse } from "@src/domain/models/auth";
 import { Encrypt } from "@src/infrastructure/models/encrypt";
-import 'dotenv/config';
+import { Jwt } from "@src/infrastructure/models/jwt";
 import UserService from "./user";
-const bcrypt = require('bcryptjs');
-const jwt = require('jwt-simple');
 
 export default class AuthService {
     constructor(
         private readonly userService: UserService,
         private readonly encrypt: Encrypt,
+        private readonly jwt: Jwt,
     ) { };
 
     async signin(params: SigninParams): Promise<SigninResponse> {
@@ -28,7 +27,7 @@ export default class AuthService {
             name: user.name
         }
 
-        const token = jwt.encode(response, process.env.SECRET);
+        const token = this.jwt.encode(response);
 
         return { token };
     }
