@@ -1,7 +1,8 @@
+import BalanceKnexDatabase from '@src/infrastructure/database/specific/balanceKnex';
 import BalanceService from '@src/services/balance';
 import express, { Request, Response } from 'express';
 
-const balanceService = new BalanceService();
+const balanceService = new BalanceService(new BalanceKnexDatabase());
 
 module.exports = () => {
     const router = express.Router();
