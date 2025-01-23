@@ -1,4 +1,5 @@
 import BcryptEncrypt from '@src/infrastructure/encrypt/bcrypt';
+import JwtSimpleJwt from '@src/infrastructure/jwt/jwtSimple';
 import express, { Request, Response } from 'express';
 import { ZodError } from 'zod';
 import Validation from '../domain/validations';
@@ -6,7 +7,7 @@ import AuthService from '../services/auth';
 import UserService from '../services/user';
 
 const user = new UserService();
-const authService = new AuthService(user, new BcryptEncrypt());
+const authService = new AuthService(user, new BcryptEncrypt(), new JwtSimpleJwt());
 
 module.exports = () => {
     const router = express.Router();
