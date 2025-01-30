@@ -1,27 +1,19 @@
 import { CreateProps, CreateResponse, FindProps, FindResponse, UpdateProps, UpdateResponse } from "@src/domain/models/transaction";
-import knex from 'knex';
-import config from "../../knexfile";
-
-const db = knex(config);
+import { TransactionDatabase } from "@src/infrastructure/models/database";
 
 export default class TransactionService {
-    tableName = 'transactions';
-    constructor() { }
+    constructor(
+        private readonly db: TransactionDatabase
+    ) { }
 
     async find(params: FindProps): Promise<FindResponse[]> {
-        const response = await db(this.tableName)
-            .join('accounts', 'accounts.id', 'acc_id')
-            .where(params.filter ?? {})
-            .andWhere('accounts.user_id', '=', params.user_id)
-            .select(`${this.tableName}.id`, 'description', 'type', 'date', 'ammount', 'acc_id', 'transfer_id');
+        const response = await this.db.findTransactions(params);
 
         return response;
     }
 
     async findById(id: number): Promise<FindResponse> {
-        const response = await db(this.tableName)
-            .where({ id })
-            .select('id', 'description', 'type', 'date', 'ammount', 'acc_id');
+        const response = await this.db.getByFIlter<FindResponse[]>({ id });
 
         return response[0];
     }
@@ -29,21 +21,21 @@ export default class TransactionService {
     async create(params: CreateProps): Promise<CreateResponse> {
         const dataRequest = params.date ?? new Date();
 
-        const response = await db(this.tableName)
-            .insert({ ...params, date: dataRequest }, ['id', 'description', 'type', 'date', 'ammount', 'acc_id']);
+        const response = await this.db.create<CreateProps, CreateResponse>({ ...params, date: dataRequest });
 
-        return response[0];
+        return response;
     }
 
     async updateById(id: number, params: UpdateProps): Promise<UpdateResponse> {
-        const response = await db(this.tableName)
-            .where({ id })
-            .update(params, ['id', 'description', 'type', 'date', 'ammount', 'acc_id']);
+        const response = await this.db.update<UpdateResponse>({
+            id,
+            data: params
+        });
 
-        return response[0];
+        return response;
     }
 
     async deleteById(id: number): Promise<void> {
-        await db(this.tableName).where({ id }).del();
+        await this.db.deleteById(id);
     }
 };
