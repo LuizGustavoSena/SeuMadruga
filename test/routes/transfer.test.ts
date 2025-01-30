@@ -1,6 +1,7 @@
 import app from '@src/app';
 import { Type } from '@src/domain/models/transaction';
 import { CreateTransfer, TransferProps } from '@src/domain/models/transfer';
+import TransactionKnexDatabase from '@src/infrastructure/database/specific/transactionKnex';
 import BcryptEncrypt from '@src/infrastructure/encrypt/bcrypt';
 import JwtSimpleJwt from '@src/infrastructure/jwt/jwtSimple';
 import AuthService from '@src/services/auth';
@@ -14,7 +15,7 @@ const db = knex(config);
 const URL = '/v1/transfers';
 var token = '';
 
-const transactionService = new TransactionService();
+const transactionService = new TransactionService(new TransactionKnexDatabase());
 
 const request = supertest(app);
 
