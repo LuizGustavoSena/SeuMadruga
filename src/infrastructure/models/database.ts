@@ -1,4 +1,5 @@
 import { getBalanceByUserIdResponse } from "@src/domain/models/balance";
+import { FindProps, FindResponse } from "@src/domain/models/transaction";
 
 export type ParamsUpdateDatabase<T> = {
     id: number;
@@ -20,4 +21,8 @@ export interface BalanceDatabase {
     tableAccountName: string;
 
     getBalanceByUserId(userId: number): Promise<getBalanceByUserIdResponse[]>
+}
+
+export interface TransactionDatabase extends Database {
+    findTransactions(params: FindProps): Promise<FindResponse[]>;
 }
