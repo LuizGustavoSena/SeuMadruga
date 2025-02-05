@@ -1,5 +1,5 @@
 import { getBalanceByUserIdResponse } from '@src/domain/models/balance';
-import { BalanceDatabase } from '@src/infrastructure/models/database';
+import { BalanceDatabase } from '@src/infrastructure/models/balanceDatabase';
 
 export default class BalanceService {
     constructor(
