@@ -1,5 +1,5 @@
 import { FindProps, FindResponse } from "@src/domain/models/transaction";
-import { TransactionDatabase } from "@src/infrastructure/models/database";
+import { TransactionDatabase } from "@src/infrastructure/models/transactionDatabase";
 import KnexDatabase from "../knex";
 
 export default class TransactionKnexDatabase extends KnexDatabase implements TransactionDatabase {
