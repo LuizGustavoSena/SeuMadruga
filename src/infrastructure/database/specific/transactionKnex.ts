@@ -16,4 +16,10 @@ export default class TransactionKnexDatabase extends KnexDatabase implements Tra
 
         return response;
     }
+
+    async deleteByTransferId(transferId: number): Promise<void> {
+        await this.db(this.tableName)
+            .where({ transfer_id: transferId })
+            .del();
+    }
 }
