@@ -2,6 +2,7 @@ import app from '@src/app';
 import { CreateProps, Type } from '@src/domain/models/transaction';
 import { CreateTransfer } from '@src/domain/models/transfer';
 import TransactionKnexDatabase from '@src/infrastructure/database/specific/transactionKnex';
+import TransferKnexDatabase from '@src/infrastructure/database/specific/transferKnex';
 import BcryptEncrypt from '@src/infrastructure/encrypt/bcrypt';
 import JwtSimpleJwt from '@src/infrastructure/jwt/jwtSimple';
 import AuthService from '@src/services/auth';
@@ -17,8 +18,9 @@ const db = knex(config);
 
 const URL = '/v1/balance';
 
-const transactionService = new TransactionService(new TransactionKnexDatabase());
-const transferService = new TransferService();
+const transactionKnexDatabase = new TransactionKnexDatabase();
+const transactionService = new TransactionService(transactionKnexDatabase);
+const transferService = new TransferService(new TransferKnexDatabase(transactionKnexDatabase));
 
 var token = '';
 var generalToken = '';
