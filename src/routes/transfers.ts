@@ -1,10 +1,10 @@
+import AccountService from '@src/data/use-cases/account';
+import TransactionService from '@src/data/use-cases/transaction';
+import TransferService from '@src/data/use-cases/transfer';
 import Validation from '@src/domain/validations';
 import KnexDatabase from '@src/infrastructure/database/knex';
 import TransactionKnexDatabase from '@src/infrastructure/database/specific/transactionKnex';
 import TransferKnexDatabase from '@src/infrastructure/database/specific/transferKnex';
-import AccountService from '@src/services/account';
-import TransactionService from '@src/services/transaction';
-import TransferService from '@src/services/transfer';
 import express, { NextFunction, Request, Response } from 'express';
 import { ZodError } from 'zod';
 

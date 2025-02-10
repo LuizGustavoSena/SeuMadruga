@@ -2,7 +2,7 @@ import KnexDatabase from '@src/infrastructure/database/knex';
 import BcryptEncrypt from '@src/infrastructure/encrypt/bcrypt';
 import 'dotenv/config';
 import { Express } from "express";
-import UserService from '../services/user';
+import UserService from '../data/use-cases/user';
 
 const passport = require('passport');
 const { Strategy, ExtractJwt } = require('passport-jwt');

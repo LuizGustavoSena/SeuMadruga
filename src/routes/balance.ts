@@ -1,5 +1,5 @@
+import BalanceService from '@src/data/use-cases/balance';
 import BalanceKnexDatabase from '@src/infrastructure/database/specific/balanceKnex';
-import BalanceService from '@src/services/balance';
 import express, { Request, Response } from 'express';
 
 const balanceService = new BalanceService(new BalanceKnexDatabase());

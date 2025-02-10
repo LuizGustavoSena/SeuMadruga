@@ -1,11 +1,11 @@
 import app from '@src/app';
+import AuthService from '@src/data/use-cases/auth';
+import UserService from '@src/data/use-cases/user';
 import { GetByIdResponse } from '@src/domain/models/account';
 import { Type } from '@src/domain/models/transaction';
 import KnexDatabase from '@src/infrastructure/database/knex';
 import BcryptEncrypt from '@src/infrastructure/encrypt/bcrypt';
 import JwtSimpleJwt from '@src/infrastructure/jwt/jwtSimple';
-import AuthService from '@src/services/auth';
-import UserService from '@src/services/user';
 import knex from 'knex';
 import supertest from 'supertest';
 import config from "../../knexfile";

@@ -1,7 +1,7 @@
 import app from '@src/app';
+import UserService from '@src/data/use-cases/user';
 import KnexDatabase from '@src/infrastructure/database/knex';
 import BcryptEncrypt from '@src/infrastructure/encrypt/bcrypt';
-import UserService from '@src/services/user';
 import supertest from 'supertest';
 import { user } from './models/user';
 

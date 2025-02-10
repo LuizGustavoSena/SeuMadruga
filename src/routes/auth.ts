@@ -1,11 +1,11 @@
+import AuthService from '@src/data/use-cases/auth';
 import KnexDatabase from '@src/infrastructure/database/knex';
 import BcryptEncrypt from '@src/infrastructure/encrypt/bcrypt';
 import JwtSimpleJwt from '@src/infrastructure/jwt/jwtSimple';
 import express, { Request, Response } from 'express';
 import { ZodError } from 'zod';
+import UserService from '../data/use-cases/user';
 import Validation from '../domain/validations';
-import AuthService from '../services/auth';
-import UserService from '../services/user';
 
 const bcrypt = new BcryptEncrypt()
 const user = new UserService(new KnexDatabase('users'), bcrypt);
