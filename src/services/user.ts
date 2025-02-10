@@ -1,17 +1,17 @@
 import { FindByEmailResponse, UserModel, UserProps } from '@src/domain/models/user';
-import knex from 'knex';
-import config from "../../knexfile";
-const bcrypt = require('bcryptjs');
-
-const db = knex(config);
+import { Database } from '@src/infrastructure/models/database';
+import { Encrypt } from '@src/infrastructure/models/encrypt';
 
 export default class UserService {
-    constructor() { }
+    constructor(
+        private readonly db: Database,
+        private readonly encrypt: Encrypt
+    ) { }
 
     async findByEmail(email: string): Promise<FindByEmailResponse> {
-        const users = await db.select().from('users').where({ email }).first();
+        const users = await this.db.getByFIlter<FindByEmailResponse[]>({ email });
 
-        return users;
+        return users[0];
     }
 
     async save(params: UserProps): Promise<UserModel> {
@@ -20,15 +20,12 @@ export default class UserService {
         if (existEmail)
             throw new Error('Email já existente');
 
-        const encryptPassword = await this.encryptText(params.password);
+        const encryptPassword = await this.encrypt.create(params.password);
 
-        const response = await db('users').insert({ ...params, password: encryptPassword }, ['id', 'name', 'email']);
+        var response = await this.db.create<UserProps, Partial<UserProps> & { id: number }>({ ...params, password: encryptPassword });
 
-        return response[0];
-    }
+        delete response.password;
 
-    private async encryptText(text: string): Promise<string> {
-        const sant = await bcrypt.genSalt(10);
-        return await bcrypt.hash(text, sant);
+        return response as UserModel;
     }
 }
