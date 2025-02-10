@@ -5,7 +5,8 @@ export default class BcryptEncrypt implements Encrypt {
     constructor() { }
 
     async create(text: string): Promise<string> {
-        throw new Error("Method not implemented.");
+        const sant = await bcrypt.genSalt(10);
+        return await bcrypt.hash(text, sant);
     }
 
     async compare(encryptText: string, text: string): Promise<boolean> {
