@@ -1,4 +1,4 @@
-import { Encrypt } from "../models/encrypt";
+import { Encrypt } from "../../data/protocols/encrypt/encrypt";
 const bcrypt = require('bcryptjs');
 
 export default class BcryptEncrypt implements Encrypt {

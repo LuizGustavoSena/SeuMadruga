@@ -1,5 +1,5 @@
+import { Database } from "@src/data/protocols/database/database";
 import { CreateProps, CreateResponse, GetAllResponse, GetByIdResponse, UpdateParams, UpdateResponse } from "@src/domain/models/account";
-import { Database } from "@src/infrastructure/models/database";
 import TransactionService from "./transaction";
 
 export default class AccountService {

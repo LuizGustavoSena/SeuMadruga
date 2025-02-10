@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { EncodeProps, Jwt } from "../models/jwt";
+import { EncodeProps, Jwt } from "../../data/protocols/jwt/jwt";
 
 const jwt = require('jwt-simple');
 

@@ -1,5 +1,5 @@
 import { CreateProps, CreateResponse, FindProps, FindResponse, UpdateProps, UpdateResponse } from "@src/domain/models/transaction";
-import { TransactionDatabase } from "@src/infrastructure/models/transactionDatabase";
+import { TransactionDatabase } from "../protocols/database/specif/transactionDatabase";
 
 export default class TransactionService {
     constructor(

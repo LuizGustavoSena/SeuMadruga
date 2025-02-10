@@ -1,6 +1,6 @@
 import knex from 'knex';
 import config from "../../../knexfile";
-import { Database, ParamsUpdateDatabase } from "../models/database";
+import { Database, ParamsUpdateDatabase } from "../../data/protocols/database/database";
 
 export default class KnexDatabase implements Database {
     db = knex(config);

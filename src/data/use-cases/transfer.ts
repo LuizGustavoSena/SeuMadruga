@@ -1,7 +1,7 @@
 import { CreateTransfer, CreateTransferResponse, TransferProps, UpdateTransferProps, UpdateTransferResponse } from '@src/domain/models/transfer';
-import { TransferDatabase } from '@src/infrastructure/models/transferDatabase';
 import knex from 'knex';
 import config from "../../../knexfile";
+import { TransferDatabase } from '../protocols/database/specif/transferDatabase';
 
 const db = knex(config);
 

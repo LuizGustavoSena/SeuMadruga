@@ -1,6 +1,6 @@
+import { Encrypt } from "@src/data/protocols/encrypt/encrypt";
+import { Jwt } from "@src/data/protocols/jwt/jwt";
 import { SigninParams, SigninResponse } from "@src/domain/models/auth";
-import { Encrypt } from "@src/infrastructure/models/encrypt";
-import { Jwt } from "@src/infrastructure/models/jwt";
 import UserService from "./user";
 
 export default class AuthService {

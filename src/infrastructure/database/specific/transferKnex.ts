@@ -1,7 +1,7 @@
+import { TransactionDatabase } from "@src/data/protocols/database/specif/transactionDatabase";
+import { TransferDatabase } from "@src/data/protocols/database/specif/transferDatabase";
 import { TransactionProps, Type } from "@src/domain/models/transaction";
 import { insertTransactionsProps } from "@src/domain/models/transfer";
-import { TransactionDatabase } from "@src/infrastructure/models/transactionDatabase";
-import { TransferDatabase } from "@src/infrastructure/models/transferDatabase";
 import KnexDatabase from "../knex";
 
 export default class TransferKnexDatabase extends KnexDatabase implements TransferDatabase {

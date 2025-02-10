@@ -1,6 +1,6 @@
+import { Database } from '@src/data/protocols/database/database';
+import { Encrypt } from '@src/data/protocols/encrypt/encrypt';
 import { FindByEmailResponse, UserModel, UserProps } from '@src/domain/models/user';
-import { Database } from '@src/infrastructure/models/database';
-import { Encrypt } from '@src/infrastructure/models/encrypt';
 
 export default class UserService {
     constructor(

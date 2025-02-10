@@ -1,5 +1,5 @@
+import { BalanceDatabase } from "@src/data/protocols/database/specif/balanceDatabase";
 import { getBalanceByUserIdResponse } from "@src/domain/models/balance";
-import { BalanceDatabase } from "@src/infrastructure/models/balanceDatabase";
 import knex from 'knex';
 import config from "../../../../knexfile";
 
