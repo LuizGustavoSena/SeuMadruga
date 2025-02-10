@@ -1,6 +1,7 @@
 import app from '@src/app';
 import { CreateProps, Type } from '@src/domain/models/transaction';
 import { CreateTransfer } from '@src/domain/models/transfer';
+import KnexDatabase from '@src/infrastructure/database/knex';
 import TransactionKnexDatabase from '@src/infrastructure/database/specific/transactionKnex';
 import TransferKnexDatabase from '@src/infrastructure/database/specific/transferKnex';
 import BcryptEncrypt from '@src/infrastructure/encrypt/bcrypt';
@@ -31,7 +32,9 @@ describe('Balance', () => {
     beforeAll(async () => {
         await db.seed.run();
 
-        const authService = new AuthService(new UserService(), new BcryptEncrypt(), new JwtSimpleJwt());
+        const bcrypt = new BcryptEncrypt();
+        const userService = new UserService(new KnexDatabase('users'), bcrypt)
+        const authService = new AuthService(userService, bcrypt, new JwtSimpleJwt());
 
         const response = await authService.signin({
             email: 'email3@email.com',

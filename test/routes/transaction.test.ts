@@ -18,8 +18,9 @@ const db = knex(config);
 const URL_TRANSACTION = '/v1/transactions';
 
 const request = supertest(app);
-const userService = new UserService();
-const authService = new AuthService(userService, new BcryptEncrypt(), new JwtSimpleJwt());
+const bcrypt = new BcryptEncrypt()
+const userService = new UserService(new KnexDatabase('users'), bcrypt);
+const authService = new AuthService(userService, bcrypt, new JwtSimpleJwt());
 const transactionService = new TransactionService(new TransactionKnexDatabase());
 const serviceAccount = new AccountService(transactionService, new KnexDatabase('accounts'));
 

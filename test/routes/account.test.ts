@@ -1,6 +1,7 @@
 import app from '@src/app';
 import { GetByIdResponse } from '@src/domain/models/account';
 import { Type } from '@src/domain/models/transaction';
+import KnexDatabase from '@src/infrastructure/database/knex';
 import BcryptEncrypt from '@src/infrastructure/encrypt/bcrypt';
 import JwtSimpleJwt from '@src/infrastructure/jwt/jwtSimple';
 import AuthService from '@src/services/auth';
@@ -17,8 +18,9 @@ const URL_TRANSACTION = '/v1/transactions';
 
 const request = supertest(app);
 
-const userService = new UserService();
-const authService = new AuthService(userService, new BcryptEncrypt(), new JwtSimpleJwt());
+const bcrypt = new BcryptEncrypt()
+const userService = new UserService(new KnexDatabase('users'), bcrypt);
+const authService = new AuthService(userService, bcrypt, new JwtSimpleJwt());
 
 const USER: user = {
     name: 'Walter Mitty',

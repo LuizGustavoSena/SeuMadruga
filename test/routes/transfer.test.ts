@@ -1,6 +1,7 @@
 import app from '@src/app';
 import { Type } from '@src/domain/models/transaction';
 import { CreateTransfer, TransferProps } from '@src/domain/models/transfer';
+import KnexDatabase from '@src/infrastructure/database/knex';
 import TransactionKnexDatabase from '@src/infrastructure/database/specific/transactionKnex';
 import BcryptEncrypt from '@src/infrastructure/encrypt/bcrypt';
 import JwtSimpleJwt from '@src/infrastructure/jwt/jwtSimple';
@@ -23,7 +24,9 @@ describe('Transfer', () => {
     beforeAll(async () => {
         await db.seed.run();
 
-        const authService = new AuthService(new UserService(), new BcryptEncrypt(), new JwtSimpleJwt());
+        const bcrypt = new BcryptEncrypt();
+        const userService = new UserService(new KnexDatabase('users'), bcrypt)
+        const authService = new AuthService(userService, bcrypt, new JwtSimpleJwt());
 
         const response = await authService.signin({
             email: 'email1@email.com',

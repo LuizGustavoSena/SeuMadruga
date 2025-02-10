@@ -1,3 +1,4 @@
+import KnexDatabase from '@src/infrastructure/database/knex';
 import BcryptEncrypt from '@src/infrastructure/encrypt/bcrypt';
 import JwtSimpleJwt from '@src/infrastructure/jwt/jwtSimple';
 import express, { Request, Response } from 'express';
@@ -6,8 +7,9 @@ import Validation from '../domain/validations';
 import AuthService from '../services/auth';
 import UserService from '../services/user';
 
-const user = new UserService();
-const authService = new AuthService(user, new BcryptEncrypt(), new JwtSimpleJwt());
+const bcrypt = new BcryptEncrypt()
+const user = new UserService(new KnexDatabase('users'), bcrypt);
+const authService = new AuthService(user, bcrypt, new JwtSimpleJwt());
 
 module.exports = () => {
     const router = express.Router();

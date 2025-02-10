@@ -1,4 +1,6 @@
 import app from '@src/app';
+import KnexDatabase from '@src/infrastructure/database/knex';
+import BcryptEncrypt from '@src/infrastructure/encrypt/bcrypt';
 import UserService from '@src/services/user';
 import supertest from 'supertest';
 import { user } from './models/user';
@@ -7,7 +9,7 @@ const URL = '/auth';
 const URL_USERS = '/v1/users';
 
 const request = supertest(app);
-const userService = new UserService();
+const userService = new UserService(new KnexDatabase('users'), new BcryptEncrypt());
 
 const USER: user = {
     name: 'Walter Mitty',
