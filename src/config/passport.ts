@@ -1,13 +1,11 @@
-import KnexDatabase from '@src/infrastructure/database/knex';
-import BcryptEncrypt from '@src/infrastructure/encrypt/bcrypt';
+import MakeUserService from '@src/main/factories/use-cases/makeUserService';
 import 'dotenv/config';
 import { Express } from "express";
-import UserService from '../data/use-cases/user';
 
 const passport = require('passport');
 const { Strategy, ExtractJwt } = require('passport-jwt');
 
-const userService = new UserService(new KnexDatabase('users'), new BcryptEncrypt());
+const userService = MakeUserService.getInstance();
 
 module.exports = (app: Express) => {
     const params = {

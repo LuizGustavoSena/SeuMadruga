@@ -1,15 +1,9 @@
 import app from '@src/app';
-import AuthService from '@src/data/use-cases/auth';
-import TransactionService from '@src/data/use-cases/transaction';
-import TransferService from '@src/data/use-cases/transfer';
-import UserService from '@src/data/use-cases/user';
 import { CreateProps, Type } from '@src/domain/models/transaction';
 import { CreateTransfer } from '@src/domain/models/transfer';
-import KnexDatabase from '@src/infrastructure/database/knex';
-import TransactionKnexDatabase from '@src/infrastructure/database/specific/transactionKnex';
-import TransferKnexDatabase from '@src/infrastructure/database/specific/transferKnex';
-import BcryptEncrypt from '@src/infrastructure/encrypt/bcrypt';
-import JwtSimpleJwt from '@src/infrastructure/jwt/jwtSimple';
+import MakeAuthService from '@src/main/factories/use-cases/makeAuthService';
+import MakeTransactionService from '@src/main/factories/use-cases/makeTransactionService';
+import MakeTransferService from '@src/main/factories/use-cases/makeTransferService';
 import knex from 'knex';
 import moment from 'moment';
 import supertest from 'supertest';
@@ -19,9 +13,8 @@ const db = knex(config);
 
 const URL = '/v1/balance';
 
-const transactionKnexDatabase = new TransactionKnexDatabase();
-const transactionService = new TransactionService(transactionKnexDatabase);
-const transferService = new TransferService(new TransferKnexDatabase(transactionKnexDatabase));
+const transactionService = MakeTransactionService.getInstance();
+const transferService = MakeTransferService.getInstance();
 
 var token = '';
 var generalToken = '';
@@ -32,9 +25,7 @@ describe('Balance', () => {
     beforeAll(async () => {
         await db.seed.run();
 
-        const bcrypt = new BcryptEncrypt();
-        const userService = new UserService(new KnexDatabase('users'), bcrypt)
-        const authService = new AuthService(userService, bcrypt, new JwtSimpleJwt());
+        const authService = MakeAuthService.getInstance();
 
         const response = await authService.signin({
             email: 'email3@email.com',

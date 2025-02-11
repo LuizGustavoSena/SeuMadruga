@@ -1,13 +1,11 @@
-import AccountService from '@src/data/use-cases/account';
-import TransactionService from '@src/data/use-cases/transaction';
 import Validation from '@src/domain/validations';
-import KnexDatabase from '@src/infrastructure/database/knex';
-import TransactionKnexDatabase from '@src/infrastructure/database/specific/transactionKnex';
+import MakeAccountService from '@src/main/factories/use-cases/makeAccountService';
+import MakeTransactionService from '@src/main/factories/use-cases/makeTransactionService';
 import express, { NextFunction, Request, Response } from 'express';
 import { ZodError } from 'zod';
 
-const transactionService = new TransactionService(new TransactionKnexDatabase());
-const serviceAccount = new AccountService(transactionService, new KnexDatabase('accounts'));
+const transactionService = MakeTransactionService.getInstance();
+const serviceAccount = MakeAccountService.getInstance();
 
 module.exports = () => {
     const router = express.Router();

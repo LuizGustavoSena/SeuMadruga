@@ -1,8 +1,7 @@
-import BalanceService from '@src/data/use-cases/balance';
-import BalanceKnexDatabase from '@src/infrastructure/database/specific/balanceKnex';
+import MakeBalanceService from '@src/main/factories/use-cases/makeBalanceService';
 import express, { Request, Response } from 'express';
 
-const balanceService = new BalanceService(new BalanceKnexDatabase());
+const balanceService = MakeBalanceService.getInstance();
 
 module.exports = () => {
     const router = express.Router();

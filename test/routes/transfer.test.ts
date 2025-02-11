@@ -1,13 +1,8 @@
 import app from '@src/app';
-import AuthService from '@src/data/use-cases/auth';
-import TransactionService from '@src/data/use-cases/transaction';
-import UserService from '@src/data/use-cases/user';
 import { Type } from '@src/domain/models/transaction';
 import { CreateTransfer, TransferProps } from '@src/domain/models/transfer';
-import KnexDatabase from '@src/infrastructure/database/knex';
-import TransactionKnexDatabase from '@src/infrastructure/database/specific/transactionKnex';
-import BcryptEncrypt from '@src/infrastructure/encrypt/bcrypt';
-import JwtSimpleJwt from '@src/infrastructure/jwt/jwtSimple';
+import MakeAuthService from '@src/main/factories/use-cases/makeAuthService';
+import MakeTransactionService from '@src/main/factories/use-cases/makeTransactionService';
 import knex from 'knex';
 import supertest from 'supertest';
 import config from "../../knexfile";
@@ -16,7 +11,7 @@ const db = knex(config);
 const URL = '/v1/transfers';
 var token = '';
 
-const transactionService = new TransactionService(new TransactionKnexDatabase());
+const transactionService = MakeTransactionService.getInstance();
 
 const request = supertest(app);
 
@@ -24,9 +19,7 @@ describe('Transfer', () => {
     beforeAll(async () => {
         await db.seed.run();
 
-        const bcrypt = new BcryptEncrypt();
-        const userService = new UserService(new KnexDatabase('users'), bcrypt)
-        const authService = new AuthService(userService, bcrypt, new JwtSimpleJwt());
+        const authService = MakeAuthService.getInstance();
 
         const response = await authService.signin({
             email: 'email1@email.com',

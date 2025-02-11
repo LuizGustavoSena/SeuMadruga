@@ -1,15 +1,11 @@
-import AuthService from '@src/data/use-cases/auth';
-import KnexDatabase from '@src/infrastructure/database/knex';
-import BcryptEncrypt from '@src/infrastructure/encrypt/bcrypt';
-import JwtSimpleJwt from '@src/infrastructure/jwt/jwtSimple';
+import MakeAuthService from '@src/main/factories/use-cases/makeAuthService';
+import MakeUserService from '@src/main/factories/use-cases/makeUserService';
 import express, { Request, Response } from 'express';
 import { ZodError } from 'zod';
-import UserService from '../data/use-cases/user';
 import Validation from '../domain/validations';
 
-const bcrypt = new BcryptEncrypt()
-const user = new UserService(new KnexDatabase('users'), bcrypt);
-const authService = new AuthService(user, bcrypt, new JwtSimpleJwt());
+const user = MakeUserService.getInstance();
+const authService = MakeAuthService.getInstance();
 
 module.exports = () => {
     const router = express.Router();

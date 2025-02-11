@@ -1,13 +1,9 @@
 import app from '@src/app';
-import AccountService from '@src/data/use-cases/account';
-import AuthService from '@src/data/use-cases/auth';
-import TransactionService from '@src/data/use-cases/transaction';
-import UserService from '@src/data/use-cases/user';
 import { FindResponse, Type } from '@src/domain/models/transaction';
-import KnexDatabase from '@src/infrastructure/database/knex';
-import TransactionKnexDatabase from '@src/infrastructure/database/specific/transactionKnex';
-import BcryptEncrypt from '@src/infrastructure/encrypt/bcrypt';
-import JwtSimpleJwt from '@src/infrastructure/jwt/jwtSimple';
+import MakeAccountService from '@src/main/factories/use-cases/makeAccountService';
+import MakeAuthService from '@src/main/factories/use-cases/makeAuthService';
+import MakeTransactionService from '@src/main/factories/use-cases/makeTransactionService';
+import MakeUserService from '@src/main/factories/use-cases/makeUserService';
 import knex from 'knex';
 import supertest from 'supertest';
 import config from "../../knexfile";
@@ -18,11 +14,11 @@ const db = knex(config);
 const URL_TRANSACTION = '/v1/transactions';
 
 const request = supertest(app);
-const bcrypt = new BcryptEncrypt()
-const userService = new UserService(new KnexDatabase('users'), bcrypt);
-const authService = new AuthService(userService, bcrypt, new JwtSimpleJwt());
-const transactionService = new TransactionService(new TransactionKnexDatabase());
-const serviceAccount = new AccountService(transactionService, new KnexDatabase('accounts'));
+
+const userService = MakeUserService.getInstance();
+const authService = MakeAuthService.getInstance();
+const transactionService = MakeTransactionService.getInstance();
+const serviceAccount = MakeAccountService.getInstance();
 
 const USERS: user[] = [
     {
