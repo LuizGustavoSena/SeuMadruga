@@ -5,6 +5,8 @@ export default class DatabaseSpy implements Database {
     tableName: string = 'Teste';
     content: any[] = [];
 
+    constructor() { };
+
     async create<T, R>(params: T): Promise<R> {
         this.content.push(params);
 
