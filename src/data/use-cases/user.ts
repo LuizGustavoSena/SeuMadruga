@@ -1,8 +1,9 @@
 import { Database } from '@src/data/protocols/database/database';
 import { Encrypt } from '@src/data/protocols/encrypt/encrypt';
 import { FindByEmailResponse, UserModel, UserProps } from '@src/domain/models/user';
+import { User } from '@src/domain/use-cases/user';
 
-export default class UserService {
+export default class UserService implements User {
     constructor(
         private readonly db: Database,
         private readonly encrypt: Encrypt
