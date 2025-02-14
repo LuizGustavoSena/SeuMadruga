@@ -1,8 +1,9 @@
 import { Database } from "@src/data/protocols/database/database";
 import { CreateProps, CreateResponse, GetAllResponse, GetByIdResponse, UpdateParams, UpdateResponse } from "@src/domain/models/account";
+import { Account } from "@src/domain/use-cases/account";
 import TransactionService from "./transaction";
 
-export default class AccountService {
+export default class AccountService implements Account {
     constructor(
         private transactionService: TransactionService,
         private db: Database,
