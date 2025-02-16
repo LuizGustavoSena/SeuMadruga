@@ -1,3 +1,4 @@
+import { faker } from "@faker-js/faker/.";
 import UserService from "@src/data/use-cases/user";
 import DatabaseSpy from "../mocks/database";
 import MakeEncryptSpy, { EncryptSpy } from "../mocks/encrypt";
@@ -68,5 +69,15 @@ describe('User', () => {
         expect(response.name).toBe(user.name);
         expect(response.password).toBe(user.password);
         expect(response.id).toBe(id);
+    });
+
+    test('Should be empty value when find by email user', async () => {
+        const { sut } = makeSut();
+
+        const email = faker.internet.email();
+
+        const response = await sut.findByEmail(email);
+
+        expect(response).toBeUndefined();
     });
 });
