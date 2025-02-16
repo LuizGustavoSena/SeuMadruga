@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
 import { Encrypt } from "../protocols/encrypt/encrypt";
 
-class EncryptSpy implements Encrypt {
+export class EncryptSpy implements Encrypt {
     encryptText: string = faker.string.uuid();
 
     constructor() { };
@@ -20,7 +20,7 @@ export default class MakeEncryptSpy {
 
     constructor() { };
 
-    getInstance() {
+    static getInstance() {
         if (!MakeEncryptSpy.instance)
             MakeEncryptSpy.instance = new EncryptSpy();
 
