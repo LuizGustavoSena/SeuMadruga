@@ -22,7 +22,7 @@ const makeSut = (): Props => {
 
 describe('User', () => {
     test('Should be correct save user', async () => {
-        const { sut } = makeSut();
+        const { databaseSpy, encryptSpy, sut } = makeSut();
 
         const user = makeUser();
 
@@ -30,6 +30,9 @@ describe('User', () => {
 
         expect(response.email).toBe(user.email);
         expect(response.name).toBe(user.name);
+        expect(databaseSpy.content[0].email).toBe(user.email);
+        expect(databaseSpy.content[0].name).toBe(user.name);
+        expect(databaseSpy.content[0].password).toBe(`${encryptSpy.encryptText}${user.password}`);
         expect(response).toHaveProperty('id');
     });
 });
