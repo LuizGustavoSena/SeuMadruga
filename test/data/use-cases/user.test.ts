@@ -49,4 +49,24 @@ describe('User', () => {
 
         await expect(promise).rejects.toThrow(new ExistingEmailError())
     });
+
+    test('Should be success when find by email user', async () => {
+        const { databaseSpy, sut } = makeSut();
+
+        const email = faker.internet.email();
+        const id = faker.number.int();
+        const user = makeUser({ email });
+
+        databaseSpy.content.push({
+            ...user,
+            id
+        });
+
+        const response = await sut.findByEmail(email);
+
+        expect(response.email).toBe(user.email);
+        expect(response.name).toBe(user.name);
+        expect(response.password).toBe(user.password);
+        expect(response.id).toBe(id);
+    });
 });
