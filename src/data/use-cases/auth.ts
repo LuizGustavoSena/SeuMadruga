@@ -1,9 +1,10 @@
 import { Encrypt } from "@src/data/protocols/encrypt/encrypt";
 import { Jwt } from "@src/data/protocols/jwt/jwt";
 import { SigninParams, SigninResponse } from "@src/domain/models/auth";
+import { Auth } from "@src/domain/use-cases/auth";
 import UserService from "./user";
 
-export default class AuthService {
+export default class AuthService implements Auth{
     constructor(
         private readonly userService: UserService,
         private readonly encrypt: Encrypt,
