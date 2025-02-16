@@ -1,5 +1,6 @@
 import { Database } from '@src/data/protocols/database/database';
 import { Encrypt } from '@src/data/protocols/encrypt/encrypt';
+import { ExistingEmailError } from '@src/domain/error/existingEmail';
 import { FindByEmailResponse, UserModel, UserProps } from '@src/domain/models/user';
 import { User } from '@src/domain/use-cases/user';
 
@@ -19,7 +20,7 @@ export default class UserService implements User {
         const existEmail = await this.findByEmail(params.email);
 
         if (existEmail)
-            throw new Error('Email já existente');
+            throw new ExistingEmailError();
 
         const encryptPassword = await this.encrypt.create(params.password);
 
