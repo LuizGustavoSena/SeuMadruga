@@ -35,4 +35,18 @@ describe('User', () => {
         expect(databaseSpy.content[0].password).toBe(`${encryptSpy.encryptText}${user.password}`);
         expect(response).toHaveProperty('id');
     });
+
+    test('Should be error when create a user with exist email', async () => {
+        const { databaseSpy, sut } = makeSut();
+
+        const email = faker.internet.email();
+
+        databaseSpy.content.push(makeUser({ email }));
+
+        const user = makeUser({ email });
+
+        const promise = sut.save(user);
+
+        await expect(promise).rejects.toThrow(new ExistingEmailError())
+    });
 });
