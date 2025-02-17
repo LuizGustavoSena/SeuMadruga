@@ -32,10 +32,14 @@ export default class DatabaseSpy implements Database {
         this.content = this.content.map(el => {
             if (el.id != params.id) return el;
 
-            return params.data;
+            Object.keys(params.data).forEach(key => {
+                el[key] = params.data[key as keyof Partial<Omit<T, "id">>]
+            })
+
+            return el;
         });
 
-        return { ...params, id: params.id } as T;
+        return this.content.find(el => el.id === params.id);
     }
 
     async deleteById(id: number): Promise<void> {
