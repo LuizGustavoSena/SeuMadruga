@@ -79,24 +79,21 @@ describe('Account', () => {
         expect(response.id).toBe(id);
     });
 
-    // test('Should be delete by id account successful', async () => {
-    //     const account = {
-    //         name: 'Acc 5'
-    //     }
+    test('Should be delete by id account successful', async () => {
+        const { database, sut } = makeSut();
 
-    //     const response = await request.post(URL)
-    //         .set('authorization', `JWT ${USER.token}`)
-    //         .send(account);
+        const account = makeAccount();
+        const id = faker.number.int();
 
-    //     const del = await request.delete(`${URL}/${response.body.id}`)
-    //         .set('authorization', `JWT ${USER.token}`);
+        database.content.push({
+            ...account,
+            id
+        });
 
-    //     const get = await request.get(`${URL}/${response.body.id}`)
-    //         .set('authorization', `JWT ${USER.token}`);
+        await sut.deleteById(id);
 
-    //     expect(del.status).toBe(200);
-    //     expect(get.status).toBe(404);
-    // });
+        expect(database.content).toHaveLength(0);
+    });
 
     // test('Should be list only accounts by user', async () => {
     //     await db('transactions').del();
