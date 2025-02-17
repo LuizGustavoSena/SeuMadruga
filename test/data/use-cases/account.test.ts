@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker/.';
 import AccountService from '@src/data/use-cases/account';
 import TransactionService from '@src/data/use-cases/transaction';
+import { ExistingAccountError } from '@src/domain/error/existingAccount';
 import DatabaseSpy from '../mocks/databaseSpy';
 import { makeAccount } from '../mocks/insertAccount';
 import TransactionDatabaseSpy from '../mocks/transactionDatabaseSpy';
@@ -37,6 +38,22 @@ describe('Account', () => {
         expect(response.name).toBe(account.name);
         expect(response.user_id).toBe(account.user_id);
         expect(response).toHaveProperty('id');
+    });
+
+    test('Should be error when create account with the same name', async () => {
+        const { database, sut } = makeSut();
+
+        const name = faker.person.fullName();
+        const user_id = faker.number.int();
+
+        database.content.push({
+            ...makeAccount({ name, user_id }),
+            id: faker.number.int()
+        });
+
+        const promise = sut.create(makeAccount({ name, user_id }));
+
+        await expect(promise).rejects.toThrow(new ExistingAccountError());
     });
 
     test('Should be get by filter account successful', async () => {
@@ -94,56 +111,6 @@ describe('Account', () => {
 
         expect(database.content).toHaveLength(0);
     });
-
-    // test('Should be list only accounts by user', async () => {
-    //     await db('transactions').del();
-    //     await db('transfers').del();
-    //     await db('accounts').del();
-
-    //     const account = { name: 'USER' };
-    //     const another_account = { name: 'ANOTHER_USER' };
-
-    //     await request.post(URL)
-    //         .set('authorization', `JWT ${USER.token}`)
-    //         .send(account);
-
-    //     await request.post(URL)
-    //         .set('authorization', `JWT ${ANOTHER_USER.token}`)
-    //         .send(another_account);
-
-    //     const response = await request.get(URL)
-    //         .set('authorization', `JWT ${USER.token}`);
-
-    //     const another_response = await request.get(URL)
-    //         .set('authorization', `JWT ${ANOTHER_USER.token}`);
-
-    //     expect(response.status).toBe(200);
-    //     expect(response.body.length).toBeGreaterThanOrEqual(1);
-    //     expect(response.body.find((el: GetByIdResponse) => el.name === account.name)).not.toBeUndefined();
-
-    //     expect(another_response.status).toBe(200);
-    //     expect(another_response.body.length).toBeGreaterThanOrEqual(1);
-    //     expect(another_response.body.find((el: GetByIdResponse) => el.name === another_account.name)).not.toBeUndefined();
-    // });
-
-    // test('Should don`t insert account with same name', async () => {
-    //     const account = { name: 'Duplicate Name' };
-
-    //     const response = await request.post(URL)
-    //         .set('authorization', `JWT ${USER.token}`)
-    //         .send(account);
-
-    //     const duplicateResponse = await request.post(URL)
-    //         .set('authorization', `JWT ${USER.token}`)
-    //         .send(account);
-
-    //     expect(response.status).toBe(201);
-    //     expect(response.body.name).toBe(account.name);
-
-    //     expect(duplicateResponse.status).toBe(400);
-    //     expect(duplicateResponse.body).toHaveProperty('error');
-    //     expect(duplicateResponse.body.error).toContain('existente');
-    // });
 
     // test('Should don`t show another user_id account', async () => {
     //     const account = { name: 'NameTheUserOne' };
