@@ -1,7 +1,8 @@
+import AccountService from '@src/data/use-cases/account';
+import TransactionService from '@src/data/use-cases/transaction';
 import DatabaseSpy from '../mocks/databaseSpy';
+import { makeAccount } from '../mocks/insertAccount';
 import TransactionDatabaseSpy from '../mocks/transactionDatabaseSpy';
-import AccountService from './account';
-import TransactionService from './transaction';
 
 type Props = {
     sut: AccountService;
@@ -25,18 +26,17 @@ const makeSut = (): Props => {
 }
 
 describe('Account', () => {
-    // test('Should be create a successful account', async () => {
-    //     const account = {
-    //         name: 'Acc 1'
-    //     }
+    test('Should be create a successful account', async () => {
+        const { sut } = makeSut();
 
-    //     const response = await request.post(URL)
-    //         .set('authorization', `JWT ${USER.token}`)
-    //         .send(account);
+        const account = makeAccount();
 
-    //     expect(response.status).toBe(201);
-    //     expect(response.body.name).toBe(account.name);
-    // });
+        const response = await sut.create(account);
+
+        expect(response.name).toBe(account.name);
+        expect(response.user_id).toBe(account.user_id);
+        expect(response).toHaveProperty('id');
+    });
 
     // test('Should be error in create a account without name', async () => {
     //     const response = await request.post(URL)
