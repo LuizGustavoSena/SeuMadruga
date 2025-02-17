@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker/.';
 import AccountService from '@src/data/use-cases/account';
 import TransactionService from '@src/data/use-cases/transaction';
 import DatabaseSpy from '../mocks/databaseSpy';
@@ -38,30 +39,23 @@ describe('Account', () => {
         expect(response).toHaveProperty('id');
     });
 
-    // test('Should be error in create a account without name', async () => {
-    //     const response = await request.post(URL)
-    //         .set('authorization', `JWT ${USER.token}`);
+    test('Should be get by filter account successful', async () => {
+        const { database, sut } = makeSut();
 
-    //     expect(response.status).toBe(400);
-    //     expect(response.body.error).toContain('name');
-    // });
+        const account = makeAccount();
+        const id = faker.number.int();
 
-    // test('Should be get by id account successful', async () => {
-    //     const account = {
-    //         name: 'Acc 3'
-    //     }
+        database.content.push({
+            ...account,
+            id
+        });
 
-    //     const response = await request.post(URL)
-    //         .set('authorization', `JWT ${USER.token}`)
-    //         .send(account);
+        const response = await sut.getByFilter({ id });
 
-    //     const get = await request.get(`${URL}/${response.body.id}`)
-    //         .set('authorization', `JWT ${USER.token}`);
-
-    //     expect(response.status).toBe(201);
-    //     expect(get.status).toBe(200);
-    //     expect(get.body.name).toBe(account.name);
-    // });
+        expect(response[0].name).toBe(account.name);
+        expect(response[0].user_id).toBe(account.user_id);
+        expect(response[0].id).toBe(id);
+    });
 
     // test('Should be get by id account successful', async () => {
     //     const get = await request.get(`${URL}/${-1}`)
