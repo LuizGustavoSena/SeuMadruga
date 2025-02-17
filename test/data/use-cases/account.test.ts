@@ -57,31 +57,27 @@ describe('Account', () => {
         expect(response[0].id).toBe(id);
     });
 
-    // test('Should be get by id account successful', async () => {
-    //     const get = await request.get(`${URL}/${-1}`)
-    //         .set('authorization', `JWT ${USER.token}`);
+    test('Should be update a successful account', async () => {
+        const { database, sut } = makeSut();
 
-    //     expect(get.status).toBe(404);
-    // });
+        const name = faker.person.fullName();
+        const account = makeAccount();
+        const id = faker.number.int();
 
-    // test('Should be update a successful account', async () => {
-    //     const account = {
-    //         name: 'Acc 4'
-    //     }
+        database.content.push({
+            ...account,
+            id
+        });
 
-    //     const updatedName = 'Acc update';
+        const response = await sut.update({
+            id,
+            name
+        });
 
-    //     const response = await request.post(URL)
-    //         .set('authorization', `JWT ${USER.token}`)
-    //         .send(account);
-
-    //     const put = await request.put(`${URL}/${response.body.id}`)
-    //         .set('authorization', `JWT ${USER.token}`)
-    //         .send({ name: updatedName });
-
-    //     expect(put.status).toBe(200);
-    //     expect(put.body.name).toBe(updatedName);
-    // });
+        expect(response.name).toBe(name);
+        expect(response.user_id).toBe(account.user_id);
+        expect(response.id).toBe(id);
+    });
 
     // test('Should be delete by id account successful', async () => {
     //     const account = {
