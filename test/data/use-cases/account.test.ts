@@ -2,8 +2,10 @@ import { faker } from '@faker-js/faker/.';
 import AccountService from '@src/data/use-cases/account';
 import TransactionService from '@src/data/use-cases/transaction';
 import { ExistingAccountError } from '@src/domain/error/existingAccount';
+import { ExistingTransactionsError } from '@src/domain/error/existingTransactions';
 import DatabaseSpy from '../mocks/databaseSpy';
 import { makeAccount } from '../mocks/insertAccount';
+import { makeTransaction } from '../mocks/insertTransaction';
 import TransactionDatabaseSpy from '../mocks/transactionDatabaseSpy';
 
 type Props = {
@@ -112,74 +114,27 @@ describe('Account', () => {
         expect(database.content).toHaveLength(0);
     });
 
-    // test('Should don`t show another user_id account', async () => {
-    //     const account = { name: 'NameTheUserOne' };
+    test('Should don`t delete account with one or multiple transactions', async () => {
+        const { database, databaseTransaction, sut } = makeSut();
 
-    //     const response = await request.post(URL)
-    //         .set('authorization', `JWT ${USER.token}`)
-    //         .send(account);
+        const user_id = faker.number.int();
+        const id = faker.number.int();
+        const account = makeAccount({ user_id });
 
-    //     const responseAnotherUser = await request.get(`${URL}/${response.body.id}`)
-    //         .set('authorization', `JWT ${ANOTHER_USER.token}`);
+        database.content.push({
+            ...account,
+            id
+        });
 
-    //     expect(responseAnotherUser.status).toBe(403);
-    //     expect(responseAnotherUser.body).toHaveProperty('error');
-    //     expect(responseAnotherUser.body.error).toContain('não pertence');
-    // });
+        databaseTransaction.transactions = [{
+            ...makeTransaction({ acc_id: id }),
+            id: faker.number.int()
+        }];
 
-    // test('Should don`t update another user_id account', async () => {
-    //     const account = { name: 'NameToUpdateTheUserOne' };
+        const promise = sut.deleteById(id);
 
-    //     const response = await request.post(URL)
-    //         .set('authorization', `JWT ${USER.token}`)
-    //         .send(account);
-
-    //     const responseAnotherUser = await request.put(`${URL}/${response.body.id}`)
-    //         .set('authorization', `JWT ${ANOTHER_USER.token}`)
-    //         .send({ name: 'AlterName' });
-
-    //     expect(responseAnotherUser.status).toBe(403);
-    //     expect(responseAnotherUser.body).toHaveProperty('error');
-    //     expect(responseAnotherUser.body.error).toContain('não pertence');
-    // });
-
-    // test('Should don`t delete another user_id account', async () => {
-    //     const account = { name: 'NameToDeleteTheUserOne' };
-
-    //     const response = await request.post(URL)
-    //         .set('authorization', `JWT ${USER.token}`)
-    //         .send(account);
-
-    //     const responseAnotherUser = await request.delete(`${URL}/${response.body.id}`)
-    //         .set('authorization', `JWT ${ANOTHER_USER.token}`);
-
-    //     expect(responseAnotherUser.status).toBe(403);
-    //     expect(responseAnotherUser.body).toHaveProperty('error');
-    //     expect(responseAnotherUser.body.error).toContain('não pertence');
-    // });
-
-    // test('Should don`t delete account with one or multiple transactions', async () => {
-    //     const account = { name: `DelWithTrans${Date.now()}` };
-
-    //     const response = await request.post(URL)
-    //         .set('authorization', `JWT ${USER.token}`)
-    //         .send(account);
-
-    //     await request.post(URL_TRANSACTION)
-    //         .set('authorization', `JWT ${USER.token}`)
-    //         .send({
-    //             ammount: 100,
-    //             description: `Error delete account with transaction${Date.now()}`,
-    //             type: Type.INPUT,
-    //             status: true,
-    //             acc_id: response.body.id
-    //         });
-
-    //     const responseDelte = await request.delete(`${URL}/${response.body.id}`)
-    //         .set('authorization', `JWT ${USER.token}`);
-
-    //     expect(responseDelte.status).toBe(400);
-    //     expect(responseDelte.body).toHaveProperty('error');
-    //     expect(responseDelte.body.error).toContain('transações vinculadas a ela');
-    // });
+        await expect(promise).rejects.toThrow(new ExistingTransactionsError());
+        expect(databaseTransaction.params.user_id).toBe(user_id);
+        expect(database.content).toHaveLength(1);
+    });
 })
