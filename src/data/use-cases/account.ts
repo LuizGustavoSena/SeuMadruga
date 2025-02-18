@@ -1,5 +1,6 @@
 import { Database } from "@src/data/protocols/database/database";
 import { ExistingAccountError } from "@src/domain/error/existingAccount";
+import { ExistingTransactionsError } from "@src/domain/error/existingTransactions";
 import { CreateProps, CreateResponse, GetAllResponse, GetByIdResponse, UpdateParams, UpdateResponse } from "@src/domain/models/account";
 import { Account } from "@src/domain/use-cases/account";
 import TransactionService from "./transaction";
@@ -49,7 +50,7 @@ export default class AccountService implements Account {
 
         const transaction = await this.transactionService.find({ user_id: account[0].user_id });
 
-        if (transaction.length > 0) throw new Error('Não é possível excluir conta por ter transações vinculadas a ela');
+        if (transaction.length > 0) throw new ExistingTransactionsError();
 
         await this.db.deleteById(id);
     }
