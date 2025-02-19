@@ -10,7 +10,7 @@ export class EncryptSpy implements Encrypt {
         return `${this.encryptText}${text}`;
     }
 
-    async compare(encryptText: string, text: string): Promise<boolean> {
+    async compare(text: string, encryptText: string): Promise<boolean> {
         return encryptText.includes(`${this.encryptText}${text}`);
     }
 }
