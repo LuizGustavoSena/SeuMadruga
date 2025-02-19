@@ -1,8 +1,10 @@
+import { faker } from '@faker-js/faker/.';
+import AuthService from '@src/data/use-cases/auth';
+import UserService from '@src/data/use-cases/user';
 import DatabaseSpy from '../mocks/databaseSpy';
 import MakeEncryptSpy, { EncryptSpy } from '../mocks/encryptSpy';
+import { makeUser } from '../mocks/insertUser';
 import JwtSpy from '../mocks/jwtSpy';
-import AuthService from './auth';
-import UserService from './user';
 
 type Props = {
     sut: AuthService;
@@ -31,63 +33,24 @@ const makeSut = (): Props => {
 }
 
 describe('Auth', () => {
-    // test('Should be successful create account', async () => {
-    //     const response = await request.post(`${URL}/signup`)
-    //         .send({
-    //             name: 'Walter',
-    //             email: `${Date.now()}@email.com`,
-    //             password: '12354'
-    //         });
+    test('Should be successful singin', async () => {
+        const { database, sut, encrypt, jwt } = makeSut();
 
-    //     expect(response.status).toBe(201);
-    //     expect(response.body.name).toBe('Walter');
-    //     expect(response.body).toHaveProperty('email');
-    //     expect(response.body).not.toHaveProperty('password');
-    // });
+        const user = makeUser();
+        const id = faker.number.int();
+        const responseJwt = faker.string.alphanumeric();
 
-    // test('Should be auth successful user', async () => {
-    //     const response = await request.post(`${URL}/signin`).send({
-    //         email: USER.email,
-    //         password: USER.password
-    //     });
+        jwt.response = responseJwt;
 
-    //     expect(response.status).toBe(201);
-    //     expect(response.body).toHaveProperty('token');
-    // });
+        database.content.push({
+            ...user,
+            password: await encrypt.create(user.password),
+            id
+        });
 
-    // test('Should be auth error with wrong email user', async () => {
-    //     const response = await request.post(`${URL}/signin`).send({
-    //         email: 'user@user.com',
-    //         password: USER.password
-    //     });
+        const response = await sut.signin(user);
 
-    //     expect(response.status).toBe(400);
-    //     expect(response.body.error).toContain('Usuário não encontrado');
-    // });
-
-    // test('Should be auth error with wrong password user', async () => {
-    //     const response = await request.post(`${URL}/signin`).send({
-    //         email: USER.email,
-    //         password: '54321'
-    //     });
-
-    //     expect(response.status).toBe(400);
-    //     expect(response.body.error).toContain('Usuário não encontrado');
-    // });
-
-    // test('Should be auth error with wrong password and email user', async () => {
-    //     const response = await request.post(`${URL}/signin`).send({
-    //         email: 'user@user.com',
-    //         password: '54321'
-    //     });
-
-    //     expect(response.status).toBe(400);
-    //     expect(response.body.error).toBe('Usuário não encontrado');
-    // });
-
-    // test('Should be error when request any endpoint without token', async () => {
-    //     const response = await request.get(URL_USERS);
-
-    //     expect(response.status).toBe(401);
-    // });
+        expect(jwt.params).toEqual({ id, email: user.email, name: user.name });
+        expect(response.token).toBe(responseJwt);
+    });
 })
