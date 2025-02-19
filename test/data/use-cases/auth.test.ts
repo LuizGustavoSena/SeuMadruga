@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker/.';
 import AuthService from '@src/data/use-cases/auth';
 import UserService from '@src/data/use-cases/user';
+import { UserNotFoundError } from '@src/domain/error/userNotFoundError';
 import DatabaseSpy from '../mocks/databaseSpy';
 import MakeEncryptSpy, { EncryptSpy } from '../mocks/encryptSpy';
 import { makeUser } from '../mocks/insertUser';
@@ -52,5 +53,13 @@ describe('Auth', () => {
 
         expect(jwt.params).toEqual({ id, email: user.email, name: user.name });
         expect(response.token).toBe(responseJwt);
+    });
+
+    test('Should be error when singin with no user registered', async () => {
+        const { sut } = makeSut();
+
+        const promise = sut.signin(makeUser());
+
+        await expect(promise).rejects.toThrow(new UserNotFoundError());
     });
 })
