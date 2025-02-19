@@ -62,4 +62,27 @@ describe('Auth', () => {
 
         await expect(promise).rejects.toThrow(new UserNotFoundError());
     });
+
+    test('Should be error when insert wrong passworrd to singin', async () => {
+        const { database, sut, encrypt, jwt } = makeSut();
+
+        const user = makeUser();
+        const id = faker.number.int();
+        const responseJwt = faker.string.alphanumeric();
+
+        jwt.response = responseJwt;
+
+        database.content.push({
+            ...user,
+            password: await encrypt.create(user.password),
+            id
+        });
+
+        const promise = sut.signin({
+            email: user.email,
+            password: faker.internet.password()
+        });
+
+        await expect(promise).rejects.toThrow(new UserNotFoundError());
+    });
 })
