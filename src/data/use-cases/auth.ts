@@ -1,10 +1,11 @@
 import { Encrypt } from "@src/data/protocols/encrypt/encrypt";
 import { Jwt } from "@src/data/protocols/jwt/jwt";
+import { UserNotFoundError } from "@src/domain/error/userNotFoundError";
 import { SigninParams, SigninResponse } from "@src/domain/models/auth";
 import { Auth } from "@src/domain/use-cases/auth";
 import UserService from "./user";
 
-export default class AuthService implements Auth{
+export default class AuthService implements Auth {
     constructor(
         private readonly userService: UserService,
         private readonly encrypt: Encrypt,
@@ -15,12 +16,12 @@ export default class AuthService implements Auth{
         const user = await this.userService.findByEmail(params.email);
 
         if (!user)
-            throw new Error('Usuário não encontrado');
+            throw new UserNotFoundError();
 
         const samePassword = await this.encrypt.compare(params.password, user.password);
 
         if (!samePassword)
-            throw new Error('Usuário não encontrado');
+            throw new UserNotFoundError();
 
         const response = {
             id: user.id,
