@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker/.';
 import TransactionService from '@src/data/use-cases/transaction';
+import { makeTransaction } from '../mocks/insertTransaction';
 import TransactionDatabaseSpy from '../mocks/transactionDatabaseSpy';
 
 type Props = {
@@ -26,19 +27,26 @@ describe('Transaction', () => {
         expect(response).toHaveLength(0);
     });
 
-    // test('Should be successful create a transaction', async () => {
-    //     const response = await request.post(URL_TRANSACTION)
-    //         .set('authorization', `JWT ${USERS[0].token}`)
-    //         .send({
-    //             ammount: 100,
-    //             description: 'Successful transaction',
-    //             type: Type.INPUT,
-    //             acc_id: ACCOUNTS[0].id
-    //         });
+    test('Should be successful create a transaction without date', async () => {
+        const { sut, database } = makeSut();
 
-    //     expect(response.status).toBe(201);
-    //     expect(response.body).toHaveProperty('id');
-    // });
+        const transaction = makeTransaction();
+
+        delete transaction.date;
+
+        const response = await sut.create(transaction);
+
+        console.log(database.content)
+
+        expect(response.acc_id).toBe(transaction.acc_id);
+        expect(response.ammount).toBe(transaction.ammount);
+        expect(response.description).toBe(transaction.description);
+        expect(response.status).toBe(transaction.status);
+        expect(response.transfer_id).toBe(transaction.transfer_id);
+        expect(response.type).toBe(transaction.type);
+        expect(response).toHaveProperty('id');
+        expect(response.date).toBe(database.content[0].date);
+    });
 
     // test('Should be error create a transaction with negative ammount on Input type', async () => {
     //     const response = await request.post(URL_TRANSACTION)
