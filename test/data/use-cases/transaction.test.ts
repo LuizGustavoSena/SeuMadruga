@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker/.';
 import TransactionService from '@src/data/use-cases/transaction';
 import TransactionDatabaseSpy from '../mocks/transactionDatabaseSpy';
 
@@ -17,12 +18,13 @@ const makeSut = (): Props => {
 }
 
 describe('Transaction', () => {
-    // test('Should be empty list transaction', async () => {
-    //     const response = await request.get(URL_TRANSACTION)
-    //         .set('authorization', `JWT ${USERS[0].token}`);
+    test('Should be empty list transaction', async () => {
+        const { sut } = makeSut();
 
-    //     expect(response.status).toBe(204);
-    // });
+        const response = await sut.find({ user_id: faker.number.int() });
+
+        expect(response).toHaveLength(0);
+    });
 
     // test('Should be successful create a transaction', async () => {
     //     const response = await request.post(URL_TRANSACTION)
