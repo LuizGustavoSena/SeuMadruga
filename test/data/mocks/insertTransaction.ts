@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker/.";
-import { TransactionProps, Type } from "@src/domain/models/transaction";
+import { CreateProps, TransactionProps, Type } from "@src/domain/models/transaction";
 
-export const makeTransaction = (params?: Partial<TransactionProps>): TransactionProps => {
+export const makeTransaction = (params?: Partial<TransactionProps>): CreateProps => {
     return {
         acc_id: params?.acc_id ? params.acc_id : faker.number.int(),
         ammount: params?.ammount ? params.ammount : faker.number.float(),
