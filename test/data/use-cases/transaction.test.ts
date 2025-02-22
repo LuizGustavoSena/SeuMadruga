@@ -92,26 +92,4 @@ describe('Transaction', () => {
 
         expect(database.content).toHaveLength(0);
     });
-
-    // test('Should error delete transaction by another user', async () => {
-    //     const transaction = await request.post(URL_TRANSACTION)
-    //         .set('authorization', `JWT ${USERS[0].token}`)
-    //         .send({
-    //             ammount: 100,
-    //             description: 'Error update transaction',
-    //             type: Type.INPUT,
-    //             acc_id: ACCOUNTS[0].id
-    //         });
-
-    //     const response = await request.delete(`${URL_TRANSACTION}/${transaction.body.id}`)
-    //         .set('authorization', `JWT ${USERS[1].token}`)
-    //         .send({ description: 'Updated transaction' });
-
-    //     const responseGet = await request.get(`${URL_TRANSACTION}/${transaction.body.id}`)
-    //         .set('authorization', `JWT ${USERS[0].token}`);
-
-    //     expect(response.status).toBe(403);
-    //     expect(responseGet.status).toBe(200);
-    //     expect(responseGet.body.id).toBe(transaction.body.id);
-    // });
 });
