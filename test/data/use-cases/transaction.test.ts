@@ -62,41 +62,21 @@ describe('Transaction', () => {
         expect(response).toEqual({ ...transaction, id });
     });
 
-    // test('Should error get transaction by another user', async () => {
-    //     const transaction = await request.post(URL_TRANSACTION)
-    //         .set('authorization', `JWT ${USERS[0].token}`)
-    //         .send({
-    //             ammount: 100,
-    //             description: 'Error transaction',
-    //             type: Type.INPUT,
-    //             acc_id: ACCOUNTS[0].id
-    //         });
+    test('Should successful update transaction by id', async () => {
+        const { sut, database } = makeSut();
 
-    //     const response = await request.get(`${URL_TRANSACTION}/${transaction.body.id}`)
-    //         .set('authorization', `JWT ${USERS[1].token}`);
+        const id = faker.number.int();
+        const transaction = makeTransaction()
 
-    //     expect(response.status).toBe(403);
-    //     expect(response.body.error).toContain('não pertence');
-    // });
+        database.content.push({
+            ...makeTransaction(),
+            id
+        });
 
-    // test('Should successful update transaction by id', async () => {
-    //     const transaction = await request.post(URL_TRANSACTION)
-    //         .set('authorization', `JWT ${USERS[0].token}`)
-    //         .send({
-    //             ammount: 100,
-    //             description: 'Successful update transaction',
-    //             type: Type.INPUT,
-    //             acc_id: ACCOUNTS[0].id
-    //         });
+        const response = await sut.updateById(id, transaction);
 
-    //     const response = await request.put(`${URL_TRANSACTION}/${transaction.body.id}`)
-    //         .set('authorization', `JWT ${USERS[0].token}`)
-    //         .send({ description: 'Updated transaction' });
-
-    //     expect(response.status).toBe(200);
-    //     expect(response.body.description).not.toBe(transaction);
-    //     expect(response.body.id).toBe(transaction.body.id);
-    // });
+        expect(response).toEqual({ ...transaction, id });
+    });
 
     // test('Should error update transaction by another user', async () => {
     //     const transaction = await request.post(URL_TRANSACTION)
