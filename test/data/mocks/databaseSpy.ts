@@ -8,9 +8,11 @@ export default class DatabaseSpy implements Database {
     constructor() { };
 
     async create<T, R>(params: T): Promise<R> {
-        this.content.push(params);
+        const id = faker.number.int();
+        const result = { ...params, id }
+        this.content.push(result);
 
-        return { ...params, id: faker.number.int() } as R;
+        return result as R;
     }
 
     async getAll<T>(): Promise<T> {
