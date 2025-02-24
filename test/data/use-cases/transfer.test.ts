@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker/.';
 import TransferService from '@src/data/use-cases/transfer';
 import { makeTransfer } from '../mocks/insertTransfer';
 import TransferDatabaseSpy from '../mocks/transferDatabaseSpy';
@@ -33,5 +34,20 @@ describe('Transfer', () => {
         expect(database.params.date).not.toBe(transfer.date);
         expect(database.params.id).toBe(database.content[0].id);
         expect(response).toEqual(database.content[0]);
+    });
+
+    test('Should be successful find transfer by id', async () => {
+        const { sut, database } = makeSut();
+
+        const transfer = {
+            ...makeTransfer(),
+            id: faker.number.int()
+        };
+
+        database.content.push(transfer)
+
+        const response = await sut.find({ id: transfer.id });
+
+        expect(response[0]).toEqual(database.content[0]);
     });
 });
