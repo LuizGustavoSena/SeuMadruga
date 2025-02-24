@@ -50,4 +50,24 @@ describe('Transfer', () => {
 
         expect(response[0]).toEqual(database.content[0]);
     });
+
+    test('Should be successful update transfer', async () => {
+        const { sut, database } = makeSut();
+
+        const transfer = makeTransfer();
+
+        const createdTransfer = await sut.create(makeTransfer());
+
+        const response = await sut.update({
+            id: createdTransfer.id,
+            data: transfer
+        });
+
+        expect(response).toEqual({ ...transfer, id: createdTransfer.id });
+        expect(database.params.acc_dest_id).toBe(transfer.acc_dest_id);
+        expect(database.params.acc_ori_id).toBe(transfer.acc_ori_id);
+        expect(database.params.ammount).toBe(transfer.ammount);
+        expect(database.params.date).toBe(transfer.date);
+        expect(database.params.id).toBe(createdTransfer.id);
+    })
 });
