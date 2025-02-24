@@ -69,5 +69,23 @@ describe('Transfer', () => {
         expect(database.params.ammount).toBe(transfer.ammount);
         expect(database.params.date).toBe(transfer.date);
         expect(database.params.id).toBe(createdTransfer.id);
-    })
+    });
+
+    test('Should be successful delete transfer by id', async () => {
+        const { sut, database } = makeSut();
+
+        const id = faker.number.int();
+
+        const transfer = {
+            ...makeTransfer(),
+            id
+        };
+
+        database.content.push(transfer)
+
+        await sut.deleteById(id);
+
+        expect(database.content).toHaveLength(0);
+        expect(database.params.id).toBe(id);
+    });
 });
