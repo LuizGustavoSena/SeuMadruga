@@ -1,5 +1,6 @@
+import BalanceService from '@src/data/use-cases/balance';
 import BalanceDatabaseSpy from '../mocks/balanceDatabaseSpy';
-import BalanceService from './balance';
+import { responseBalance } from '../mocks/responseBalance';
 
 type Props = {
     sut: BalanceService;
@@ -17,5 +18,16 @@ const makeSut = (): Props => {
 }
 
 describe('Balance', () => {
+    test('Should be successful get balance by userId', async () => {
+        const { database, sut } = makeSut();
 
+        const balance = responseBalance();
+
+        database.content.push(balance);
+
+        const response = await sut.getBalanceByUserId(balance.id);
+
+        expect(response[0]).toEqual(balance);
+        expect(database.params).toBe(balance.id);
+    });
 });
