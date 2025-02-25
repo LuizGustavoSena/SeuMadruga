@@ -126,7 +126,7 @@ describe('Account', () => {
             id
         });
 
-        databaseTransaction.transactions = [{
+        databaseTransaction.content = [{
             ...makeTransaction({ acc_id: id }),
             id: faker.number.int()
         }];
