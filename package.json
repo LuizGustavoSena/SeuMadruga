@@ -7,7 +7,7 @@
     "build": "tsc",
     "start": "yarn build && node dist/src/server.js",
     "dev": "ts-node-dev --transpile-only src/server.ts",
-    "test": "jest --setupFiles dotenv/config --verbose=true --runInBand --forceExit",
+    "test": "jest --setupFiles dotenv/config --verbose=true --forceExit",
     "seed": "./node_modules/.bin/knex seed:run --env test"
   },
   "author": "Luiz Sena",
