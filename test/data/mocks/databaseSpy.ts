@@ -12,7 +12,7 @@ export default class DatabaseSpy implements Database {
         const result = { ...params, id }
         this.content.push(result);
 
-        return result as R;
+        return { ...result } as R;
     }
 
     async getAll<T>(): Promise<T> {
