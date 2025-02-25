@@ -3,8 +3,7 @@ import { TransactionDatabase } from "../protocols/database/specif/transactionDat
 import DatabaseSpy from "./databaseSpy";
 
 export default class TransactionDatabaseSpy extends DatabaseSpy implements TransactionDatabase {
-    transactions: FindResponse[] = [];
-    params: FindProps;
+    params: any;
 
     constructor() {
         super();
@@ -13,10 +12,10 @@ export default class TransactionDatabaseSpy extends DatabaseSpy implements Trans
     async findTransactions(params: FindProps): Promise<FindResponse[]> {
         this.params = params;
 
-        return this.transactions;
+        return this.content;
     }
 
     async deleteByTransferId(transferId: number): Promise<void> {
-        this.transactions = this.transactions.filter(el => el.transfer_id != transferId);
+        this.params = transferId;
     }
 }
