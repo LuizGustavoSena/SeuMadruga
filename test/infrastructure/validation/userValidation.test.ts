@@ -36,4 +36,16 @@ describe('UserValidation', () => {
 
         await expect(promise).rejects.toThrow(new ValidationError(UserRequiredError.EMAIL));
     });
+
+    test('Should be error when create user without password', async () => {
+        const sut = makeSut();
+
+        const request = makeUser();
+        // @ts-expect-error
+        delete request.password;
+
+        const promise = sut.save(request);
+
+        await expect(promise).rejects.toThrow(new ValidationError(UserRequiredError.PASSWORD));
+    });
 });
