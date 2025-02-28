@@ -5,5 +5,5 @@ export enum AccountRequiredError {
 }
 
 export interface AccountValidation {
-    createOrUpdateAccount(oarams: CreateProps): void;
+    createOrUpdateAccount(params: CreateProps): void;
 }
