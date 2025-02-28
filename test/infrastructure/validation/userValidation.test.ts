@@ -59,4 +59,14 @@ describe('UserValidation', () => {
 
         await expect(promise).rejects.toThrow(new ValidationError(UserMessageError.EMAIL));
     });
+
+    test('Should be error when create user with small password', async () => {
+        const sut = makeSut();
+
+        const request = makeUser({ password: faker.internet.password().slice(0, 4) });
+
+        const promise = sut.save(request);
+
+        await expect(promise).rejects.toThrow(new ValidationError(UserMessageError.PASSWORD));
+    });
 });
