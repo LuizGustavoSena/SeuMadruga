@@ -1,6 +1,7 @@
+import { faker } from "@faker-js/faker/.";
 import UserService from "@src/data/use-cases/user";
 import { ValidationError } from "@src/domain/error/validationError";
-import { UserRequiredError } from "@src/domain/validations/user";
+import { UserMessageError, UserRequiredError } from "@src/domain/validations/user";
 import UserValidationZod from "@src/infrastructure/validation/zod/userValidationZod";
 import DatabaseSpy from "@test/data/mocks/databaseSpy";
 import { EncryptSpy } from "@test/data/mocks/encryptSpy";
@@ -47,5 +48,15 @@ describe('UserValidation', () => {
         const promise = sut.save(request);
 
         await expect(promise).rejects.toThrow(new ValidationError(UserRequiredError.PASSWORD));
+    });
+
+    test('Should be error when create user with wrong email', async () => {
+        const sut = makeSut();
+
+        const request = makeUser({ email: faker.string.uuid() });
+
+        const promise = sut.save(request);
+
+        await expect(promise).rejects.toThrow(new ValidationError(UserMessageError.EMAIL));
     });
 });
