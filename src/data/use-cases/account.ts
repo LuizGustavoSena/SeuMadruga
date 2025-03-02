@@ -3,15 +3,19 @@ import { ExistingAccountError } from "@src/domain/error/existingAccount";
 import { ExistingTransactionsError } from "@src/domain/error/existingTransactions";
 import { CreateProps, CreateResponse, GetAllResponse, GetByIdResponse, UpdateParams, UpdateResponse } from "@src/domain/models/account";
 import { Account } from "@src/domain/use-cases/account";
+import { AccountValidation } from "@src/domain/validations/account";
 import TransactionService from "./transaction";
 
 export default class AccountService implements Account {
     constructor(
         private transactionService: TransactionService,
         private db: Database,
+        private validation: AccountValidation
     ) { };
 
     async create(params: CreateProps): Promise<CreateResponse> {
+        this.validation.create(params);
+
         const account = await this.getByFilter({ name: params.name, user_id: params.user_id });
 
         if (account.length > 0)
@@ -35,6 +39,8 @@ export default class AccountService implements Account {
     }
 
     async update(params: UpdateParams): Promise<UpdateResponse> {
+        this.validation.update(params);
+
         const response = await this.db.update<UpdateResponse>({
             id: params.id,
             data: {
