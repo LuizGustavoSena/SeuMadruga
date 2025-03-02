@@ -1,3 +1,4 @@
+import { faker } from "@faker-js/faker/.";
 import AccountService from "@src/data/use-cases/account";
 import TransactionService from "@src/data/use-cases/transaction";
 import { ValidationError } from "@src/domain/error/validationError";
@@ -22,6 +23,15 @@ describe('AccountValidation', () => {
         delete request.name;
 
         const promise = sut.create(request);
+
+        await expect(promise).rejects.toThrow(new ValidationError(AccountRequiredError.NAME));
+    });
+
+    test('Should be error when update account without name', async () => {
+        const sut = makeSut();
+
+        // @ts-expect-error
+        const promise = sut.update({ id: faker.number.int() });
 
         await expect(promise).rejects.toThrow(new ValidationError(AccountRequiredError.NAME));
     });
