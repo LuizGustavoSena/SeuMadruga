@@ -1,5 +1,6 @@
 import AccountService from "@src/data/use-cases/account";
 import MakeDatabase from "../database/makeDatabase";
+import MakeAccountValidation from "../validation/account";
 import MakeTransactionService from "./makeTransactionService";
 
 export default class MakeAccountService {
@@ -8,8 +9,13 @@ export default class MakeAccountService {
     private constructor() { }
 
     static getInstance(): AccountService {
-        if (!MakeAccountService.instance)
-            MakeAccountService.instance = new AccountService(MakeTransactionService.getInstance(), MakeDatabase.getInstance('accounts'));
+        if (!MakeAccountService.instance) {
+            const transactionService = MakeTransactionService.getInstance();
+            const database = MakeDatabase.getInstance('accounts');
+            const validation = MakeAccountValidation.getInstance();
+
+            MakeAccountService.instance = new AccountService(transactionService, database, validation);
+        }
 
         return MakeAccountService.instance;
     }
