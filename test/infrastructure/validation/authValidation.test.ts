@@ -2,7 +2,7 @@ import { faker } from "@faker-js/faker/.";
 import AuthService from "@src/data/use-cases/auth";
 import UserService from "@src/data/use-cases/user";
 import { ValidationError } from "@src/domain/error/validationError";
-import { AuthRequiredError } from "@src/domain/validations/auth";
+import { AuthMessageError, AuthRequiredError } from "@src/domain/validations/auth";
 import AuthValidationZod from "@src/infrastructure/validation/zod/authValidationZod";
 import UserValidationZod from "@src/infrastructure/validation/zod/userValidationZod";
 import DatabaseSpy from "@test/data/mocks/databaseSpy";
@@ -42,5 +42,15 @@ describe('AuthValidation', () => {
         const promise = sut.signin(request);
 
         await expect(promise).rejects.toThrow(new ValidationError(AuthRequiredError.PASSWORD));
+    });
+
+    test('Should be error when signin wrong email', async () => {
+        const sut = makeSut();
+
+        const request = { email: faker.string.uuid(), password: faker.internet.password() };
+
+        const promise = sut.signin(request);
+
+        await expect(promise).rejects.toThrow(new ValidationError(AuthMessageError.EMAIL));
     });
 });
