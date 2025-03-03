@@ -32,4 +32,15 @@ describe('AuthValidation', () => {
 
         await expect(promise).rejects.toThrow(new ValidationError(AuthRequiredError.EMAIL));
     });
+
+    test('Should be error when signin without password', async () => {
+        const sut = makeSut();
+
+        const request = { email: faker.internet.email() };
+
+        // @ts-expect-error
+        const promise = sut.signin(request);
+
+        await expect(promise).rejects.toThrow(new ValidationError(AuthRequiredError.PASSWORD));
+    });
 });
