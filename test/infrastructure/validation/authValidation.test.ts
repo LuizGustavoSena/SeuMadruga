@@ -53,4 +53,14 @@ describe('AuthValidation', () => {
 
         await expect(promise).rejects.toThrow(new ValidationError(AuthMessageError.EMAIL));
     });
+
+    test('Should be error when signin wrong password', async () => {
+        const sut = makeSut();
+
+        const request = { email: faker.internet.email(), password: faker.internet.password().slice(0, 3) };
+
+        const promise = sut.signin(request);
+
+        await expect(promise).rejects.toThrow(new ValidationError(AuthMessageError.PASSWORD));
+    });
 });
