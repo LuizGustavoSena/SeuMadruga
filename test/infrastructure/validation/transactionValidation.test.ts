@@ -64,4 +64,15 @@ describe('TransactionValidation', () => {
 
         expect(() => sut.create(transaction)).toThrow(new ValidationError(TransactionMessageError.POSITIVE_AMMOUNT));
     });
+
+    test('Should be erro when create transaction with output type and positive ammount', async () => {
+        const sut = makeSut();
+
+        const transaction = makeTransaction({
+            type: Type.OUTPUT,
+            ammount: faker.number.float()
+        });
+
+        expect(() => sut.create(transaction)).toThrow(new ValidationError(TransactionMessageError.NEGATIVE_AMMOUNT));
+    });
 });
