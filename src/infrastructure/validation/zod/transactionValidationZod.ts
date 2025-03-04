@@ -22,9 +22,14 @@ export default class TransactionValidationZod implements TransactionValidation {
 
     create(params: CreateProps): void {
         try {
-            this.validation.merge(params.type === Type.INPUT ? this.inputType : this.outputType)
-
             this.validation.parse(params);
+
+            if (params.type === Type.INPUT)
+                this.inputType.parse(params);
+
+            if (params.type === Type.OUTPUT)
+                this.outputType.parse(params);
+
         } catch (error) {
             if (!(error instanceof ZodError)) return;
 
