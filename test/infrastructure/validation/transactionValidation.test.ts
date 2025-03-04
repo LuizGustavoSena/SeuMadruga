@@ -40,4 +40,16 @@ describe('TransactionValidation', () => {
 
         expect(() => sut.create(transaction)).toThrow(new ValidationError(TransactionMessageError.TYPE));
     });
+
+
+    test('Should be erro when create transaction without ammount', async () => {
+        const sut = makeSut();
+
+        const transaction = makeTransaction();
+
+        // @ts-expect-error
+        delete transaction.ammount;
+
+        expect(() => sut.create(transaction)).toThrow(new ValidationError(TransactionRequiredError.AMMOUNT));
+    });
 });
