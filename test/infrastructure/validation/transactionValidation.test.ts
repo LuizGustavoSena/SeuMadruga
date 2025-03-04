@@ -1,5 +1,5 @@
 import { ValidationError } from "@src/domain/error/validationError";
-import { TransactionRequiredError } from "@src/domain/validations/transaction";
+import { TransactionMessageError, TransactionRequiredError } from "@src/domain/validations/transaction";
 import TransactionValidationZod from "@src/infrastructure/validation/zod/transactionValidationZod";
 import { makeTransaction } from "@test/data/mocks/insertTransaction";
 
@@ -28,5 +28,16 @@ describe('TransactionValidation', () => {
         delete transaction.acc_id;
 
         expect(() => sut.create(transaction)).toThrow(new ValidationError(TransactionRequiredError.ACC_ID));
+    });
+
+    test('Should be erro when create transaction without type', async () => {
+        const sut = makeSut();
+
+        const transaction = makeTransaction();
+
+        // @ts-expect-error
+        delete transaction.type;
+
+        expect(() => sut.create(transaction)).toThrow(new ValidationError(TransactionMessageError.TYPE));
     });
 });
