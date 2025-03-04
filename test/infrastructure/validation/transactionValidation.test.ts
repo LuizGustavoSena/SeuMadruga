@@ -1,4 +1,6 @@
+import { faker } from "@faker-js/faker/.";
 import { ValidationError } from "@src/domain/error/validationError";
+import { Type } from "@src/domain/models/transaction";
 import { TransactionMessageError, TransactionRequiredError } from "@src/domain/validations/transaction";
 import TransactionValidationZod from "@src/infrastructure/validation/zod/transactionValidationZod";
 import { makeTransaction } from "@test/data/mocks/insertTransaction";
@@ -41,7 +43,6 @@ describe('TransactionValidation', () => {
         expect(() => sut.create(transaction)).toThrow(new ValidationError(TransactionMessageError.TYPE));
     });
 
-
     test('Should be erro when create transaction without ammount', async () => {
         const sut = makeSut();
 
@@ -51,5 +52,16 @@ describe('TransactionValidation', () => {
         delete transaction.ammount;
 
         expect(() => sut.create(transaction)).toThrow(new ValidationError(TransactionRequiredError.AMMOUNT));
+    });
+
+    test('Should be erro when create transaction with input type and negative ammount', async () => {
+        const sut = makeSut();
+
+        const transaction = makeTransaction({
+            type: Type.INPUT,
+            ammount: faker.number.float() * -1
+        });
+
+        expect(() => sut.create(transaction)).toThrow(new ValidationError(TransactionMessageError.POSITIVE_AMMOUNT));
     });
 });
