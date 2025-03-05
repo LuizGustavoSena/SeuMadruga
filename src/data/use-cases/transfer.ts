@@ -1,4 +1,5 @@
 import { CreateTransfer, CreateTransferResponse, TransferProps, UpdateTransferProps, UpdateTransferResponse } from '@src/domain/models/transfer';
+import { TransferValidation } from '@src/domain/validations/transfer';
 import knex from 'knex';
 import config from "../../../knexfile";
 import { TransferDatabase } from '../protocols/database/specif/transferDatabase';
@@ -8,7 +9,8 @@ const db = knex(config);
 export default class TransferService {
 
     constructor(
-        private readonly db: TransferDatabase
+        private readonly db: TransferDatabase,
+        private readonly validation: TransferValidation
     ) { }
 
     async find(filters: Partial<TransferProps>): Promise<TransferProps[]> {
@@ -18,6 +20,8 @@ export default class TransferService {
     }
 
     async create(params: CreateTransfer): Promise<CreateTransferResponse> {
+        this.validation.create(params);
+
         const transfer = await this.db.create<CreateTransfer, TransferProps>({ ...params, date: new Date() });
 
         await this.db.insertTransactions({
