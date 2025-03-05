@@ -42,4 +42,15 @@ describe('TransferValidation', () => {
 
         expect(() => sut.create(request)).toThrow(new ValidationError(TransferRequiredError.ACC_ORI_ID));
     });
+
+    test('Should be error when create transfer without acc_dest_id', () => {
+        const sut = makeSut();
+
+        const request = makeTransfer();
+
+        // @ts-expect-error
+        delete request.acc_dest_id;
+
+        expect(() => sut.create(request)).toThrow(new ValidationError(TransferRequiredError.ACC_DEST_ID));
+    });
 })
