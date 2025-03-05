@@ -1,5 +1,6 @@
+import { faker } from "@faker-js/faker/.";
 import { ValidationError } from "@src/domain/error/validationError";
-import { TransferRequiredError } from "@src/domain/validations/transfer";
+import { TransferMessageError, TransferRequiredError } from "@src/domain/validations/transfer";
 import TransferValidationZod from "@src/infrastructure/validation/zod/transferValidationZod";
 import { makeTransfer } from "@test/data/mocks/insertTransfer";
 
@@ -52,5 +53,15 @@ describe('TransferValidation', () => {
         delete request.acc_dest_id;
 
         expect(() => sut.create(request)).toThrow(new ValidationError(TransferRequiredError.ACC_DEST_ID));
+    });
+
+    test('Should be error when create transfer with acc_ori_id equal acc_dest_id', () => {
+        const sut = makeSut();
+
+        const id = faker.number.int();
+
+        const request = makeTransfer({ acc_dest_id: id, acc_ori_id: id });
+
+        expect(() => sut.create(request)).toThrow(new ValidationError(TransferMessageError.ACC_ORI_ID_EQUAL_ACC_DEST_ID));
     });
 })
