@@ -19,5 +19,16 @@ describe('TransferValidation', () => {
         delete request.description;
 
         expect(() => sut.create(request)).toThrow(new ValidationError(TransferRequiredError.DESCRIPTION));
-    })
+    });
+
+    test('Should be error when create transfer without ammount', () => {
+        const sut = makeSut();
+
+        const request = makeTransfer();
+
+        // @ts-expect-error
+        delete request.ammount;
+
+        expect(() => sut.create(request)).toThrow(new ValidationError(TransferRequiredError.AMMOUNT));
+    });
 })
