@@ -6,3 +6,5 @@ const router = express.Router();
 const balanceController = MakeBalanceController.getInstance();
 
 router.get('/', balanceController.getBalance);
+
+export default router;

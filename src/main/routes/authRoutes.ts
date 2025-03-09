@@ -8,3 +8,5 @@ const authController = MakeAuthController.getInstance();
 router.post('/signin', authController.login);
 
 router.post('/signup', authController.create);
+
+export default router;

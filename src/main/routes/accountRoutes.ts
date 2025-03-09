@@ -15,3 +15,5 @@ router.route('/:id')
     .get(accountController.getById)
     .put(accountController.updateById)
     .delete(accountController.deleteById);
+
+export default router;

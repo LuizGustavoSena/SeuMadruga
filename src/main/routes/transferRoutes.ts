@@ -15,3 +15,5 @@ router.route('/:id')
     .get(transferController.getById)
     .put(transferController.updateById)
     .delete(transferController.deleteById);
+
+export default router;

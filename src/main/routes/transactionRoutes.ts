@@ -15,3 +15,5 @@ router.route('/:id')
     .get(transactionController.getById)
     .put(transactionController.updateById)
     .delete(transactionController.deleteById);
+
+export default router;
