@@ -1,4 +1,4 @@
-import AuthController from "@src/main/controllers/auth";
+import AuthController from "@src/main/controllers/authController";
 import MakeAuthService from "../use-cases/makeAuthService";
 import MakeUserService from "../use-cases/makeUserService";
 

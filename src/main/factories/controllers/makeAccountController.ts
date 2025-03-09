@@ -1,4 +1,4 @@
-import AccountController from "@src/main/controllers/accounts";
+import AccountController from "@src/main/controllers/accountController";
 import MakeAccountService from "../use-cases/makeAccountService";
 
 export default class MakeAccountController {
