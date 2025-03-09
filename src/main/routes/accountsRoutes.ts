@@ -7,11 +7,11 @@ const accountController = MakeAccountController.getInstance();
 
 router.param('id', accountController.paramsInterceptor);
 
-router.route('/accounts')
+router.route('/')
     .post(accountController.create)
     .get(accountController.getAll);
 
-router.route('/accounts/:id')
+router.route('/:id')
     .get(accountController.getById)
     .put(accountController.updateById)
     .delete(accountController.deleteById);
