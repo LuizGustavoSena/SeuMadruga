@@ -28,6 +28,6 @@ const strategy = new Strategy(params, async (payload: any, done: any) => {
 
 passport.use(strategy);
 
-export default {
-    authenticate: () => passport.authenticate('jwt', { session: false })
-}
+const authenticate = () => passport.authenticate('jwt', { session: false })
+
+export default authenticate;
