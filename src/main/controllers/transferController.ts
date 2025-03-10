@@ -1,11 +1,13 @@
 import AccountService from "@src/data/use-cases/account";
 import TransferService from "@src/data/use-cases/transfer";
+import { TransferValidation } from "@src/domain/validations/transfer";
 import { NextFunction, Request, Response } from 'express';
 
 export default class TransferController {
     constructor(
         private transferService: TransferService,
-        private accountService: AccountService
+        private accountService: AccountService,
+        private validation: TransferValidation
     ) { };
 
     async paramsInterceptor(req: Request, res: Response, next: NextFunction) {
@@ -32,6 +34,8 @@ export default class TransferController {
 
     async create(req: Request, res: Response, next: NextFunction) {
         try {
+            this.validation.create(req.body);
+
             const accountOrigin = await this.accountService.getByFilter({ id: req.body.acc_ori_id });
 
             if (accountOrigin.length === 0 || accountOrigin[0].user_id !== req.user.id)
