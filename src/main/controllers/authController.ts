@@ -1,7 +1,6 @@
 import AuthService from "@src/data/use-cases/auth";
 import UserService from "@src/data/use-cases/user";
-import { ValidationError } from "@src/domain/error/validationError";
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 export default class AuthController {
     constructor(
@@ -9,33 +8,23 @@ export default class AuthController {
         private userService: UserService
     ) { };
 
-    async login(req: Request, res: Response) {
+    async login(req: Request, res: Response, next: NextFunction) {
         try {
             const response = await this.authService.signin(req.body);
 
             res.status(201).send(response);
         } catch (error: any) {
-            if (error instanceof ValidationError) {
-                res.status(400).send({ error: error.message });
-                return;
-            }
-
-            res.status(500).send();
+            next(error);
         }
     }
 
-    async create(req: Request, res: Response) {
+    async create(req: Request, res: Response, next: NextFunction) {
         try {
             const response = await this.userService.save(req.body);
 
             res.status(201).send(response);
         } catch (error: any) {
-            if (error instanceof ValidationError) {
-                res.status(400).send({ error: error.message });
-                return;
-            }
-
-            res.status(500).send();
+            next(error);
         }
     }
 }

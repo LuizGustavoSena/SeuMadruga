@@ -1,6 +1,5 @@
 import AccountService from "@src/data/use-cases/account";
 import TransferService from "@src/data/use-cases/transfer";
-import { ValidationError } from "@src/domain/error/validationError";
 import { NextFunction, Request, Response } from 'express';
 
 export default class TransferController {
@@ -12,32 +11,26 @@ export default class TransferController {
     async paramsInterceptor(req: Request, res: Response, next: NextFunction) {
         const transfer = await this.transferService.find({ id: Number(req.params.id) });
 
-        if (transfer.length === 0) {
-            res.status(404).send();
+        if (transfer.length === 0)
+            return res.status(404).send();
 
-            return;
-        }
+        if (transfer[0].user_id !== req.user.id)
+            return res.status(403).send({ error: 'Essa transação não pertence a essa conta' });
 
-        if (transfer[0].user_id !== req.user.id) {
-            res.status(403).send({ error: 'Essa transação não pertence a essa conta' });
-
-            return;
-        }
-
-        next();
+        return next();
     };
 
-    async getAll(req: Request, res: Response) {
+    async getAll(req: Request, res: Response, next: NextFunction) {
         try {
             const response = await this.transferService.find({ user_id: req.user.id });
 
             res.status(response.length > 0 ? 200 : 204).send(response);
         } catch (error: any) {
-            res.status(400).send({ error: error.message });
+            next(error);
         }
     }
 
-    async create(req: Request, res: Response) {
+    async create(req: Request, res: Response, next: NextFunction) {
         try {
             const accountOrigin = await this.accountService.getByFilter({ id: req.body.acc_ori_id });
 
@@ -53,27 +46,21 @@ export default class TransferController {
 
             res.status(201).send(response);
         } catch (error: any) {
-            if (error instanceof ValidationError) {
-                res.status(400).send({ error: error.message });
-
-                return;
-            }
-
-            res.status(500).send();
+            next(error);
         }
     }
 
-    async getById(req: Request, res: Response) {
+    async getById(req: Request, res: Response, next: NextFunction) {
         try {
             const response = await this.transferService.find({ id: Number(req.params.id) });
 
             res.status(200).send(response[0]);
         } catch (error: any) {
-            res.status(500).send();
+            next(error);
         }
     }
 
-    async updateById(req: Request, res: Response) {
+    async updateById(req: Request, res: Response, next: NextFunction) {
         try {
             const response = await this.transferService.update({
                 id: Number(req.params.id),
@@ -82,17 +69,17 @@ export default class TransferController {
 
             res.status(200).send(response);
         } catch (error: any) {
-            res.status(500).send();
+            next(error);
         }
     }
 
-    async deleteById(req: Request, res: Response) {
+    async deleteById(req: Request, res: Response, next: NextFunction) {
         try {
             await this.transferService.deleteById(Number(req.params.id));
 
             res.status(200).send();
         } catch (error: any) {
-            res.status(500).send();
+            next(error);
         }
     }
 }
