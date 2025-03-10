@@ -1,5 +1,6 @@
 import AccountController from "@src/main/controllers/accountController";
 import MakeAccountService from "../use-cases/makeAccountService";
+import MakeAccountValidation from "../validation/account";
 
 export default class MakeAccountController {
     private static instance: AccountController;
@@ -7,7 +8,9 @@ export default class MakeAccountController {
     static getInstance(): AccountController {
         if (!MakeAccountController.instance) {
             const service = MakeAccountService.getInstance();
-            MakeAccountController.instance = new AccountController(service);
+            const validation = MakeAccountValidation.getInstance();
+
+            MakeAccountController.instance = new AccountController(service, validation);
         }
 
         return MakeAccountController.instance;

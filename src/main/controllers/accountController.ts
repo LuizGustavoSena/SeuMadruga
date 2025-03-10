@@ -1,14 +1,17 @@
 import AccountService from "@src/data/use-cases/account";
-import { AccountMessageError } from "@src/domain/validations/account";
+import { AccountMessageError, AccountValidation } from "@src/domain/validations/account";
 import { NextFunction, Request, Response } from 'express';
 
 export default class AccountController {
     constructor(
-        private accountService: AccountService
+        private accountService: AccountService,
+        private validation: AccountValidation
     ) { };
 
     create = async (req: Request, res: Response, next: NextFunction) => {
         try {
+            this.validation.create(req.body);
+
             const response = await this.accountService.create({ ...req.body, user_id: req.user.id });
 
             res.status(201).send(response);
@@ -39,6 +42,8 @@ export default class AccountController {
 
     updateById = async (req: Request, res: Response, next: NextFunction) => {
         try {
+            this.validation.update(req.body);
+
             const response = await this.accountService.update({
                 id: Number(req.params.id),
                 name: req.body.name
