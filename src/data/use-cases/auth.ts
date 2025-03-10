@@ -3,20 +3,16 @@ import { Jwt } from "@src/data/protocols/jwt/jwt";
 import { UserNotFoundError } from "@src/domain/error/userNotFoundError";
 import { SigninParams, SigninResponse } from "@src/domain/models/auth";
 import { Auth } from "@src/domain/use-cases/auth";
-import { AuthValidation } from "@src/domain/validations/auth";
 import UserService from "./user";
 
 export default class AuthService implements Auth {
     constructor(
         private readonly userService: UserService,
         private readonly encrypt: Encrypt,
-        private readonly jwt: Jwt,
-        private readonly validation: AuthValidation,
+        private readonly jwt: Jwt
     ) { };
 
     async signin(params: SigninParams): Promise<SigninResponse> {
-        this.validation.signin(params);
-
         const user = await this.userService.findByEmail(params.email);
 
         if (!user)

@@ -3,13 +3,11 @@ import { Encrypt } from '@src/data/protocols/encrypt/encrypt';
 import { ExistingEmailError } from '@src/domain/error/existingEmail';
 import { FindByEmailResponse, UserModel, UserProps } from '@src/domain/models/user';
 import { User } from '@src/domain/use-cases/user';
-import { UserValidation } from '@src/domain/validations/user';
 
 export default class UserService implements User {
     constructor(
         private readonly db: Database,
-        private readonly encrypt: Encrypt,
-        private readonly validation: UserValidation
+        private readonly encrypt: Encrypt
     ) { }
 
     async findByEmail(email: string): Promise<FindByEmailResponse> {
@@ -19,8 +17,6 @@ export default class UserService implements User {
     }
 
     async save(params: UserProps): Promise<UserModel> {
-        this.validation.create(params);
-
         const existEmail = await this.findByEmail(params.email);
 
         if (existEmail)
