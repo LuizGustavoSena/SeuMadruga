@@ -5,7 +5,8 @@ import balanceRoutes from '@src/main/routes/BalanceRoutes';
 import transactionRoutes from '@src/main/routes/transactionRoutes';
 import transferRoutes from '@src/main/routes/transferRoutes';
 import { json } from 'body-parser';
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
+import { errorHandler } from './middlewares/errorHandler';
 
 const app = express();
 const protectedRouter = express.Router();
@@ -20,5 +21,9 @@ protectedRouter.use('/transfers', transferRoutes);
 protectedRouter.use('/balance', balanceRoutes);
 
 app.use('/v1', authenticate(), protectedRouter);
+
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    errorHandler(err, res);
+});
 
 export default app;
