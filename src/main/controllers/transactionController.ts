@@ -1,11 +1,13 @@
 import AccountService from "@src/data/use-cases/account";
 import TransactionService from "@src/data/use-cases/transaction";
+import { TransactionValidation } from "@src/domain/validations/transaction";
 import { NextFunction, Request, Response } from 'express';
 
 export default class TransactionController {
     constructor(
         private transactionService: TransactionService,
-        private accountService: AccountService
+        private accountService: AccountService,
+        private validation: TransactionValidation
     ) { };
 
     async getAll(req: Request, res: Response, next: NextFunction) {
@@ -22,6 +24,8 @@ export default class TransactionController {
 
     async create(req: Request, res: Response, next: NextFunction) {
         try {
+            this.validation.create(req.body);
+
             const account = await this.accountService.getByFilter({ user_id: req.user.id });
 
             if (!account.find(el => el.id === req.body.acc_id)) {
