@@ -4,7 +4,7 @@
 <img height="400" src="assets/seubarriga.jpg" />
 </div>
 </br>
-Is a financial manager where you can create any accounts in your user and transfer money between them. The project has error handling about any action to another user's account for example get balance, put values or delete some account. the tests are made direct api, testing the application as a whole.
+Is a financial manager where you can create any accounts in your user and transfer money between them. The project has error handling about any action to another user's account for example get balance, put values or delete some account. Have unit test in service, controllers and infrastructure.
 
 ## Table of Contents
 
