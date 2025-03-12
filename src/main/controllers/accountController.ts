@@ -32,6 +32,8 @@ export default class AccountController {
 
     getById = async (req: Request, res: Response, next: NextFunction) => {
         try {
+            this.validation.id(Number(req.params.id));
+
             const response = await this.accountService.getByFilter({ id: Number(req.params.id) });
 
             res.status(response.length > 0 ? 200 : 404).send(response[0]);
@@ -42,6 +44,7 @@ export default class AccountController {
 
     updateById = async (req: Request, res: Response, next: NextFunction) => {
         try {
+            this.validation.id(Number(req.params.id));
             this.validation.update(req.body);
 
             const response = await this.accountService.update({
@@ -57,6 +60,8 @@ export default class AccountController {
 
     deleteById = async (req: Request, res: Response, next: NextFunction) => {
         try {
+            this.validation.id(Number(req.params.id));
+
             await this.accountService.deleteById(Number(req.params.id));
 
             res.status(200).send();
