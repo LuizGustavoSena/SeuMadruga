@@ -1,6 +1,7 @@
 import AccountService from "@src/data/use-cases/account";
 import TransferService from "@src/data/use-cases/transfer";
-import { TransferValidation } from "@src/domain/validations/transfer";
+import { TransactionMessageError } from "@src/domain/validations/transaction";
+import { TransferMessageError, TransferValidation } from "@src/domain/validations/transfer";
 import { NextFunction, Request, Response } from 'express';
 
 export default class TransferController {
@@ -17,7 +18,7 @@ export default class TransferController {
             return res.status(404).send();
 
         if (transfer[0].user_id !== req.user.id)
-            return res.status(403).send({ error: 'Essa transação não pertence a essa conta' });
+            return res.status(403).send({ error: TransactionMessageError.ANOTHER_ACCOUNT_TRANSACTION });
 
         return next();
     };
@@ -39,12 +40,12 @@ export default class TransferController {
             const accountOrigin = await this.accountService.getByFilter({ id: req.body.acc_ori_id });
 
             if (accountOrigin.length === 0 || accountOrigin[0].user_id !== req.user.id)
-                throw new Error('acc_ori_id não pertence a esse usuário');
+                throw new Error(TransferMessageError.ACC_ORI_ID_ANOTHER_USER);
 
             const accountDestiny = await this.accountService.getByFilter({ id: req.body.acc_dest_id });
 
             if (accountDestiny.length === 0 || accountDestiny[0].user_id !== req.user.id)
-                throw new Error('acc_dest_id não pertence a esse usuário');
+                throw new Error(TransferMessageError.ACC_DEST_ID_ANOTHER_USER);
 
             const response = await this.transferService.create({ ...req.body, user_id: req.user.id });
 
@@ -56,6 +57,8 @@ export default class TransferController {
 
     async getById(req: Request, res: Response, next: NextFunction) {
         try {
+            this.validation.id(Number(req.params.id));
+
             const response = await this.transferService.find({ id: Number(req.params.id) });
 
             res.status(200).send(response[0]);
@@ -66,6 +69,8 @@ export default class TransferController {
 
     async updateById(req: Request, res: Response, next: NextFunction) {
         try {
+            this.validation.id(Number(req.params.id));
+
             const response = await this.transferService.update({
                 id: Number(req.params.id),
                 data: req.body
@@ -79,6 +84,8 @@ export default class TransferController {
 
     async deleteById(req: Request, res: Response, next: NextFunction) {
         try {
+            this.validation.id(Number(req.params.id));
+
             await this.transferService.deleteById(Number(req.params.id));
 
             res.status(200).send();
