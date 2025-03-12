@@ -18,7 +18,19 @@ export default class TransactionValidationZod implements TransactionValidation {
         type: z.nativeEnum(Type, { required_error: TransactionRequiredError.TYPE, message: TransactionMessageError.TYPE }),
     });
 
-    constructor() { };
+    validationId = z.number({ message: TransactionMessageError.ID });
+
+    constructor() { }
+
+    id(id: number): void {
+        try {
+            this.validationId.parse(id);
+        } catch (error) {
+            if (!(error instanceof ZodError)) return;
+
+            throw new ValidationError(error.errors.map(el => el.message).join(', '))
+        }
+    }
 
     create(params: CreateProps): void {
         try {
