@@ -7,6 +7,7 @@ COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
 
 COPY . .
+RUN rm -rf /app/test
 
 RUN npm run build
 
