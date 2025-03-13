@@ -11,10 +11,7 @@ const config = {
             database: `${process.env.NAME_DB}`
         },
         migrations: {
-            directory: 'src/migrations'
-        },
-        seeds: {
-            directory: 'src/seeds'
+            directory: 'src/infrastructure/database/migrations'
         }
     }
 }
