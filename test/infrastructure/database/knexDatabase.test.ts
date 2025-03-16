@@ -3,11 +3,12 @@ import KnexDatabase from "@src/infrastructure/database/knex";
 import { makeUser } from "@test/data/mocks/insertUser";
 
 const sut: KnexDatabase = new KnexDatabase('users');
+const auxiliarUser = makeUser();
 
 describe('KnexDatabase', () => {
     beforeAll(async () => {
         await sut.db.migrate.latest();
-        await sut.create<UserProps, FindByEmailResponse>(makeUser());
+        await sut.create<UserProps, FindByEmailResponse>(auxiliarUser);
     });
 
     afterAll(async () => {
@@ -32,16 +33,12 @@ describe('KnexDatabase', () => {
     });
 
     test('Should be successful getByFilter objects', async () => {
-        const user = makeUser();
-
-        await sut.create<UserProps, FindByEmailResponse>(user);
-
-        const response = await sut.getByFIlter<FindByEmailResponse[]>({ name: user.name });
+        const response = await sut.getByFIlter<FindByEmailResponse[]>({ name: auxiliarUser.name });
 
         expect(response).toHaveLength(1);
         expect(response[0]).toHaveProperty('id');
-        expect(response[0].email).toBe(user.email);
-        expect(response[0].name).toBe(user.name);
-        expect(response[0].password).toBe(user.password);
+        expect(response[0].email).toBe(auxiliarUser.email);
+        expect(response[0].name).toBe(auxiliarUser.name);
+        expect(response[0].password).toBe(auxiliarUser.password);
     });
 });
