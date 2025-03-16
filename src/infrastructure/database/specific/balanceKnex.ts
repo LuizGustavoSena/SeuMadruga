@@ -1,17 +1,16 @@
 import { BalanceDatabase } from "@src/data/protocols/database/specif/balanceDatabase";
 import { getBalanceByUserIdResponse } from "@src/domain/models/balance";
-import knex from 'knex';
-import config from "../../../../knexfile";
+import KnexDatabase from "../knex";
 
-export default class BalanceKnexDatabase implements BalanceDatabase {
-    db = knex(config);
-    tableTransactionName = 'transactions';
+export default class BalanceKnexDatabase extends KnexDatabase implements BalanceDatabase {
     tableAccountName = 'accounts';
 
-    constructor() { };
+    constructor() {
+        super('transactions')
+    };
 
     async getBalanceByUserId(userId: number): Promise<getBalanceByUserIdResponse[]> {
-        const response = await this.db(`${this.tableTransactionName} as t`).sum('ammount')
+        const response = await this.db(`${this.tableName} as t`).sum('ammount')
             .join(`${this.tableAccountName} as acc`, 'acc.id', '=', 't.acc_id')
             .where({ user_id: userId, status: true })
             .where('date', '<=', new Date())
