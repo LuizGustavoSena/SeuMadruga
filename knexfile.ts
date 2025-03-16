@@ -1,7 +1,7 @@
 import 'dotenv/config';
 
 const config = {
-    test: {
+    production: {
         client: 'pg',
         version: '9.6',
         connection: {
@@ -13,7 +13,17 @@ const config = {
         migrations: {
             directory: 'src/infrastructure/database/migrations'
         }
+    },
+    development: {
+        client: 'sqlite3',
+        connection: {
+            filename: ":memory:",
+        },
+        useNullAsDefault: true,
+        migrations: {
+            directory: 'src/infrastructure/database/migrations'
+        }
     }
 }
-
-export default config['test'];
+// @ts-expect-error
+export default config[process.env.NODE_ENV];
