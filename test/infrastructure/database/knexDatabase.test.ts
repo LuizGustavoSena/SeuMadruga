@@ -1,7 +1,8 @@
-import { faker } from "@faker-js/faker/.";
+import { UserProps } from "@src/domain/models/user";
 import KnexDatabase from "@src/infrastructure/database/knex";
+import { makeUser } from "@test/data/mocks/insertUser";
 
-const sut: KnexDatabase = new KnexDatabase(faker.database.column());
+const sut: KnexDatabase = new KnexDatabase('users');
 
 describe('KnexDatabase', () => {
     beforeAll(async () => {
@@ -10,5 +11,16 @@ describe('KnexDatabase', () => {
 
     afterAll(async () => {
         await sut.db.destroy();
+    });
+
+    test('Should be successful create object', async () => {
+        const user = makeUser();
+
+        const response = await sut.create<UserProps, UserProps & { id: number }>(user);
+
+        expect(response).toHaveProperty('id');
+        expect(response.email).toBe(user.email);
+        expect(response.name).toBe(user.name);
+        expect(response.password).toBe(user.password);
     });
 });
