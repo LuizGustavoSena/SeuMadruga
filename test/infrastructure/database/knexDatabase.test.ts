@@ -23,4 +23,10 @@ describe('KnexDatabase', () => {
         expect(response.name).toBe(user.name);
         expect(response.password).toBe(user.password);
     });
+
+    test('Should be successful getAll objects', async () => {
+        const response = await sut.getAll<UserProps & { id: number }[]>();
+
+        expect(response).toHaveLength(1);
+    });
 });
