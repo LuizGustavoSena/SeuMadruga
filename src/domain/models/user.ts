@@ -6,9 +6,4 @@ export type UserProps = {
 
 export type UserModel = Omit<UserProps, 'password'> & { id: number }
 
-export type FindByEmailResponse = {
-    id: number;
-    name: string;
-    email: string;
-    password: string;
-}
+export type FindByEmailResponse = UserProps & { id: number }
