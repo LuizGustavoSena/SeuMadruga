@@ -10,7 +10,7 @@ export default class BalanceKnexDatabase extends KnexDatabase implements Balance
     };
 
     async getBalanceByUserId(userId: number): Promise<getBalanceByUserIdResponse[]> {
-        const response = await this.db(`${this.tableName} as t`).sum('ammount')
+        const response = await this.db(`${this.tableName} as t`).sum({ sum: 'ammount' })
             .join(`${this.tableAccountName} as acc`, 'acc.id', '=', 't.acc_id')
             .where({ user_id: userId, status: true })
             .where('date', '<=', new Date())
