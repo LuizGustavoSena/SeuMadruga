@@ -17,4 +17,10 @@ describe('TransactionKnexDatabase', () => {
     afterAll(async () => {
         await sut.db.destroy();
     });
+
+    test('Should be successful empty transaction', async () => {
+        const response = await sut.findTransactions({ user_id: auxiliarAccount.user_id });
+
+        expect(response).toHaveLength(0);
+    });
 });
