@@ -1,7 +1,7 @@
 export type TransactionProps = {
     description: string;
     type: Type;
-    date: Date;
+    date: string;
     ammount: number;
     acc_id: number;
     transfer_id?: number;
@@ -20,7 +20,7 @@ export enum Type {
 
 export type FindResponse = TransactionProps & { id: number };
 
-export type CreateProps = Omit<TransactionProps, 'date'> & { date?: Date };
+export type CreateProps = Omit<TransactionProps, 'date'> & { date?: string };
 
 export type CreateResponse = FindResponse;
 

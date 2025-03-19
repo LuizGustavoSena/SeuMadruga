@@ -1,7 +1,7 @@
 export type TransferProps = {
     id: number;
     description: string;
-    date: Date;
+    date: string;
     ammount: number;
     acc_ori_id: number;
     acc_dest_id: number;
@@ -22,6 +22,6 @@ export type insertTransactionsProps = {
     acc_ori_id: number;
     acc_dest_id: number;
     ammount: number;
-    date: Date;
+    date: string;
     id: number;
 }

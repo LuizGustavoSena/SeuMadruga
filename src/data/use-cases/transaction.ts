@@ -1,4 +1,5 @@
 import { CreateProps, CreateResponse, FindProps, FindResponse, UpdateProps, UpdateResponse } from "@src/domain/models/transaction";
+import moment from "moment";
 import { TransactionDatabase } from "../protocols/database/specif/transactionDatabase";
 
 export default class TransactionService {
@@ -19,7 +20,7 @@ export default class TransactionService {
     }
 
     async create(params: CreateProps): Promise<CreateResponse> {
-        const dataRequest = params.date ?? new Date();
+        const dataRequest = params.date ?? moment().toISOString();
 
         const response = await this.db.create<CreateProps, CreateResponse>({ ...params, date: dataRequest });
 
