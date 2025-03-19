@@ -1,3 +1,4 @@
+import { faker } from "@faker-js/faker/.";
 import { CreateProps } from "@src/domain/models/account";
 import TransactionKnexDatabase from "@src/infrastructure/database/specific/transactionKnex";
 import { makeAccount } from "@test/data/mocks/insertAccount";
@@ -32,5 +33,16 @@ describe('TransactionKnexDatabase', () => {
         const response = await sut.findTransactions({ user_id: auxiliarAccount.user_id });
 
         expect(response).toHaveLength(1);
+    });
+
+    test('Should be successful delete transaction by id', async () => {
+        const transferId = faker.number.int();
+        const transaction = await sut.db('transactions').insert(makeTransaction({ acc_id: auxiliarAccount.id, transfer_id: transferId }), 'id');
+
+        await sut.deleteByTransferId(transferId);
+
+        const response = await sut.getByFIlter({ id: transaction[0].id });
+
+        expect(response).toHaveLength(0);
     });
 });
