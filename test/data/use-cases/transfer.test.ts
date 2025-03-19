@@ -86,6 +86,6 @@ describe('Transfer', () => {
         await sut.deleteById(id);
 
         expect(database.content).toHaveLength(0);
-        expect(database.params.id).toBe(id);
+        expect(database.params).toBe(id);
     });
 });
