@@ -1,6 +1,6 @@
 import BalanceService from '@src/data/use-cases/balance';
+import { responseBalance } from '@test/domain/mocks/responseBalance';
 import BalanceDatabaseSpy from '../mocks/balanceDatabaseSpy';
-import { responseBalance } from '../mocks/responseBalance';
 
 type Props = {
     sut: BalanceService;
