@@ -1,7 +1,6 @@
 import { insertTransactionsProps } from "@src/domain/models/transfer";
-import { Database } from "../database";
+import { TransactionDatabase } from "./transactionDatabase";
 
-export interface TransferDatabase extends Database {
+export interface TransferDatabase extends TransactionDatabase {
     insertTransactions(params: insertTransactionsProps): Promise<void>;
-    deleteTransactionsByTransferId(id: number): Promise<void>;
 }

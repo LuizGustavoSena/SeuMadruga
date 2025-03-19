@@ -1,18 +1,11 @@
-import { TransactionDatabase } from "@src/data/protocols/database/specif/transactionDatabase";
 import { TransferDatabase } from "@src/data/protocols/database/specif/transferDatabase";
 import { TransactionProps, Type } from "@src/domain/models/transaction";
 import { insertTransactionsProps } from "@src/domain/models/transfer";
-import KnexDatabase from "../knex";
+import TransactionKnexDatabase from "./transactionKnex";
 
-export default class TransferKnexDatabase extends KnexDatabase implements TransferDatabase {
-    constructor(
-        private readonly dbTransaction: TransactionDatabase
-    ) {
-        super('transfers');
-    }
-
-    async deleteTransactionsByTransferId(id: number): Promise<void> {
-        await this.dbTransaction.deleteByTransferId(id);
+export default class TransferKnexDatabase extends TransactionKnexDatabase implements TransferDatabase {
+    constructor() {
+        super();
     }
 
     async insertTransactions(params: insertTransactionsProps): Promise<void> {
@@ -26,7 +19,7 @@ export default class TransferKnexDatabase extends KnexDatabase implements Transf
             status: true
         }
 
-        await this.dbTransaction.create(transactionsTo);
+        await this.create(transactionsTo);
 
         const transactionFrom: TransactionProps = {
             description: `Transfer from account_id: ${params.acc_ori_id}`,
@@ -38,7 +31,6 @@ export default class TransferKnexDatabase extends KnexDatabase implements Transf
             status: true
         }
 
-        await this.dbTransaction.create(transactionFrom);
+        await this.create(transactionFrom);
     }
-
 }

@@ -1,8 +1,8 @@
 import { insertTransactionsProps } from "@src/domain/models/transfer";
 import { TransferDatabase } from "../protocols/database/specif/transferDatabase";
-import DatabaseSpy from "./databaseSpy";
+import TransactionDatabaseSpy from "./transactionDatabaseSpy";
 
-export default class TransferDatabaseSpy extends DatabaseSpy implements TransferDatabase {
+export default class TransferDatabaseSpy extends TransactionDatabaseSpy implements TransferDatabase {
     params: any;
 
     constructor() {
@@ -11,9 +11,5 @@ export default class TransferDatabaseSpy extends DatabaseSpy implements Transfer
 
     async insertTransactions(params: insertTransactionsProps): Promise<void> {
         this.params = params;
-    }
-
-    async deleteTransactionsByTransferId(id: number): Promise<void> {
-        this.params = { id };
     }
 }
