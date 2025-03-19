@@ -2,8 +2,8 @@ import { faker } from "@faker-js/faker/.";
 import { CreateProps } from "@src/domain/models/account";
 import { Type } from "@src/domain/models/transaction";
 import BalanceKnexDatabase from "@src/infrastructure/database/specific/balanceKnex";
-import { makeAccount } from "@test/data/mocks/insertAccount";
-import { makeTransaction } from "@test/data/mocks/insertTransaction";
+import { makeAccount } from "@test/domain/mocks/insertAccount";
+import { makeTransaction } from "@test/domain/mocks/insertTransaction";
 
 const sut: BalanceKnexDatabase = new BalanceKnexDatabase();
 

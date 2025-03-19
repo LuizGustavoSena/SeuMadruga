@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker/.';
 import TransactionService from '@src/data/use-cases/transaction';
-import { makeTransaction } from '../mocks/insertTransaction';
+import { makeTransaction } from '../../domain/mocks/insertTransaction';
 import TransactionDatabaseSpy from '../mocks/transactionDatabaseSpy';
 
 type Props = {

@@ -3,7 +3,7 @@ import { ValidationError } from "@src/domain/error/validationError";
 import { Type } from "@src/domain/models/transaction";
 import { TransactionMessageError, TransactionRequiredError } from "@src/domain/validations/transaction";
 import TransactionValidationZod from "@src/infrastructure/validation/zod/transactionValidationZod";
-import { makeTransaction } from "@test/data/mocks/insertTransaction";
+import { makeTransaction } from "@test/domain/mocks/insertTransaction";
 
 const makeSut = (): TransactionValidationZod => {
     return new TransactionValidationZod();

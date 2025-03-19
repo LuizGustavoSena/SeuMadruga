@@ -2,7 +2,7 @@ import { faker } from "@faker-js/faker/.";
 import { ValidationError } from "@src/domain/error/validationError";
 import { TransferMessageError, TransferRequiredError } from "@src/domain/validations/transfer";
 import TransferValidationZod from "@src/infrastructure/validation/zod/transferValidationZod";
-import { makeTransfer } from "@test/data/mocks/insertTransfer";
+import { makeTransfer } from "@test/domain/mocks/insertTransfer";
 
 const makeSut = (): TransferValidationZod => {
     const sut = new TransferValidationZod();

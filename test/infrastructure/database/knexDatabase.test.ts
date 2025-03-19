@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker/.";
 import { FindByEmailResponse, UserProps } from "@src/domain/models/user";
 import KnexDatabase from "@src/infrastructure/database/knex";
-import { makeUser } from "@test/data/mocks/insertUser";
+import { makeUser } from "@test/domain/mocks/insertUser";
 
 const sut: KnexDatabase = new KnexDatabase('users');
 

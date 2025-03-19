@@ -2,9 +2,9 @@ import { faker } from '@faker-js/faker/.';
 import AuthService from '@src/data/use-cases/auth';
 import UserService from '@src/data/use-cases/user';
 import { UserNotFoundError } from '@src/domain/error/userNotFoundError';
+import { makeUser } from '../../domain/mocks/insertUser';
 import DatabaseSpy from '../mocks/databaseSpy';
 import MakeEncryptSpy, { EncryptSpy } from '../mocks/encryptSpy';
-import { makeUser } from '../mocks/insertUser';
 import JwtSpy from '../mocks/jwtSpy';
 
 type Props = {

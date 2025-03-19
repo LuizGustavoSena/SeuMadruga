@@ -1,9 +1,9 @@
 import { faker } from "@faker-js/faker/.";
 import UserService from "@src/data/use-cases/user";
 import { ExistingEmailError } from "@src/domain/error/existingEmail";
+import { makeUser } from "../../domain/mocks/insertUser";
 import DatabaseSpy from "../mocks/databaseSpy";
 import MakeEncryptSpy, { EncryptSpy } from "../mocks/encryptSpy";
-import { makeUser } from "../mocks/insertUser";
 
 type Props = {
     sut: UserService;

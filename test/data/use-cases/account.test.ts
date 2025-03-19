@@ -3,9 +3,9 @@ import AccountService from '@src/data/use-cases/account';
 import TransactionService from '@src/data/use-cases/transaction';
 import { ExistingAccountError } from '@src/domain/error/existingAccount';
 import { ExistingTransactionsError } from '@src/domain/error/existingTransactions';
+import { makeAccount } from '../../domain/mocks/insertAccount';
+import { makeTransaction } from '../../domain/mocks/insertTransaction';
 import DatabaseSpy from '../mocks/databaseSpy';
-import { makeAccount } from '../mocks/insertAccount';
-import { makeTransaction } from '../mocks/insertTransaction';
 import TransactionDatabaseSpy from '../mocks/transactionDatabaseSpy';
 
 type Props = {

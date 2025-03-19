@@ -2,7 +2,7 @@ import { faker } from "@faker-js/faker/.";
 import { ValidationError } from "@src/domain/error/validationError";
 import { AccountRequiredError } from "@src/domain/validations/account";
 import AccountValidationZod from "@src/infrastructure/validation/zod/accountValidationZod";
-import { makeAccount } from "@test/data/mocks/insertAccount";
+import { makeAccount } from "@test/domain/mocks/insertAccount";
 
 const makeSut = (): AccountValidationZod => {
     const sut = new AccountValidationZod();

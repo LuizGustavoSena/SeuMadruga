@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker/.';
 import TransferService from '@src/data/use-cases/transfer';
-import { makeTransfer } from '../mocks/insertTransfer';
+import { makeTransfer } from '../../domain/mocks/insertTransfer';
 import TransferDatabaseSpy from '../mocks/transferDatabaseSpy';
 
 type Props = {
