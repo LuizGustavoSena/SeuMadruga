@@ -13,4 +13,14 @@ describe('BcryptEncrypt', () => {
         expect(response.length).not.toBe(password.length);
         expect(response).not.toContain(password);
     });
+
+    test('Should be successfull compare encrypt', async () => {
+        const password = faker.internet.password();
+
+        const encrypt = await sut.create(password);
+
+        const response = await sut.compare(password, encrypt);
+
+        expect(response).toBeTruthy();
+    });
 });
