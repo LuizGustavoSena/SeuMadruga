@@ -11,7 +11,7 @@ export const makeTransaction = (params?: Partial<TransactionProps>): CreateProps
         description: params?.description ? params.description : faker.string.sample(),
         status: params?.status ? params.status : Math.random() < 0.5,
         type: params?.type ? params.type : type,
-        date: params?.date ? params.date : faker.date.past(),
+        date: params?.date ? params.date : faker.date.past().toISOString(),
         transfer_id: params?.transfer_id ? params.transfer_id : faker.number.int()
     }
 }
